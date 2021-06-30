@@ -2,12 +2,8 @@ package util.game_situation;
 
 import rlbot.cppinterop.RLBotDll;
 import rlbot.gamestate.GameState;
-import rlbotexample.input.dynamic_data.DataPacket;
-import util.game_constants.RlConstants;
+import rlbotexample.dynamic_objects.DataPacket;
 import util.timer.FrameTimer;
-import util.timer.Timer;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class GameSituation {
 

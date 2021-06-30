@@ -1,20 +1,19 @@
 package util.math.vector;
 
-import rlbotexample.input.dynamic_data.car.orientation.CarOrientation;
-import rlbotexample.input.dynamic_data.car.orientation.Orientation;
+import rlbotexample.dynamic_objects.car.orientation.Orientation;
 
 import java.io.Serializable;
 
 public class CarOrientedPosition implements Serializable {
     public Vector3 position;
-    public CarOrientation orientation;
+    public Orientation orientation;
 
     public CarOrientedPosition() {
         this.position = new Vector3();
-        this.orientation = new CarOrientation();
+        this.orientation = new Orientation();
     }
 
-    public CarOrientedPosition(Vector3 position, CarOrientation orientation) {
+    public CarOrientedPosition(Vector3 position, Orientation orientation) {
         this.position = position;
         this.orientation = orientation;
     }
@@ -25,11 +24,11 @@ public class CarOrientedPosition implements Serializable {
         Vector3 rotatorZ = restOrientation.findRotator(flatFront);
         double angleZ = rotatorZ.dotProduct(Vector3.UP_VECTOR);
 
-        CarOrientation restOrientationRotatedInZ = new CarOrientation().rotate(rotatorZ);
+        Orientation restOrientationRotatedInZ = new Orientation().rotate(rotatorZ);
         Vector3 rotatorY = restOrientationRotatedInZ.noseVector.findRotator(orientation.noseVector);
         double angleY = rotatorY.dotProduct(Vector3.Y_VECTOR.rotate(rotatorZ));
 
-        CarOrientation restOrientationRotatedInZy = restOrientationRotatedInZ.rotate(rotatorY);
+        Orientation restOrientationRotatedInZy = restOrientationRotatedInZ.rotate(rotatorY);
         Vector3 rotatorX = restOrientationRotatedInZy.roofVector.findRotator(orientation.roofVector);
         double angleX = rotatorX.dotProduct(Vector3.X_VECTOR.rotate(rotatorZ).rotate(rotatorY));
         // ugly fix but it seems to work now!
@@ -55,7 +54,7 @@ public class CarOrientedPosition implements Serializable {
                 .rotate(rotatorY)
                 .rotate(rotatorXPosition)
                 .plus(globalOrigin.position);
-        CarOrientation rotatedOrientation = orientation
+        Orientation rotatedOrientation = orientation
                 .rotate(rotatorZ)
                 .rotate(rotatorY)
                 .rotate(rotatorXOrientation);

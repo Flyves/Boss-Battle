@@ -1,6 +1,6 @@
 package util.machine_learning_models.evaluators;
 
-import rlbotexample.input.dynamic_data.DataPacket;
+import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.machine_learning_models.generic_data_structure.generic_data.FileParameter;
 

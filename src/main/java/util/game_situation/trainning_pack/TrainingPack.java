@@ -1,6 +1,6 @@
 package util.game_situation.trainning_pack;
 
-import rlbotexample.input.dynamic_data.DataPacket;
+import rlbotexample.dynamic_objects.DataPacket;
 import util.game_situation.GameSituation;
 import util.game_situation.miscellaneous.UnhandledGameState;
 

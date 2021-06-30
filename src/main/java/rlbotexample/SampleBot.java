@@ -5,10 +5,10 @@ import rlbot.ControllerState;
 import rlbot.flat.GameTickPacket;
 import rlbot.manager.BotLoopRenderer;
 import rlbot.render.Renderer;
-import rlbotexample.bot.BotBehaviour;
-import rlbotexample.input.dynamic_data.DataPacket;
-import rlbotexample.output.BotOutput;
-import rlbotexample.output.ControlsOutput;
+import rlbotexample.generic_bot.BotBehaviour;
+import rlbotexample.dynamic_objects.DataPacket;
+import rlbotexample.generic_bot.output.BotOutput;
+import rlbotexample.generic_bot.output.ControlsOutput;
 
 public class SampleBot implements Bot {
 

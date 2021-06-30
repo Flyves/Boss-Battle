@@ -1,7 +1,7 @@
 package util.debug;
 
 import rlbot.render.Renderer;
-import rlbotexample.input.dynamic_data.DataPacket;
+import rlbotexample.dynamic_objects.DataPacket;
 import util.bezier_curve.PathIterator;
 import util.bezier_curve.CurveSegment;
 import util.math.vector.Vector3;

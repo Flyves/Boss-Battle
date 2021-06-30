@@ -7,7 +7,7 @@ import bpy
 
 def main():
     # destination folder
-    export_path = "D:\\Program Files\\GitHub\\RocketLeague-PanBot\\src\\main\\resources\\boss rig\\"
+    export_path = "D:\\Program Files\\GitHub\\Flyves\\Boss-Battle\\src\\main\\resources\\car animations\\"
     # file extension when exported
     export_extension = ".cop"
 

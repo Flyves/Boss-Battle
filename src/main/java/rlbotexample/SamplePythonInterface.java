@@ -3,7 +3,7 @@ package rlbotexample;
 import rlbot.Bot;
 import rlbot.manager.BotManager;
 import rlbot.pyinterop.SocketServer;
-import rlbotexample.bot.implementation.BossBattleBot;
+import rlbotexample.app.BossBattleBot;
 
 public class SamplePythonInterface extends SocketServer {
 

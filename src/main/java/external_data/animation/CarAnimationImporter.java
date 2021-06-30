@@ -1,8 +1,8 @@
 package external_data.animation;
 
-import rlbotexample.input.animations.CarGroup;
-import rlbotexample.input.animations.IndexedCarGroup;
-import rlbotexample.input.animations.CarGroupAnimation;
+import rlbotexample.animations.CarGroup;
+import rlbotexample.animations.IndexedCarGroup;
+import rlbotexample.animations.CarGroupAnimation;
 import util.math.matrix.Matrix3By3;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;
@@ -17,19 +17,19 @@ import java.util.stream.Collectors;
 
 /**
  * This small program works in coordination with blender.
- * Basically, there is a script that gets the data about object position and orientations,
- * and this algorithm serves as a bridge to transfer the parsed data into a usable object for later use in the program.
+ * Basically, there is a script that gets the positions and orientations of animated cars in blender and outputs them in a file.
+ * This algorithm serves as a bridge to transfer the parsed data into streamed objects so we can use them in the main bot.
  *
- * With this, we can load in rocket league animations that we carefully crafted in blender!
+ * With this, we can load rocket league animations that we carefully crafted in blender.
  */
 public class CarAnimationImporter {
 
-    public static final String ANIMATIONS_BASE_FOLDER_PATH = "src\\main\\resources\\boss rig";
+    public static final String ANIMATIONS_BASE_FOLDER_PATH = "src\\main\\resources\\car animations";
     public static final String ANIMATIONS_EXTENSION_NAME = ".cop";
     public static final String OBJECT_STREAMING_EXTENSION_NAME = ".sob";
 
     public static void main(String[] args) {
-        IOFile.getFileNamesIn("src\\main\\resources\\boss rig")
+        IOFile.getFileNamesIn("src\\main\\resources\\car animations")
                 .stream()
                 .filter(fileName -> {
                     int extensionIndex = fileName.lastIndexOf('.');
@@ -49,9 +49,7 @@ public class CarAnimationImporter {
 
         List<IndexedCarGroup> carMeshFrames = new ArrayList<>();
 
-        // parse the damn file
-
-        // for each frame
+        // for each car in every frame
         fileData.forEach(s -> {
             // just get the floats in an array
             String[] valuesStr = s.split(":");
@@ -80,11 +78,13 @@ public class CarAnimationImporter {
                 carMeshFrames.add(new IndexedCarGroup(safeFrameId));
             }
 
+            // get the latest frame that we are building
             CarGroup mesh = carMeshFrames.get(carMeshFrames.size()-1).carGroup;
 
+            // add the parsed car in the frame
             mesh.orientedPositions.add(new ZyxOrientedPosition(
                     objectPosition,
-                    objectRotationMatrix.toEulerZyx())); // oh boy...
+                    objectRotationMatrix.toEulerZyx()));
         });
 
         // serialize the data in a file for easy loading

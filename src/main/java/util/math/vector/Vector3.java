@@ -4,8 +4,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import rlbot.flat.Rotator;
 import rlbot.gamestate.DesiredRotation;
 import rlbot.gamestate.DesiredVector3;
-import rlbotexample.input.dynamic_data.car.orientation.CarOrientation;
-import rlbotexample.input.dynamic_data.car.orientation.Orientation;
+import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.matrix.Matrix3By3;
 import util.shapes.Plane3D;
 import util.shapes.Triangle3D;
@@ -210,25 +209,6 @@ public class Vector3 implements Serializable {
         Vector3 result = new Vector3(this);
 
         // roll
-        Vector3 rotatedRoll = orientation.getRoof().orderedMinusAngle(orientation.getNose());
-        Vector2 rollProjection = new Vector2(rotatedRoll.z, rotatedRoll.y);
-        Vector2 rotatedInRollLocalPointProjection = new Vector2(result.z, result.y).minusAngle(rollProjection).plusAngle(new Vector2(0, 1));
-        result = new Vector3(result.x, rotatedInRollLocalPointProjection.x, rotatedInRollLocalPointProjection.y);
-
-        // computing global pitch and yaw
-        Vector2 pitchProjection = new Vector2(orientation.getNose().flatten().magnitude(), -orientation.getNose().z);
-        Vector2 localPointProjection = new Vector2(result.x, result.z);
-        Vector2 rotatedLocalPointProjection = localPointProjection.minusAngle(pitchProjection);
-        result = new Vector3(rotatedLocalPointProjection.x, result.y, rotatedLocalPointProjection.y);
-        result = result.orderedPlusAngle(new Vector3(orientation.getNose().flatten(), 0));
-
-        return result;
-    }
-
-    public Vector3 matrixRotation(CarOrientation orientation) {
-        Vector3 result = new Vector3(this);
-
-        // roll
         Vector3 rotatedRoll = orientation.roofVector.orderedMinusAngle(orientation.noseVector);
         Vector2 rollProjection = new Vector2(rotatedRoll.z, rotatedRoll.y);
         Vector2 rotatedInRollLocalPointProjection = new Vector2(result.z, result.y).minusAngle(rollProjection).plusAngle(new Vector2(0, 1));
@@ -245,11 +225,6 @@ public class Vector3 implements Serializable {
     }
 
     public Vector3 toFrameOfReference(Orientation orientation)
-    {
-        return toFrameOfReference(orientation.getNose(), orientation.getRoof());
-    }
-
-    public Vector3 toFrameOfReference(CarOrientation orientation)
     {
         return toFrameOfReference(orientation.noseVector, orientation.roofVector);
     }
@@ -402,6 +377,10 @@ public class Vector3 implements Serializable {
 
     public DesiredVector3 toDesiredVector3() {
         return new DesiredVector3((float)x, (float)y, (float)z);
+    }
+
+    public DesiredVector3 toFlippedDesiredVector3() {
+        return new DesiredVector3((float)-x, (float)y, (float)z);
     }
 
     public DesiredRotation toDesiredRotation() {

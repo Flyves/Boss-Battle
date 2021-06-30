@@ -1,7 +1,6 @@
 package util.math.vector;
 
-import rlbotexample.input.dynamic_data.car.orientation.CarOrientation;
-import rlbotexample.input.dynamic_data.car.orientation.Orientation;
+import rlbotexample.dynamic_objects.car.orientation.Orientation;
 
 import java.io.Serializable;
 
@@ -28,6 +27,6 @@ public class ZyxOrientedPosition implements Serializable {
                 .rotate(rotatorY)
                 .rotate(rotatorX);
 
-        return new CarOrientedPosition(position, new CarOrientation(nose, roof));
+        return new CarOrientedPosition(position, new Orientation(nose, roof));
     }
 }

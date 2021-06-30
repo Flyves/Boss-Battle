@@ -1,6 +1,6 @@
 package util.machine_learning_models.evaluators;
 
-import rlbotexample.input.dynamic_data.DataPacket;
+import rlbotexample.dynamic_objects.DataPacket;
 
 public abstract class BotEvaluator {
 

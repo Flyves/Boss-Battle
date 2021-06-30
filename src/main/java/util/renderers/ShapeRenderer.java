@@ -1,11 +1,7 @@
 package util.renderers;
 
 import rlbot.render.Renderer;
-import rlbotexample.input.dynamic_data.car.hit_box.HitBox;
-import rlbotexample.input.dynamic_data.RlUtils;
-import rlbotexample.input.dynamic_data.car.hit_box.wheels.WheelBox;
-import rlbotexample.input.dynamic_data.car.orientation.CarOrientation;
-import rlbotexample.input.prediction.Trajectory3D;
+import rlbotexample.physics_prediction.Trajectory3D;
 import util.math.vector.*;
 import util.shapes.Circle;
 import util.shapes.Circle3D;
@@ -127,40 +123,5 @@ public class ShapeRenderer {
             renderer.drawLine3d(color, nextPosition.toFlatVector(), previousPosition.toFlatVector());
             previousPosition = nextPosition;
         }
-    }
-
-    public void renderHitBox(HitBox hitBox, Color color) {
-        Vector3 opponentNoseOrientation = hitBox.frontOrientation;
-        Vector3 opponentRoofOrientation = hitBox.roofOrientation;
-        Vector3 opponentRightOrientation = opponentNoseOrientation.crossProduct(opponentRoofOrientation);
-
-        Vector3 hitBoxCorner111 = hitBox.closestPointOnSurface(opponentNoseOrientation.plus(opponentRoofOrientation).plus(opponentRightOrientation).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner110 = hitBox.closestPointOnSurface(opponentNoseOrientation.plus(opponentRoofOrientation).plus(opponentRightOrientation.scaled(-1)).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner101 = hitBox.closestPointOnSurface(opponentNoseOrientation.plus(opponentRoofOrientation.scaled(-1)).plus(opponentRightOrientation).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner100 = hitBox.closestPointOnSurface(opponentNoseOrientation.plus(opponentRoofOrientation.scaled(-1)).plus(opponentRightOrientation.scaled(-1)).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner011 = hitBox.closestPointOnSurface(opponentNoseOrientation.scaled(-1).plus(opponentRoofOrientation).plus(opponentRightOrientation).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner010 = hitBox.closestPointOnSurface(opponentNoseOrientation.scaled(-1).plus(opponentRoofOrientation).plus(opponentRightOrientation.scaled(-1)).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner001 = hitBox.closestPointOnSurface(opponentNoseOrientation.scaled(-1).plus(opponentRoofOrientation.scaled(-1)).plus(opponentRightOrientation).scaled(300).plus(hitBox.centerPositionOfHitBox));
-        Vector3 hitBoxCorner000 = hitBox.closestPointOnSurface(opponentNoseOrientation.scaled(-1).plus(opponentRoofOrientation.scaled(-1)).plus(opponentRightOrientation.scaled(-1)).scaled(300).plus(hitBox.centerPositionOfHitBox));
-
-        renderer.drawLine3d(color, hitBoxCorner111.toFlatVector(), hitBoxCorner110.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner111.toFlatVector(), hitBoxCorner101.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner111.toFlatVector(), hitBoxCorner011.toFlatVector());
-
-        renderer.drawLine3d(color, hitBoxCorner010.toFlatVector(), hitBoxCorner011.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner010.toFlatVector(), hitBoxCorner000.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner010.toFlatVector(), hitBoxCorner110.toFlatVector());
-
-        renderer.drawLine3d(color, hitBoxCorner001.toFlatVector(), hitBoxCorner000.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner001.toFlatVector(), hitBoxCorner011.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner001.toFlatVector(), hitBoxCorner101.toFlatVector());
-
-        renderer.drawLine3d(color, hitBoxCorner100.toFlatVector(), hitBoxCorner101.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner100.toFlatVector(), hitBoxCorner110.toFlatVector());
-        renderer.drawLine3d(color, hitBoxCorner100.toFlatVector(), hitBoxCorner000.toFlatVector());
-    }
-
-    public void renderWheelBox(WheelBox wheelBox, Color color) {
-        wheelBox.render(renderer, color);
     }
 }
