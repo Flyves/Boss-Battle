@@ -1,8 +1,13 @@
 package rlbotexample.dynamic_objects;
 
 import rlbot.flat.GameTickPacket;
+import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.entity.BossAi;
+import rlbotexample.app.physics.game.entity.HumanPlayer;
 import rlbotexample.dynamic_objects.ball.BallData;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
+import util.resource_handling.CarResourceHandler;
+import util.resource_handling.PlayerIndex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +39,8 @@ public class DataPacket {
     public static final AtomicInteger indexOfBotThatLoadsData = new AtomicInteger(-1);
 
     private static volatile boolean dataLoaded = false;
+
+    public static boolean carResourceHandlerHasBeenInitialized = false;
 
     public DataPacket(GameTickPacket request, int playerIndex) {
         this.botIndex = playerIndex;
@@ -71,5 +78,11 @@ public class DataPacket {
 
         // refresh boostPads information so we can utilize it
         //BoostManager.loadGameTickPacket(request);
+
+        if(!carResourceHandlerHasBeenInitialized) {
+            CarResourceHandler.initialize(allCars);
+            CarResourceHandler.alloc(new PlayerIndex(humanCar.playerIndex));
+            carResourceHandlerHasBeenInitialized = true;
+        }
     }
 }

@@ -13,13 +13,13 @@ import util.math.vector.Vector3;
 public class Orientation {
 
     /** The direction that the front of the car is facing */
-    public final Vector3 noseVector;
+    public Vector3 noseVector;
 
     /** The direction the roof of the car is facing. (0, 0, 1) means the car is upright. */
-    public final Vector3 roofVector;
+    public Vector3 roofVector;
 
     /** The direction that the right side of the car is facing. */
-    public final Vector3 rightVector;
+    public Vector3 rightVector;
 
     public Orientation() {
         this.noseVector = new Vector3(Vector3.X_VECTOR);

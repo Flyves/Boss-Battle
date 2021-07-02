@@ -11,5 +11,5 @@ public class GameAnimations {
     public static final CarGroupAnimation boss_basic_rotation = ObjectSerializer.load(BASE_FILE_PATH + "boss_basic_rotation.sob");
     public static final CarGroupAnimation quadrupedal_boss_walk = ObjectSerializer.load(BASE_FILE_PATH + "quadrupedal_boss_walk.sob");
     public static final CarGroupAnimation quadrupedal_boss_rigged_walk = ObjectSerializer.load(BASE_FILE_PATH + "quadrupedal_boss_rigged_walk.sob");
-
+    public static final CarGroupAnimation boss_transformation_0_To_1 = ObjectSerializer.load(BASE_FILE_PATH + "boss_transformation_0_To_1.sob");
 }

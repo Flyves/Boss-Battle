@@ -13,18 +13,12 @@ public class CarGroupAnimation implements Serializable {
         this.frames = frames;
     }
 
-    public CarGroup get(int frameIndex) {
-        List<CarGroup> carMeshes = frames.stream()
-                .filter(carMeshFrame -> carMeshFrame.frameIndex == frameIndex)
-                .map(carMeshFrame -> carMeshFrame.carGroup)
-                .collect(Collectors.toList());
-
-        Optional<CarGroup> frameOpt = carMeshes.stream()
-                .findFirst();
-
-        if(frameOpt.isPresent()) {
-            return frameOpt.get();
+    public CarGroup queryFrame(int frameIndex) {
+        if(frameIndex < frames.size()
+                && frameIndex >= 0) {
+            return frames.get(frameIndex).carGroup;
         }
+
         else if(frameIndex < 0) {
             return frames.get(0).carGroup;
         }

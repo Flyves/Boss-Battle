@@ -35,6 +35,8 @@ public class ExtendedCarData extends CarData {
      */
     public final int team;
 
+    public final boolean isDemolished;
+
     public final int playerIndex;
 
     public ExtendedCarData(rlbot.flat.PlayerInfo playerInfo, int playerIndex, float elapsedSeconds) {
@@ -48,5 +50,7 @@ public class ExtendedCarData extends CarData {
         this.hasFirstJump = hasWheelContact;
         this.hasUsedFirstJump = playerInfo.jumped();
         this.hasUsedSecondJump = playerInfo.doubleJumped();
+
+        this.isDemolished = playerInfo.isDemolished();
     }
 }

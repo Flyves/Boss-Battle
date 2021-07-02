@@ -8,6 +8,7 @@ public class StateMachine implements Behaviour, Debuggable {
     private State nextState;
 
     public StateMachine(State initState) {
+        state = null;
         nextState = initState;
     }
 

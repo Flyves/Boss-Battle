@@ -36,7 +36,6 @@ public class SampleBot implements Bot {
         this.time2 = 0;
         this.deltaTime = 0;
         currentFps = 0;
-
     }
 
     /**

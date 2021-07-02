@@ -1,17 +1,20 @@
 package rlbotexample.app.physics.state_setter;
 
 import rlbot.gamestate.*;
+import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
+import util.discrete_functions.ExponentialSmoother3D;
 import util.game_situation.GameSituation;
 import util.math.vector.Ray3;
 import util.math.vector.Vector3;
 
 public class BallStateSetter {
 
-    public static void handleBallState(DataPacket input) {
-        BallStateSetter.useBallAsCameraFor(input.humanCar, input.car.position);
+    private static final ExponentialSmoother3D smoother = new ExponentialSmoother3D(0.95);
 
+    public static void handleBallState(DataPacket input) {
+        BallStateSetter.useBallAsCameraFor(input.humanCar, smoother.apply(CurrentGame.bossAi.centerOfMass));
     }
 
     private static void useBallAsCameraFor(ExtendedCarData playerCar, Vector3 focusCar) {
