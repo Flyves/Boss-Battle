@@ -8,9 +8,15 @@ import util.state_machine.State;
 public class AnimationTest implements State {
 
     @Override
+    public void start(DataPacket input) {}
+
+    @Override
     public void exec(DataPacket input) {
         CurrentGame.bossAi.step(input);
     }
+
+    @Override
+    public void stop(DataPacket input) {}
 
     @Override
     public State next(DataPacket input) {
@@ -18,7 +24,5 @@ public class AnimationTest implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {
-
-    }
+    public void debug(DataPacket input, Renderer renderer) {}
 }

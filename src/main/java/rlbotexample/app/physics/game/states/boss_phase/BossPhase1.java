@@ -1,30 +1,31 @@
 package rlbotexample.app.physics.game.states.boss_phase;
 
 import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.states.boss_moves.BossRunPhase1;
 import rlbotexample.dynamic_objects.DataPacket;
-import util.math.vector.Vector3;
 import util.state_machine.State;
+import util.state_machine.StateMachine;
 
 public class BossPhase1 implements State {
 
     private static final double BOSS_HEALTH_THRESHOLD_FACTOR = 0.666666666;
 
-    public BossPhase1() {
-        try {
-            CurrentGame.bossAi.animator.close();
-        }
-        catch(RuntimeException ignored) {}
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.quadrupedal_boss_rigged_walk);
+    private static final StateMachine bossAttackPattern = new StateMachine(new BossRunPhase1());
+
+    @Override
+    public void start(DataPacket input) {
+
     }
 
     @Override
     public void exec(DataPacket input) {
-        Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
-        CurrentGame.bossAi.orientedPosition.orientation.noseVector = vectorFromBossToPlayer.scaled(1, 1, 0).normalized().scaled(-1);
-        CurrentGame.bossAi.step(input);
+        bossAttackPattern.exec(input);
+    }
+
+    @Override
+    public void stop(DataPacket input) {
+        CurrentGame.bossAi.close();
     }
 
     @Override
@@ -36,7 +37,5 @@ public class BossPhase1 implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {
-
-    }
+    public void debug(DataPacket input, Renderer renderer) {}
 }

@@ -68,7 +68,7 @@ public class CarGroupAnimator implements AutoCloseable {
                 try {
                     close();
                 }
-                catch(Exception e) {
+                catch(RuntimeException e) {
                     e.printStackTrace();
                 }
             }
@@ -89,8 +89,9 @@ public class CarGroupAnimator implements AutoCloseable {
             CarResourceHandler.free(carIndexesUsedForTheAnimation);
             isClosed = true;
         }
-        else {
-            throw new RuntimeException();
-        }
+    }
+
+    public int currentFrameIndex() {
+        return frameCount;
     }
 }

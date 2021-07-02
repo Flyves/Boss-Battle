@@ -2,6 +2,7 @@ package rlbotexample.dynamic_objects.car;
 
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.Vector3;
+import util.shapes.HitBox;
 
 public class CarData {
 
@@ -10,14 +11,7 @@ public class CarData {
     public final Vector3 spin;
     public final double boost;
     public final double elapsedSeconds;
-
-    public CarData(Vector3 position, Vector3 velocity, Vector3 spin, double boostAmount, double time) {
-        this.position = position;
-        this.velocity = velocity;
-        this.spin = spin;
-        this.boost = boostAmount;
-        this.elapsedSeconds = time;
-    }
+    public final HitBox hitBox;
 
     public CarData(rlbot.flat.PlayerInfo playerInfo, float elapsedSeconds) {
         this.position = new Vector3(playerInfo.physics().location());
@@ -26,5 +20,6 @@ public class CarData {
         this.boost = playerInfo.boost();
         final Orientation orientation = Orientation.fromFlatbuffer(playerInfo);
         this.elapsedSeconds = elapsedSeconds;
+        this.hitBox = new HitBox(position, playerInfo.hitboxOffset(), playerInfo.hitbox(), orientation.noseVector, orientation.roofVector);
     }
 }

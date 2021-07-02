@@ -1,6 +1,7 @@
 package util.shapes;
 
 import rlbot.flat.BoxShape;
+import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.Vector3;
 
@@ -151,5 +152,17 @@ public class HitBox {
 
     private Vector3 getGlobal(Vector3 localPoint) {
         return localPoint.matrixRotation(frontOrientation, roofOrientation).plus(centerPositionOfHitBox);
+    }
+
+    public boolean isCollidingWith(HitBox that) {
+        Vector3 pointOnThis = this.closestPointOnSurface(that.centerPositionOfHitBox);
+        Vector3 pointOnThat = that.closestPointOnSurface(this.centerPositionOfHitBox);
+        return this.centerPositionOfHitBox.minus(that.centerPositionOfHitBox).magnitudeSquared() <
+                square((that.centerPositionOfHitBox.minus(pointOnThat).magnitude()
+                        + this.centerPositionOfHitBox.minus(pointOnThis).magnitude())*1.2);
+    }
+
+    private double square(double x) {
+        return x*x;
     }
 }

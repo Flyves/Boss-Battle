@@ -6,9 +6,18 @@ import util.state_machine.State;
 
 public class GameOver implements State {
 
+    @Override
+    public void start(DataPacket input) {
+
+    }
 
     @Override
     public void exec(DataPacket input) {
+
+    }
+
+    @Override
+    public void stop(DataPacket input) {
 
     }
 

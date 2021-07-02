@@ -13,9 +13,17 @@ public class StateMachine implements Behaviour, Debuggable {
     }
 
     public void exec(DataPacket input) {
+        if(nextState != state) {
+            nextState.start(input);
+        }
+
         state = nextState;
         state.exec(input);
         nextState = state.next(input);
+
+        if(nextState != state) {
+            state.stop(input);
+        }
     }
 
     public void debug(DataPacket input, Renderer renderer) {

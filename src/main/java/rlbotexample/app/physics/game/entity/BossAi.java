@@ -32,15 +32,15 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     @Override
     public void step(DataPacket input) {
         List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, animator.carIndexesUsedForTheAnimation);
-        updateAverageCenterPositionOfCars(carsUsedForTheAnimation);
+        updateAverageCenterPositionOfCars(input, carsUsedForTheAnimation);
         animator.orientedPosition = this.orientedPosition;
         animator.step(input);
     }
 
-    private void updateAverageCenterPositionOfCars(List<ExtendedCarData> carsUsedForTheAnimation) {
+    private void updateAverageCenterPositionOfCars(DataPacket input, List<ExtendedCarData> carsUsedForTheAnimation) {
         AtomicReference<Vector3> vector3Ref = new AtomicReference<>(new Vector3());
         carsUsedForTheAnimation.forEach(car -> {
-            if(car != CurrentGame.humanPlayer.humanCar) {
+            if(car != input.humanCar) {
                 vector3Ref.set(vector3Ref.get().plus(car.position));
             }
         });
@@ -48,7 +48,7 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws RuntimeException {
         animator.close();
     }
 }

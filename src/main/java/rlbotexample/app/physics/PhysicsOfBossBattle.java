@@ -20,9 +20,10 @@ import java.util.Optional;
 
 public class PhysicsOfBossBattle {
 
+    private static final List<AssignedOrientedPosition> assignedOrientedPositions = new ArrayList<>();
+    private static final List<AssignedVector3> assignedVelocities = new ArrayList<>();
     private static final List<AssignedVector3> assignedAccelerations = new ArrayList<>();
     private static final List<AssignedVector3> assignedPenetrations = new ArrayList<>();
-    private static final List<AssignedOrientedPosition> assignedOrientedPositions = new ArrayList<>();
 
     public static void execute(DataPacket input) {
         CurrentGame.step(input);
@@ -34,6 +35,10 @@ public class PhysicsOfBossBattle {
 
     public static void setOrientedPosition(ZyxOrientedPosition orientedPosition, ExtendedCarData carData) {
         assignedOrientedPositions.add(new AssignedOrientedPosition(carData, orientedPosition));
+    }
+
+    public static void setVelocity(Vector3 newVelocity, ExtendedCarData carData) {
+        assignedVelocities.add(new AssignedVector3(carData, newVelocity));
     }
 
     // all forces are applied to the center of mass for now
@@ -51,12 +56,26 @@ public class PhysicsOfBossBattle {
 
     public static void applyImpulses(DataPacket input) {
         for(ExtendedCarData car: input.allCars) {
+            Optional<ZyxOrientedPosition> orientedPositionOpt;
+            Optional<Vector3> velocityOpt;
             Optional<Vector3> accelerationOpt;
             Optional<Vector3> penetrationOpt;
-            Optional<ZyxOrientedPosition> orientedPositionOpt;
 
             final PhysicsState alternativePhysics = new PhysicsState();
 
+            orientedPositionOpt = assignedOrientedPositions.stream()
+                    .filter(assignedOrientedPosition -> assignedOrientedPosition.carData == car)
+                    .map(assignedOrientedPosition -> assignedOrientedPosition.orientedPosition)
+                    .findFirst();
+
+            velocityOpt = assignedVelocities.stream()
+                    .filter(assignedVector3 -> {
+                        if(assignedVector3.carData == car) {
+                        }
+                        return assignedVector3.carData == car;
+                    })
+                    .map(assignedVector3 -> assignedVector3.vector)
+                    .findFirst();
             accelerationOpt = assignedAccelerations.stream()
                     .filter(assignedVector3 -> assignedVector3.carData == car)
                     .map(assignedVector3 -> assignedVector3.vector)
@@ -66,17 +85,17 @@ public class PhysicsOfBossBattle {
                     .map(assignedVector3 -> assignedVector3.vector)
                     .findFirst();
 
-            orientedPositionOpt = assignedOrientedPositions.stream()
-                    .filter(assignedOrientedPosition -> assignedOrientedPosition.carData == car)
-                    .map(assignedOrientedPosition -> assignedOrientedPosition.orientedPosition)
-                    .findFirst();
-
             final double dt = 1/RlConstants.BOT_REFRESH_RATE;
             penetrationOpt.ifPresent(penetration -> {
                 final Vector3 newLocation = car.position.minus(penetration);
                 final DesiredVector3 newLocationAsDesiredVector3 = newLocation.toFlippedDesiredVector3();
                 alternativePhysics.withLocation(newLocationAsDesiredVector3);
             });
+
+            velocityOpt.ifPresent(velocity -> {
+                alternativePhysics.withVelocity(velocity.toFlippedDesiredVector3());
+            });
+
             orientedPositionOpt.ifPresent(orientedPosition -> {
                 if(!penetrationOpt.isPresent()) {
                     alternativePhysics.withLocation(orientedPosition.position.toFlippedDesiredVector3());
@@ -88,8 +107,11 @@ public class PhysicsOfBossBattle {
                         (float)orientedPosition.eulerZYX.y,
                         (float)-orientedPosition.eulerZYX.z,
                         (float)orientedPosition.eulerZYX.x));
-                alternativePhysics.withVelocity(new Vector3(0, 0, 0).toFlippedDesiredVector3());
+                if(!velocityOpt.isPresent() && !accelerationOpt.isPresent()) {
+                    alternativePhysics.withVelocity(new Vector3(0, 0, 0).toFlippedDesiredVector3());
+                }
             });
+
             accelerationOpt.ifPresent(acceleration -> {
                 final Vector3 newVelocity = car.velocity.plus(acceleration.scaled(dt));
                 final DesiredVector3 newVelocityAsDesiredVector3 = newVelocity.toFlippedDesiredVector3();
@@ -98,8 +120,10 @@ public class PhysicsOfBossBattle {
 
             CarStateSetter.applyPhysics(alternativePhysics, car);
         }
+
+        assignedOrientedPositions.clear();
+        assignedVelocities.clear();
         assignedAccelerations.clear();
         assignedPenetrations.clear();
-        assignedOrientedPositions.clear();
     }
 }

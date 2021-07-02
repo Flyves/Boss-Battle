@@ -11,9 +11,13 @@ public class BossPhase3 implements State {
     private static final double BOSS_HEALTH_THRESHOLD = 0;
 
     @Override
-    public void exec(DataPacket input) {
+    public void start(DataPacket input) {}
 
-    }
+    @Override
+    public void exec(DataPacket input) {}
+
+    @Override
+    public void stop(DataPacket input) {}
 
     @Override
     public State next(DataPacket input) {
@@ -24,7 +28,5 @@ public class BossPhase3 implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {
-
-    }
+    public void debug(DataPacket input, Renderer renderer) {}
 }

@@ -3,6 +3,8 @@ package rlbotexample.app.physics.game.states.stats_handling;
 import rlbot.render.Renderer;
 import rlbot.vector.Vector3;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.entity.BossAi;
+import rlbotexample.app.physics.game.entity.HumanPlayer;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.resource_handling.CarResourceHandler;
@@ -10,7 +12,6 @@ import util.state_machine.State;
 
 import java.awt.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HandlePlayerStats implements State {
 
@@ -18,16 +19,22 @@ public class HandlePlayerStats implements State {
     private boolean wasBossAiDemolished = false;
 
     @Override
+    public void start(DataPacket input) {
+        CurrentGame.humanPlayer = new HumanPlayer(input.humanCar);
+        CurrentGame.bossAi = new BossAi(input.car);
+    }
+
+    @Override
     public void exec(DataPacket input) {
-        updatePlayerHealth();
+        updatePlayerHealth(input);
         updateBossAiHealth(CarResourceHandler.dereferenceIndexes(input, CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation));
     }
 
-    private void updatePlayerHealth() {
-        if(CurrentGame.humanPlayer.humanCar.isDemolished && !wasPlayerDemolished) {
+    private void updatePlayerHealth(DataPacket input) {
+        if(input.humanCar.isDemolished && !wasPlayerDemolished) {
             CurrentGame.humanPlayer.health--;
         }
-        wasPlayerDemolished = CurrentGame.humanPlayer.humanCar.isDemolished;
+        wasPlayerDemolished = input.humanCar.isDemolished;
     }
 
     private void updateBossAiHealth(List<ExtendedCarData> bossCars) {
@@ -39,6 +46,9 @@ public class HandlePlayerStats implements State {
         }
         wasBossAiDemolished = isDemolished;
     }
+
+    @Override
+    public void stop(DataPacket input) {}
 
     @Override
     public State next(DataPacket input) {
