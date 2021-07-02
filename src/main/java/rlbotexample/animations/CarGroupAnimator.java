@@ -53,11 +53,11 @@ public class CarGroupAnimator implements AutoCloseable {
                     CarOrientedPosition carOrientedPosition = localCarOrientedPosition.toGlobalPosition(orientedPosition);
 
                     PhysicsOfBossBattle.setOrientedPosition(carOrientedPosition.toZyxOrientedPosition(), carData);
-                    safeBotIndex.incrementAndGet();
                 }
                 catch(Exception ignored) {
                 }
             }
+            safeBotIndex.incrementAndGet();
         });
         frameCount++;
         if(isFinished()) {

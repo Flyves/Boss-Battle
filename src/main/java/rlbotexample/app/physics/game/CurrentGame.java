@@ -3,7 +3,6 @@ package rlbotexample.app.physics.game;
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.entity.BossAi;
 import rlbotexample.app.physics.game.entity.HumanPlayer;
-import rlbotexample.app.physics.game.states.animation_test.AnimationTest;
 import rlbotexample.app.physics.game.states.boss_phase.InitBossPhase;
 import rlbotexample.app.physics.game.states.stats_handling.InitPlayerStats;
 import rlbotexample.dynamic_objects.DataPacket;
