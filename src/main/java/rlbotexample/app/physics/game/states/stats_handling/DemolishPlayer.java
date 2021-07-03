@@ -9,9 +9,9 @@ import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.CarOrientedPosition;
 import util.math.vector.Vector3;
 import util.math.vector.ZyxOrientedPosition;
-import util.resource_handling.CarResourceHandler;
-import util.resource_handling.PlayerAmount;
-import util.resource_handling.PlayerIndex;
+import util.resource_handling.cars.CarResourceHandler;
+import util.resource_handling.cars.PlayerAmount;
+import util.resource_handling.cars.PlayerIndex;
 import util.state_machine.State;
 
 import java.util.List;

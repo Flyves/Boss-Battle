@@ -7,7 +7,7 @@ import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.math.vector.CarOrientedPosition;
 import util.math.vector.Vector3;
-import util.resource_handling.CarResourceHandler;
+import util.resource_handling.cars.CarResourceHandler;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -19,7 +19,7 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     public CarOrientedPosition orientedPosition;
     public Vector3 centerOfMass;
 
-    public CarGroupAnimator animator = new CarGroupAnimator(GameAnimations.quadrupedal_boss_rigged_walk);
+    public CarGroupAnimator animator;
 
     public BossAi(ExtendedCarData mainCar) {
         this.mainCar = mainCar;
@@ -27,6 +27,7 @@ public class BossAi implements PlayableEntity, AutoCloseable {
         this.orientedPosition = new CarOrientedPosition();
         this.orientedPosition.position = new Vector3();
         this.centerOfMass = mainCar.position;
+        this.animator = new CarGroupAnimator(GameAnimations.quadrupedal_boss_rigged_walk);
     }
 
     @Override

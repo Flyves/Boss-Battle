@@ -13,6 +13,7 @@ import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;
+import util.resource_handling.cars.CarResourceHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class PhysicsOfBossBattle {
 
     public static void execute(DataPacket input) {
         CurrentGame.step(input);
+
+        CarResourceHandler.handleFreeCars(input);
 
         applyImpulses(input);
 

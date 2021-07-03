@@ -424,4 +424,8 @@ public class Vector3 implements Serializable {
     public Vector3 abs() {
         return new Vector3(Math.abs(x), Math.abs(y), Math.abs(z));
     }
+
+    public static Vector3 generateRandomVector() {
+        return new Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1);
+    }
 }

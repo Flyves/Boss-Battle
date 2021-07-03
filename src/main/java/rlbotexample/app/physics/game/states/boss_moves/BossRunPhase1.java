@@ -32,6 +32,10 @@ public class BossRunPhase1 implements State {
 
     @Override
     public State next(DataPacket input) {
+        if(input.humanCar.position.z > 500
+                && CurrentGame.bossAi.centerOfMass.minus(input.humanCar.position).magnitudeSquared() < 3000*3000) {
+            return new BossElectricBallShootingAttackPhase1();
+        }
         if(CurrentGame.bossAi.centerOfMass.minus(input.humanCar.position).magnitudeSquared() < 1700*1700) {
             return new BossDashAttackPhase1();
         }

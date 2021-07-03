@@ -1,6 +1,5 @@
 package rlbotexample.animations;
 
-import jdk.internal.org.jline.utils.ClosedException;
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
@@ -8,8 +7,8 @@ import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.CarOrientedPosition;
 import util.math.vector.Vector3;
 import util.math.vector.ZyxOrientedPosition;
-import util.resource_handling.CarResourceHandler;
-import util.resource_handling.PlayerAmount;
+import util.resource_handling.cars.CarResourceHandler;
+import util.resource_handling.cars.PlayerAmount;
 
 import java.util.ArrayList;
 import java.util.List;

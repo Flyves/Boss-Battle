@@ -8,12 +8,10 @@ import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
-import util.resource_handling.CarResourceHandler;
-import util.resource_handling.PlayerAmount;
+import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
 
 import java.util.List;
-import java.util.Optional;
 
 public class BossDashAttackPhase1 implements State {
 
@@ -34,14 +32,14 @@ public class BossDashAttackPhase1 implements State {
             CurrentGame.bossAi.orientedPosition.position = CurrentGame.bossAi.orientedPosition.position
                     .plus(dashDirection.scaledToMagnitude(
                             CurrentGame.BOSS_DASH_SPEED
-                            - (CurrentGame.bossAi.animator.currentFrameIndex()*(5000/RlConstants.BOT_REFRESH_RATE)/(114.0-27))));
+                            - (CurrentGame.bossAi.animator.currentFrameIndex()*(CurrentGame.BOSS_DASH_SPEED/RlConstants.BOT_REFRESH_RATE)/(114.0-27))));
 
             List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation);
             boolean isBossCollidingWithPLayer = carsUsedForTheAnimation.stream()
                     .anyMatch(carData -> carData.hitBox.isCollidingWith(input.humanCar.hitBox));
 
             if(isBossCollidingWithPLayer) {
-                CurrentGame.demolishPlayer();
+                CurrentGame.humanPlayer.takeDamage(input, 1, dashDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(2200));
             }
         }
         CurrentGame.bossAi.step(input);
@@ -55,6 +53,11 @@ public class BossDashAttackPhase1 implements State {
         if(CurrentGame.bossAi.animator.isFinished()) {
             return new BossRunPhase1();
         }
+        /*
+      TODO
+        if(bossAiHitsAWall()) {
+            return new DashIntoWallOuchPhase1();
+        }*/
         return this;
     }
 

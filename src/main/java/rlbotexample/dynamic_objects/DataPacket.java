@@ -1,13 +1,12 @@
 package rlbotexample.dynamic_objects;
 
 import rlbot.flat.GameTickPacket;
+import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
-import rlbotexample.app.physics.game.entity.BossAi;
-import rlbotexample.app.physics.game.entity.HumanPlayer;
 import rlbotexample.dynamic_objects.ball.BallData;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
-import util.resource_handling.CarResourceHandler;
-import util.resource_handling.PlayerIndex;
+import util.resource_handling.cars.CarResourceHandler;
+import util.resource_handling.cars.PlayerIndex;
 
 import java.util.ArrayList;
 import java.util.List;

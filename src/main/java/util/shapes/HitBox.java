@@ -4,6 +4,7 @@ import rlbot.flat.BoxShape;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.Vector3;
+import util.resource_handling.electric_balls.ElectricBall;
 
 public class HitBox {
     public final Vector3 centerPositionOfHitBox;
@@ -160,6 +161,14 @@ public class HitBox {
         return this.centerPositionOfHitBox.minus(that.centerPositionOfHitBox).magnitudeSquared() <
                 square((that.centerPositionOfHitBox.minus(pointOnThat).magnitude()
                         + this.centerPositionOfHitBox.minus(pointOnThis).magnitude())*1.2);
+    }
+
+    public boolean isCollidingWith(ElectricBall electricBall) {
+        Vector3 pointOnThis = this.closestPointOnSurface(electricBall.position);
+        Vector3 pointOnThat = electricBall.position.plus(this.centerPositionOfHitBox.minus(electricBall.position).scaledToMagnitude(ElectricBall.RADII));
+        return this.centerPositionOfHitBox.minus(electricBall.position).magnitudeSquared() <
+                square(electricBall.position.minus(pointOnThat).magnitude()
+                        + this.centerPositionOfHitBox.minus(pointOnThis).magnitude());
     }
 
     private double square(double x) {
