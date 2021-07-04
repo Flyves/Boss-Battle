@@ -18,7 +18,7 @@ public class CurrentGame {
 
     public static final int BOSS_INITIAL_HP = 1000;
     public static final double BOSS_MAX_SPEED = 2700/RlConstants.BOT_REFRESH_RATE;
-    public static final double BOSS_DASH_SPEED = 14000/RlConstants.BOT_REFRESH_RATE;
+    public static final double BOSS_DASH_SPEED = 17000/RlConstants.BOT_REFRESH_RATE;
     public static HumanPlayer humanPlayer;
     public static BossAi bossAi;
 

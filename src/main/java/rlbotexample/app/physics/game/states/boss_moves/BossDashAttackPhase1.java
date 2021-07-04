@@ -13,6 +13,8 @@ import util.state_machine.State;
 
 import java.util.List;
 
+import static rlbotexample.app.physics.game.CurrentGame.BOSS_DASH_SPEED;
+
 public class BossDashAttackPhase1 implements State {
 
     private static final int AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH = 171;
@@ -21,7 +23,7 @@ public class BossDashAttackPhase1 implements State {
 
     private static final int FRAME_FOR_BEGINNING_OF_REORIENTATION = 115;
     private static final int FRAME_FOR_ENDING_OF_REORIENTATION = 135;
-    private static final double MAX_SPIN_SPEED = 5;
+    private static final double MAX_SPIN_SPEED = 4;
 
     private static final int ATTACK_DAMAGE = 3;
 
@@ -40,8 +42,8 @@ public class BossDashAttackPhase1 implements State {
                 && CurrentGame.bossAi.animator.currentFrameIndex() > AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
             CurrentGame.bossAi.orientedPosition.position = CurrentGame.bossAi.orientedPosition.position
                     .plus(dashDirection.scaledToMagnitude(
-                            CurrentGame.BOSS_DASH_SPEED
-                            - ((CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (CurrentGame.BOSS_DASH_SPEED/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
+                            BOSS_DASH_SPEED
+                            - ((CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (BOSS_DASH_SPEED/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
 
             List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation);
             boolean isBossCollidingWithPLayer = carsUsedForTheAnimation.stream()
@@ -52,7 +54,7 @@ public class BossDashAttackPhase1 implements State {
             }
         }
         else if(CurrentGame.bossAi.animator.currentFrameIndex() >= FRAME_FOR_BEGINNING_OF_REORIENTATION
-                && CurrentGame.bossAi.animator.currentFrameIndex() <= FRAME_FOR_ENDING_OF_REORIENTATION) {
+                && CurrentGame.bossAi.animator.currentFrameIndex() < FRAME_FOR_ENDING_OF_REORIENTATION) {
             CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, Math.PI/2));
             Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
             Vector3 noseDestination = vectorFromBossToPlayer.scaled(1, 1, 0).normalized().scaled(-1);
@@ -70,13 +72,16 @@ public class BossDashAttackPhase1 implements State {
             dashDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass)
                     .scaled(1, 1, 0).normalized();
         }
-        else if(CurrentGame.bossAi.animator.currentFrameIndex() == AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
+        else if(CurrentGame.bossAi.animator.currentFrameIndex() == FRAME_FOR_ENDING_OF_REORIENTATION) {
             Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
-            Vector3 noseDestination = vectorFromBossToPlayer.scaled(1, 1, 0).normalized().scaled(-1);
+            dashDirection = vectorFromBossToPlayer.plus(input.humanCar.velocity.scaled(
+                    ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
+                            + vectorFromBossToPlayer.magnitude()/(BOSS_DASH_SPEED*RlConstants.BOT_REFRESH_RATE))
+                    .scaled(1.4))
+                    .scaled(1, 1, 0).normalized();
+            Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
             CurrentGame.bossAi.orientedPosition.orientation.noseVector = noseDestination;
             CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
-            dashDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass)
-                .scaled(1, 1, 0).normalized();
         }
         CurrentGame.bossAi.step(input);
     }
