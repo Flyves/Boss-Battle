@@ -5,7 +5,7 @@ import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
-import util.math.vector.CarOrientedPosition;
+import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
 import util.resource_handling.cars.CarResourceHandler;
 
@@ -16,7 +16,7 @@ public class BossAi implements PlayableEntity, AutoCloseable {
 
     public ExtendedCarData mainCar;
     public int health;
-    public CarOrientedPosition orientedPosition;
+    public OrientedPosition orientedPosition;
     public Vector3 centerOfMass;
 
     public CarGroupAnimator animator;
@@ -24,7 +24,7 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     public BossAi(ExtendedCarData mainCar) {
         this.mainCar = mainCar;
         this.health = CurrentGame.BOSS_INITIAL_HP;
-        this.orientedPosition = new CarOrientedPosition();
+        this.orientedPosition = new OrientedPosition();
         this.orientedPosition.position = new Vector3();
         this.centerOfMass = mainCar.position;
         this.animator = new CarGroupAnimator(GameAnimations.quadrupedal_boss_rigged_walk);

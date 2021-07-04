@@ -4,10 +4,11 @@ import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
-import util.math.vector.CarOrientedPosition;
+import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,6 +72,6 @@ public class CarResourceHandler {
 
     public static void handleFreeCars(DataPacket input) {
         List<ExtendedCarData> freeCars = dereferenceIndexes(input, freeCarIndexes);
-        freeCars.forEach(carData -> PhysicsOfBossBattle.setOrientedPosition(new CarOrientedPosition(new Vector3(30000, carData.playerIndex*200, 200), new Orientation()).toZyxOrientedPosition(), carData));
+        freeCars.forEach(carData -> PhysicsOfBossBattle.setOrientedPosition(new OrientedPosition(new Vector3(30000, carData.playerIndex*200, 10000), new Orientation()).toZyxOrientedPosition(), carData));
     }
 }

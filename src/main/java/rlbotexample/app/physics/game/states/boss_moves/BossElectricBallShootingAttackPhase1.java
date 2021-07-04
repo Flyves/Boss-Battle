@@ -11,9 +11,10 @@ import util.state_machine.State;
 
 public class BossElectricBallShootingAttackPhase1 implements State {
 
-    private static final Integer[] FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT = new Integer[]{40, 60, 80, 100, 120,
-                                                                                         35, 55, 75, 95, 115,
-                                                                                         45, 65, 85, 105, 125};
+    private static final Integer[] FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT = new Integer[]{140, 160, 180, 200, 220, 240, 260, 280,
+                                                                                         135, 155, 175, 195, 215, 235, 255, 275,
+                                                                                         145, 165, 185, 205, 225, 245, 265, 285,
+                                                                                         150, 170, 190, 210, 230, 250, 270, 290};
 
     @Override
     public void start(DataPacket input) {
@@ -25,7 +26,7 @@ public class BossElectricBallShootingAttackPhase1 implements State {
     public void exec(DataPacket input) {
         for(Integer frameIndex: FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT) {
             if(frameIndex == CurrentGame.bossAi.animator.currentFrameIndex()) {
-                ElectricBallsResourceHandler.allocAt(CurrentGame.bossAi.centerOfMass.plus(new Vector3(0, 0, 200)), input.humanCar);
+                ElectricBallsResourceHandler.allocAt(CurrentGame.bossAi.centerOfMass, input.humanCar);
             }
         }
         CurrentGame.bossAi.step(input);

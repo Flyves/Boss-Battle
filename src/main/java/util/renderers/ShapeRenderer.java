@@ -29,7 +29,7 @@ public class ShapeRenderer {
         renderer.drawLine3d(color, ray.offset.toFlatVector(), ray.offset.plus(ray.direction).toFlatVector());
     }
 
-    public void renderOrientedPosition(Color color, CarOrientedPosition orientedPosition) {
+    public void renderOrientedPosition(Color color, OrientedPosition orientedPosition) {
         renderer.drawLine3d(
                 color,
                 orientedPosition.position.toFlatVector(),

@@ -15,14 +15,14 @@ public class TransitionFromPhase0ToPhase1 implements State {
     public void start(DataPacket input) {
         CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_transformation_0_To_1);
         CurrentGame.bossAi.animator.isLooping = false;
-        CurrentGame.bossAi.health++;
+        CurrentGame.bossAi.health += 30;
     }
 
     @Override
     public void exec(DataPacket input) {
         CurrentGame.bossAi.orientedPosition.position = new Vector3();
         if(CurrentGame.bossAi.animator.currentFrameIndex() < 100) {
-            CurrentGame.bossAi.orientedPosition.position = new Vector3(0, 0, -30 * CurrentGame.bossAi.animator.currentFrameIndex() -1000);
+            CurrentGame.bossAi.orientedPosition.position = new Vector3(0, 0, -30 * CurrentGame.bossAi.animator.currentFrameIndex() - 1000);
         }
         CurrentGame.bossAi.step(input);
     }

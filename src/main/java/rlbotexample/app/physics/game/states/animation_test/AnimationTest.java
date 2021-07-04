@@ -1,6 +1,8 @@
 package rlbotexample.app.physics.game.states.animation_test;
 
 import rlbot.render.Renderer;
+import rlbotexample.animations.CarGroupAnimator;
+import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
@@ -8,7 +10,11 @@ import util.state_machine.State;
 public class AnimationTest implements State {
 
     @Override
-    public void start(DataPacket input) {}
+    public void start(DataPacket input) {
+        CurrentGame.bossAi.close();
+        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_idk);
+        CurrentGame.bossAi.animator.carsRigidity = 0.998;
+    }
 
     @Override
     public void exec(DataPacket input) {
@@ -16,7 +22,9 @@ public class AnimationTest implements State {
     }
 
     @Override
-    public void stop(DataPacket input) {}
+    public void stop(DataPacket input) {
+        CurrentGame.bossAi.close();
+    }
 
     @Override
     public State next(DataPacket input) {

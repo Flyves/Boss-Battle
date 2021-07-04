@@ -2,6 +2,8 @@ package rlbotexample.app.physics.game.states.boss_phase;
 
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.states.boss_moves.BossDashAttackPhase1;
+import rlbotexample.app.physics.game.states.boss_moves.BossElectricBallShootingAttackPhase1;
 import rlbotexample.app.physics.game.states.boss_moves.BossRunPhase1;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
@@ -11,7 +13,7 @@ public class BossPhase1 implements State {
 
     private static final double BOSS_HEALTH_THRESHOLD_FACTOR = 0.666666666;
 
-    private static final StateMachine bossAttackPattern = new StateMachine(new BossRunPhase1());
+    private static final StateMachine bossAttackPattern = new StateMachine(new BossDashAttackPhase1());
 
     @Override
     public void start(DataPacket input) {

@@ -1,13 +1,16 @@
 package rlbotexample.app.physics.game;
 
 import rlbot.render.Renderer;
+import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.game.entity.BossAi;
 import rlbotexample.app.physics.game.entity.HumanPlayer;
+import rlbotexample.app.physics.game.states.animation_test.AnimationTest;
 import rlbotexample.app.physics.game.states.boss_phase.InitBossPhase;
 import rlbotexample.app.physics.game.states.stats_handling.HandlePlayerStats;
 import rlbotexample.app.physics.game.states.stats_handling.WaitForDemolitionRequest;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
+import util.math.vector.Vector3;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.StateMachine;
 
@@ -15,7 +18,7 @@ public class CurrentGame {
 
     public static final int BOSS_INITIAL_HP = 1000;
     public static final double BOSS_MAX_SPEED = 2700/RlConstants.BOT_REFRESH_RATE;
-    public static final double BOSS_DASH_SPEED = 4500/RlConstants.BOT_REFRESH_RATE;
+    public static final double BOSS_DASH_SPEED = 14000/RlConstants.BOT_REFRESH_RATE;
     public static HumanPlayer humanPlayer;
     public static BossAi bossAi;
 
@@ -30,6 +33,8 @@ public class CurrentGame {
         PLAYER_STATS_MACHINE.exec(input);
         BOSS_PHASE_MACHINE.exec(input);
 
+        blockGoals(input);
+
         ElectricBallsResourceHandler.updateElectricBalls(input);
     }
 
@@ -38,7 +43,22 @@ public class CurrentGame {
         PLAYER_STATS_MACHINE.debug(input, renderer);
         BOSS_PHASE_MACHINE.debug(input, renderer);
 
+        displayBlockedGoals(input, renderer);
+
         ElectricBallsResourceHandler.renderElectricBalls(renderer);
+    }
+
+    public static void blockGoals(DataPacket input) {
+        if(input.humanCar.position.y > RlConstants.WALL_DISTANCE_Y) {
+            PhysicsOfBossBattle.setVelocity(input.humanCar.velocity.minus(new Vector3(0, 8000/RlConstants.BOT_REFRESH_RATE, 0)), input.humanCar);
+        }
+        else if(input.humanCar.position.y < -RlConstants.WALL_DISTANCE_Y) {
+            PhysicsOfBossBattle.setVelocity(input.humanCar.velocity.plus(new Vector3(0, 8000/RlConstants.BOT_REFRESH_RATE, 0)), input.humanCar);
+        }
+    }
+
+    public static void displayBlockedGoals(DataPacket input, Renderer renderer) {
+
     }
 
     public static void demolishPlayer() {

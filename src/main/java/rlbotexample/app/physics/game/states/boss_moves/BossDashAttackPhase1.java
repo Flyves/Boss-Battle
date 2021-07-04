@@ -15,6 +15,16 @@ import java.util.List;
 
 public class BossDashAttackPhase1 implements State {
 
+    private static final int AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH = 171;
+    private static final int FRAME_INDEX_WHEN_DASH_ENDS = 229;
+    private static final int DASH_DURATION = FRAME_INDEX_WHEN_DASH_ENDS - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH;
+
+    private static final int FRAME_FOR_BEGINNING_OF_REORIENTATION = 115;
+    private static final int FRAME_FOR_ENDING_OF_REORIENTATION = 135;
+    private static final double MAX_SPIN_SPEED = 5;
+
+    private static final int ATTACK_DAMAGE = 3;
+
     private Vector3 dashDirection = new Vector3();
 
     @Override
@@ -22,31 +32,59 @@ public class BossDashAttackPhase1 implements State {
         CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_dash_attack);
         CurrentGame.bossAi.animator.isLooping = false;
         CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
-        dashDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass)
-                .scaled(1, 1, 0).normalized();
     }
 
     @Override
     public void exec(DataPacket input) {
-        if(CurrentGame.bossAi.animator.currentFrameIndex() < 114-27) {
+        if(CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH < DASH_DURATION
+                && CurrentGame.bossAi.animator.currentFrameIndex() > AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
             CurrentGame.bossAi.orientedPosition.position = CurrentGame.bossAi.orientedPosition.position
                     .plus(dashDirection.scaledToMagnitude(
                             CurrentGame.BOSS_DASH_SPEED
-                            - (CurrentGame.bossAi.animator.currentFrameIndex()*(CurrentGame.BOSS_DASH_SPEED/RlConstants.BOT_REFRESH_RATE)/(114.0-27))));
+                            - ((CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (CurrentGame.BOSS_DASH_SPEED/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
 
             List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation);
             boolean isBossCollidingWithPLayer = carsUsedForTheAnimation.stream()
                     .anyMatch(carData -> carData.hitBox.isCollidingWith(input.humanCar.hitBox));
 
             if(isBossCollidingWithPLayer) {
-                CurrentGame.humanPlayer.takeDamage(input, 1, dashDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(2200));
+                CurrentGame.humanPlayer.takeDamage(input, ATTACK_DAMAGE, dashDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(2200));
             }
+        }
+        else if(CurrentGame.bossAi.animator.currentFrameIndex() >= FRAME_FOR_BEGINNING_OF_REORIENTATION
+                && CurrentGame.bossAi.animator.currentFrameIndex() <= FRAME_FOR_ENDING_OF_REORIENTATION) {
+            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, Math.PI/2));
+            Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
+            Vector3 noseDestination = vectorFromBossToPlayer.scaled(1, 1, 0).normalized().scaled(-1);
+            Vector3 spin = CurrentGame.bossAi.orientedPosition.orientation.noseVector
+                    .findRotator(noseDestination)
+                    .scaledToMagnitude(MAX_SPIN_SPEED/RlConstants.BOT_REFRESH_RATE);
+            if(CurrentGame.bossAi.orientedPosition.orientation.noseVector
+                    .findRotator(noseDestination)
+                    .magnitude()
+                    < Math.PI/10) {
+                spin = new Vector3();
+            }
+            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(spin);
+            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
+            dashDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass)
+                    .scaled(1, 1, 0).normalized();
+        }
+        else if(CurrentGame.bossAi.animator.currentFrameIndex() == AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
+            Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
+            Vector3 noseDestination = vectorFromBossToPlayer.scaled(1, 1, 0).normalized().scaled(-1);
+            CurrentGame.bossAi.orientedPosition.orientation.noseVector = noseDestination;
+            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
+            dashDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass)
+                .scaled(1, 1, 0).normalized();
         }
         CurrentGame.bossAi.step(input);
     }
 
     @Override
-    public void stop(DataPacket input) {}
+    public void stop(DataPacket input) {
+        CurrentGame.bossAi.close();
+    }
 
     @Override
     public State next(DataPacket input) {

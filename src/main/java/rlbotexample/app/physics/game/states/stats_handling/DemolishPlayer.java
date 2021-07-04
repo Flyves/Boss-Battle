@@ -6,7 +6,7 @@ import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
-import util.math.vector.CarOrientedPosition;
+import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
 import util.math.vector.ZyxOrientedPosition;
 import util.resource_handling.cars.CarResourceHandler;
@@ -37,7 +37,7 @@ public class DemolishPlayer implements State {
             Vector3 killingPosition = humanCar.position.minus(humanCar.orientation.noseVector.scaled(80));
             Vector3 noseOrientation = humanCar.position.minus(killingPosition).normalized().scaled(-1);
             Vector3 roofOrientation = humanCar.orientation.roofVector;
-            ZyxOrientedPosition demolitionZyxOrientedPosition = new CarOrientedPosition(killingPosition, new Orientation(noseOrientation, roofOrientation)).toZyxOrientedPosition();
+            ZyxOrientedPosition demolitionZyxOrientedPosition = new OrientedPosition(killingPosition, new Orientation(noseOrientation, roofOrientation)).toZyxOrientedPosition();
             demolitionZyxOrientedPosition.eulerZYX = demolitionZyxOrientedPosition.eulerZYX.scaled(-1, 1, 1);
             PhysicsOfBossBattle.setOrientedPosition(demolitionZyxOrientedPosition, demolitionCar);
             PhysicsOfBossBattle.setVelocity(noseOrientation.scaledToMagnitude(-3000), demolitionCar);
