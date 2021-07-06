@@ -5,6 +5,9 @@ import rlbot.render.Renderer;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 public abstract class BotBehaviour {
 
     private BotOutput botOutput;

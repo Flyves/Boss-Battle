@@ -1,7 +1,10 @@
 package rlbotexample.dynamic_objects.car;
 
 
+import rlbot.flat.PlayerInfo;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
+
+import java.util.Optional;
 
 /**
  * Basic information about the car.
@@ -39,7 +42,10 @@ public class ExtendedCarData extends CarData {
 
     public final int playerIndex;
 
-    public ExtendedCarData(rlbot.flat.PlayerInfo playerInfo, int playerIndex, float elapsedSeconds) {
+    /** previous carData */
+    public final Optional<ExtendedCarData> previousCarData;
+
+    public ExtendedCarData(PlayerInfo playerInfo, Optional<ExtendedCarData> previousCarData, int playerIndex, float elapsedSeconds) {
         super(playerInfo, elapsedSeconds);
         this.playerIndex = playerIndex;
         this.orientation = Orientation.fromFlatbuffer(playerInfo);
@@ -52,5 +58,7 @@ public class ExtendedCarData extends CarData {
         this.hasUsedSecondJump = playerInfo.doubleJumped();
 
         this.isDemolished = playerInfo.isDemolished();
+
+        this.previousCarData = previousCarData;
     }
 }

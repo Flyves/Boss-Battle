@@ -10,6 +10,9 @@ import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class SampleBot implements Bot {
 
     private final int playerIndex;
@@ -24,6 +27,8 @@ public class SampleBot implements Bot {
     private long deltaTime;
     public static double currentFps;
 
+    private final AtomicReference<Optional<DataPacket>> previousDataPacketOptRef;
+
     public SampleBot(int playerIndex, BotBehaviour botBehaviour) {
         this.playerIndex = playerIndex;
         this.botOutput = new BotOutput();
@@ -36,6 +41,8 @@ public class SampleBot implements Bot {
         this.time2 = 0;
         this.deltaTime = 0;
         currentFps = 0;
+
+        this.previousDataPacketOptRef = new AtomicReference<>(Optional.empty());
     }
 
     /**
@@ -93,7 +100,7 @@ public class SampleBot implements Bot {
 
         // Translate the raw packet data (which is in an unpleasant format) into our custom DataPacket class.
         // The DataPacket might not include everything from GameTickPacket, so improve it if you need to!
-        DataPacket dataPacket = new DataPacket(packet, playerIndex);
+        DataPacket dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex);
 
         // if the bot running the thread does not correspond to THE bot
         // that we want to use, stop its execution as soon as possible.
@@ -103,6 +110,8 @@ public class SampleBot implements Bot {
 
         // Do the actual logic using our dataPacket.
         ControlsOutput controlsOutput = processInput(dataPacket, packet);
+
+        previousDataPacketOptRef.set(Optional.of(dataPacket));
 
         // timestamp after executing the bot
         time2 = System.currentTimeMillis();

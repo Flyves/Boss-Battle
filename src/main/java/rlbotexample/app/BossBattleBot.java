@@ -8,12 +8,15 @@ import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class BossBattleBot extends FlyveBot {
 
     public BossBattleBot() {}
 
     @Override
-    public BotOutput processInput(DataPacket input, GameTickPacket packet) {
+    public BotOutput processInput(DataPacket input,  GameTickPacket packet) {
         PhysicsOfBossBattle.execute(input);
 
         return new BotOutput();

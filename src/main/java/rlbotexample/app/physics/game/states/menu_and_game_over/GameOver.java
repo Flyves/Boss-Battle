@@ -23,7 +23,7 @@ public class GameOver implements State {
 
     @Override
     public State next(DataPacket input) {
-        return null;
+        return this;
     }
 
     @Override

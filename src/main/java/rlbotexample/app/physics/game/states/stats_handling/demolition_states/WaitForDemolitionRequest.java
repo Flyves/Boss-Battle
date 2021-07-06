@@ -1,4 +1,4 @@
-package rlbotexample.app.physics.game.states.stats_handling;
+package rlbotexample.app.physics.game.states.stats_handling.demolition_states;
 
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;

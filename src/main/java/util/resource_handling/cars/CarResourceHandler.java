@@ -50,7 +50,7 @@ public class CarResourceHandler {
 
         List<Integer> allocatedCarIndexes = new ArrayList<>(requestedAmount.value);
 
-        for(int i = 0; i < requestedAmount.value; i++) {
+        for(int i = freeCarIndexes.size() - requestedAmount.value; i < freeCarIndexes.size(); i++) {
             allocatedCarIndexes.add(freeCarIndexes.get(i));
         }
         freeCarIndexes.removeAll(allocatedCarIndexes);

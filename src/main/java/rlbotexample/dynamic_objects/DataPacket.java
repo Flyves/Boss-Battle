@@ -10,7 +10,9 @@ import util.resource_handling.cars.PlayerIndex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This class is here for your convenience, it is NOT part of the framework. You can change it as much
@@ -23,7 +25,7 @@ public class DataPacket {
 
     /** Your own car, based on the playerIndex */
     public final ExtendedCarData car;
-    public ExtendedCarData humanCar = null;
+    public ExtendedCarData humanCar;
 
     public final List<ExtendedCarData> allCars;
 
@@ -41,18 +43,28 @@ public class DataPacket {
 
     public static boolean carResourceHandlerHasBeenInitialized = false;
 
-    public DataPacket(GameTickPacket request, int playerIndex) {
+    /** The previous input we received from the framework */
+    public Optional<DataPacket> previousInput;
+
+    public DataPacket(GameTickPacket request, AtomicReference<Optional<DataPacket>> previousDataPacketOptRef, int playerIndex) {
         this.botIndex = playerIndex;
         this.allCars = new ArrayList<>();
+        this.previousInput = previousDataPacketOptRef.get();
         for (int i = 0; i < request.playersLength(); i++) {
             final rlbot.flat.PlayerInfo playerInfo = request.players(i);
             final float elapsedSeconds = request.gameInfo().secondsElapsed();
-            allCars.add(new ExtendedCarData(playerInfo, i, elapsedSeconds));
+            final AtomicReference<Optional<ExtendedCarData>> previousCarOptRef = new AtomicReference<>(Optional.empty());
+            int finalI = i;
+            previousInput.ifPresent(previousInputPresent -> previousCarOptRef.set(Optional.of(previousInputPresent.allCars.get(finalI))));
+
+            allCars.add(new ExtendedCarData(playerInfo, previousCarOptRef.get(), i, elapsedSeconds));
             if(!request.players(i).isBot()) {
                 humanIndex = i;
                 humanCar = allCars.get(i);
             }
         }
+
+
         if(humanCar.playerIndex == request.playersLength()-1) {
             indexOfBotThatLoadsData.set(humanIndex-1);
         }

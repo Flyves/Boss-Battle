@@ -17,12 +17,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CarGroupAnimator implements AutoCloseable {
 
-    private static final double MAX_CAR_SPEED_FOR_CONVERGING_INTO_ANIMATION = 2300;
-    private static final double FACTOR_OF_DISTANCE_FROM_ANIMATION_TO_FIND_DESIRED_SPEED = 10;
-    private static final double MAX_CAR_ACCELERATION_FOR_CONVERGING_INTO_ANIMATION = 700;
-
-    private static final double MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION = 4;
-    private static final double FACTOR_OF_ORIENTATION_DISTANCE_FROM_ANIMATION_TO_FIND_DESIRED_SPIN = 2;
+    private static final ZyxOrientedPosition ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED =
+            new OrientedPosition(
+                    new Vector3(0, 0, 2050),    // on the ceiling
+                    new Orientation(
+                            new Vector3(1, 0, 0),   // nose in some random orientation (any works)
+                            new Vector3(0, 0, -1))  // upside down
+            ).toZyxOrientedPosition();
 
     private final CarGroupAnimation meshAnimation;
     public OrientedPosition orientedPosition;
@@ -52,8 +53,7 @@ public class CarGroupAnimator implements AutoCloseable {
         List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, carIndexesUsedForTheAnimation);
         carsUsedForTheAnimation.forEach(carData -> {
             if(carData.isDemolished) {
-                OrientedPosition positionToResetCarWheelsSoThatTheDemolishedStateGetsReseted = new OrientedPosition(new Vector3(0, 0, 2050), new Orientation(new Vector3(1, 0, 0), new Vector3(0, 0, -1)));
-                PhysicsOfBossBattle.setOrientedPosition(positionToResetCarWheelsSoThatTheDemolishedStateGetsReseted.toZyxOrientedPosition(), carData);
+                PhysicsOfBossBattle.setOrientedPosition(ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED, carData);
             }
             else {
                 try {
@@ -92,38 +92,6 @@ public class CarGroupAnimator implements AutoCloseable {
 
     private void stateSetWithSnapPhysics(OrientedPosition orientedPosition, ExtendedCarData carData) {
         PhysicsOfBossBattle.setOrientedPosition(orientedPosition.toZyxOrientedPosition(), carData);
-    }
-
-    private void stateSetWithSmoothPhysics(OrientedPosition orientedPosition, ExtendedCarData carData) {
-        Vector3 deltaVelocity = findDesiredVelocityTowardsAnimationDestination(orientedPosition, carData).minus(carData.velocity)
-                .scaled(carsRigidity);
-        Vector3 deltaSpin = findDesiredSpinTowardsAnimationDestination(orientedPosition, carData).minus(carData.spin)
-                .scaled(carsRigidity);
-
-        PhysicsOfBossBattle.setVelocity(carData.velocity.minus(deltaVelocity), carData);
-        PhysicsOfBossBattle.setSpin(deltaSpin.plus(carData.spin), carData);
-    }
-
-    private Vector3 findDesiredVelocityTowardsAnimationDestination(OrientedPosition orientedPosition, ExtendedCarData carData) {
-        Vector3 desiredVelocityTowardsAnimationDestination = carData.position.minus(orientedPosition.position).scaled(FACTOR_OF_DISTANCE_FROM_ANIMATION_TO_FIND_DESIRED_SPEED);
-        if(desiredVelocityTowardsAnimationDestination.magnitudeSquared() > MAX_CAR_SPEED_FOR_CONVERGING_INTO_ANIMATION * MAX_CAR_SPEED_FOR_CONVERGING_INTO_ANIMATION) {
-            desiredVelocityTowardsAnimationDestination = desiredVelocityTowardsAnimationDestination.scaledToMagnitude(MAX_CAR_SPEED_FOR_CONVERGING_INTO_ANIMATION);
-        }
-        return desiredVelocityTowardsAnimationDestination;
-    }
-
-    private Vector3 findDesiredSpinTowardsAnimationDestination(OrientedPosition orientedPosition, ExtendedCarData carData) {
-        Vector3 desiredSpinTowardsAnimationDestination = carData.orientation.noseVector.findRotator(orientedPosition.orientation.noseVector)
-                .scaled(FACTOR_OF_ORIENTATION_DISTANCE_FROM_ANIMATION_TO_FIND_DESIRED_SPIN);
-        if(desiredSpinTowardsAnimationDestination.magnitudeSquared() < MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION/2) {
-            desiredSpinTowardsAnimationDestination = desiredSpinTowardsAnimationDestination.scaled(1/MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION)
-                    .plus(carData.orientation.roofVector.findRotator(orientedPosition.orientation.roofVector))
-                    .scaled(MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION);
-        }
-        if(desiredSpinTowardsAnimationDestination.magnitudeSquared() > MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION * MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION) {
-            desiredSpinTowardsAnimationDestination = desiredSpinTowardsAnimationDestination.scaledToMagnitude(MAX_CAR_SPIN_FOR_CONVERGING_INTO_ANIMATION);
-        }
-        return desiredSpinTowardsAnimationDestination;
     }
 
     public boolean isFinished() {
