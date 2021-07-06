@@ -5,7 +5,6 @@ import rlbotexample.animations.CarGroupAnimator;
 import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
-import util.math.vector.Vector3;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.State;
 
@@ -19,7 +18,7 @@ public class BossElectricBallShootingAttackPhase1 implements State {
     @Override
     public void start(DataPacket input) {
         CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_electric_ball_firing);
-        CurrentGame.bossAi.animator.isLooping = false;
+        CurrentGame.bossAi.animator.looping(false);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class BossElectricBallShootingAttackPhase1 implements State {
     @Override
     public State next(DataPacket input) {
         if(CurrentGame.bossAi.animator.isFinished()) {
-            return new BossRunPhase1();
+            return new BossIdlePhase1();
         }
         return this;
     }

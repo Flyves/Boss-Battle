@@ -21,9 +21,8 @@ public class BossDashAttackPhase1 implements State {
     private static final int FRAME_INDEX_WHEN_DASH_ENDS = 229;
     private static final int DASH_DURATION = FRAME_INDEX_WHEN_DASH_ENDS - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH;
 
-    private static final int FRAME_FOR_BEGINNING_OF_REORIENTATION = 115;
+    private static final int FRAME_FOR_BEGINNING_OF_REORIENTATION = 10;
     private static final int FRAME_FOR_ENDING_OF_REORIENTATION = 135;
-    private static final double MAX_SPIN_SPEED = 4;
 
     private static final int ATTACK_DAMAGE = 3;
 
@@ -32,7 +31,7 @@ public class BossDashAttackPhase1 implements State {
     @Override
     public void start(DataPacket input) {
         CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_dash_attack);
-        CurrentGame.bossAi.animator.isLooping = false;
+        CurrentGame.bossAi.animator.looping(false);
         CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
     }
 
@@ -55,22 +54,15 @@ public class BossDashAttackPhase1 implements State {
         }
         else if(CurrentGame.bossAi.animator.currentFrameIndex() >= FRAME_FOR_BEGINNING_OF_REORIENTATION
                 && CurrentGame.bossAi.animator.currentFrameIndex() < FRAME_FOR_ENDING_OF_REORIENTATION) {
-            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, Math.PI/2));
             Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
-            Vector3 noseDestination = vectorFromBossToPlayer.scaled(1, 1, 0).normalized().scaled(-1);
-            Vector3 spin = CurrentGame.bossAi.orientedPosition.orientation.noseVector
-                    .findRotator(noseDestination)
-                    .scaledToMagnitude(MAX_SPIN_SPEED/RlConstants.BOT_REFRESH_RATE);
-            if(CurrentGame.bossAi.orientedPosition.orientation.noseVector
-                    .findRotator(noseDestination)
-                    .magnitude()
-                    < Math.PI/10) {
-                spin = new Vector3();
-            }
-            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(spin);
-            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
-            dashDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass)
+            dashDirection = vectorFromBossToPlayer.plus(input.humanCar.velocity.scaled(
+                    ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
+                            + vectorFromBossToPlayer.magnitude()/(BOSS_DASH_SPEED*RlConstants.BOT_REFRESH_RATE))
+                    .scaled(1.4))
                     .scaled(1, 1, 0).normalized();
+            Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
+            CurrentGame.bossAi.orientedPosition.orientation.noseVector = noseDestination;
+            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
         }
         else if(CurrentGame.bossAi.animator.currentFrameIndex() == FRAME_FOR_ENDING_OF_REORIENTATION) {
             Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
@@ -94,14 +86,32 @@ public class BossDashAttackPhase1 implements State {
     @Override
     public State next(DataPacket input) {
         if(CurrentGame.bossAi.animator.isFinished()) {
-            return new BossRunPhase1();
+            return new BossIdle2Phase1();
         }
-        /*
-      TODO
-        if(bossAiHitsAWall()) {
-            return new DashIntoWallOuchPhase1();
-        }*/
+        if(isBossDashOutOfBound(CurrentGame.bossAi.centerOfMass)) {
+            return new BossIdle2Phase1();
+        }
         return this;
+    }
+
+    private boolean isBossDashOutOfBound(Vector3 centerOfMass) {
+        final double offset = 0;
+
+        if(centerOfMass.x > RlConstants.WALL_DISTANCE_X - offset) {
+            return true;
+        }
+        else if(centerOfMass.x < -RlConstants.WALL_DISTANCE_X + offset) {
+            return true;
+        }
+
+        if(centerOfMass.y > RlConstants.WALL_DISTANCE_Y - offset) {
+            return true;
+        }
+        else if(centerOfMass.y < -RlConstants.WALL_DISTANCE_Y + offset) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

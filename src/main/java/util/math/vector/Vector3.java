@@ -11,6 +11,7 @@ import util.shapes.Triangle3D;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * A simple 3d vector class with the most essential operations.
@@ -427,5 +428,23 @@ public class Vector3 implements Serializable {
 
     public static Vector3 generateRandomVector() {
         return new Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1);
+    }
+
+    public Vector3 capMagnitude(double maximumMagnitude) {
+        if(magnitudeSquared() < maximumMagnitude * maximumMagnitude) {
+            return this;
+        }
+        return scaledToMagnitude(maximumMagnitude);
+    }
+
+    public Vector3 randomizeMagnitude(double maxScale) {
+        return scaled((Math.random()*2 - 1) * maxScale);
+    }
+
+    public Vector3 nonZeroOrElse(Vector3 vector3) {
+        if(isZero()) {
+            return vector3;
+        }
+        return this;
     }
 }

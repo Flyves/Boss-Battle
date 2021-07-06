@@ -27,7 +27,7 @@ public class CarGroupAnimator implements AutoCloseable {
     private final CarGroupAnimation meshAnimation;
     public OrientedPosition orientedPosition;
     private int frameCount;
-    public boolean isLooping;
+    private boolean isLooping;
     private boolean isClosed;
     public double carsRigidity;
 
@@ -139,6 +139,7 @@ public class CarGroupAnimator implements AutoCloseable {
     public void close() throws RuntimeException {
         if(!isClosed) {
             CarResourceHandler.free(carIndexesUsedForTheAnimation);
+            frameCount = meshAnimation.frames.size();
             isClosed = true;
         }
     }
@@ -149,5 +150,9 @@ public class CarGroupAnimator implements AutoCloseable {
 
     public void setCurrentFrameIndex(int newFrameCount) {
         frameCount = newFrameCount;
+    }
+
+    public void looping(boolean isLooping) {
+        this.isLooping = isLooping;
     }
 }

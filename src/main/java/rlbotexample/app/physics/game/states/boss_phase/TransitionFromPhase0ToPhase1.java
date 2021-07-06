@@ -14,7 +14,7 @@ public class TransitionFromPhase0ToPhase1 implements State {
     @Override
     public void start(DataPacket input) {
         CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_transformation_0_To_1);
-        CurrentGame.bossAi.animator.isLooping = false;
+        CurrentGame.bossAi.animator.looping(false);
         CurrentGame.bossAi.health += 30;
     }
 
