@@ -62,13 +62,12 @@ public class CarGroupAnimator implements AutoCloseable {
                     OrientedPosition localOrientedPosition = localZyxOrientedPosition.toCarOrientedPosition();
                     OrientedPosition orientedPosition = localOrientedPosition.toGlobalPosition(this.orientedPosition);
 
-                    // TODO fix this function so we can play with animation transitions!
-                    if(carsRigidity > 0.9) {
-                        stateSetWithSnapPhysics(orientedPosition, carData);
+                    if(carData.position.minus(orientedPosition.position).magnitude() < 10000) {
+                        Vector3 positionWithRigidity = carData.position.plus(orientedPosition.position.minus(carData.position).scaled(carsRigidity));
+                        orientedPosition = new OrientedPosition(positionWithRigidity, orientedPosition.orientation);
                     }
-                    else {
-                        stateSetWithSmoothPhysics(orientedPosition, carData);
-                    }
+
+                    stateSetWithSnapPhysics(orientedPosition, carData);
                 }
                 catch(Exception ignored) {
                 }

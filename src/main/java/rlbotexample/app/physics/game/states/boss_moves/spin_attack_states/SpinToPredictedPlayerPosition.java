@@ -36,23 +36,25 @@ public class SpinToPredictedPlayerPosition implements State {
                 vectorFromBossToPlayer.magnitude()/(BOSS_MOVING_SPEED));
         spinDestination = input.humanCar.position.plus(distanceFromSpeedPrediction)
             .minus(new Vector3(0, 0, 50));
+
+        final double offset = 200;
         if(spinDestination.z < -50) {
             spinDestination.z = -50;
         }
         else if(spinDestination.z > 1700) {
             spinDestination.z = 1700;
         }
-        if(spinDestination.x > RlConstants.WALL_DISTANCE_X) {
-            spinDestination.x = RlConstants.WALL_DISTANCE_X;
+        if(spinDestination.x > RlConstants.WALL_DISTANCE_X - offset) {
+            spinDestination.x = RlConstants.WALL_DISTANCE_X - offset;
         }
-        else if(spinDestination.x < -RlConstants.WALL_DISTANCE_X) {
-            spinDestination.x = -RlConstants.WALL_DISTANCE_X;
+        else if(spinDestination.x < -RlConstants.WALL_DISTANCE_X + offset) {
+            spinDestination.x = -RlConstants.WALL_DISTANCE_X + offset;
         }
-        if(spinDestination.y > RlConstants.WALL_DISTANCE_Y) {
-            spinDestination.y = RlConstants.WALL_DISTANCE_Y;
+        if(spinDestination.y > RlConstants.WALL_DISTANCE_Y - offset) {
+            spinDestination.y = RlConstants.WALL_DISTANCE_Y - offset;
         }
-        else if(spinDestination.y < -RlConstants.WALL_DISTANCE_Y) {
-            spinDestination.y = -RlConstants.WALL_DISTANCE_Y;
+        else if(spinDestination.y < -RlConstants.WALL_DISTANCE_Y + offset) {
+            spinDestination.y = -RlConstants.WALL_DISTANCE_Y + offset;
         }
 
         animationAutomationClip = new LinearNormalizer(
