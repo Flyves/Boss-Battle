@@ -40,7 +40,14 @@ def main():
             # Get the scaling vector of the object to scale the orientation matrix back
             # to something normal before writing it to the file.
             local_object_scale = every_object.scale
-
+            
+            # Get the material name of the object, and use it to determine which team
+            # it belongs to. 
+            team_id = 0
+            if every_object.active_material is not None:
+                if every_object.active_material.name == 'Red':
+                    team_id = 1
+            
             # Send the data!
             file.write(
                 # car id in blender
@@ -62,11 +69,14 @@ def main():
                 + str(state_matrix[1][2] / local_object_scale[2]) + ':'
                 + str(state_matrix[2][0] / local_object_scale[0]) + ':'
                 + str(state_matrix[2][1] / local_object_scale[1]) + ':'
-                + str(state_matrix[2][2] / local_object_scale[2]) + '\n'
+                + str(state_matrix[2][2] / local_object_scale[2]) + ':'
 
                 # The last 4x4 matrix row (the state_matrix[3] row) is ignored
                 # because it seems to always equal (0, 0, 0, 1).
                 # It's useless to stream that.
+
+                # team id of the parsed object
+                + str(team_id) + '\n'
             )
     file.close()
 

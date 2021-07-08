@@ -43,7 +43,10 @@ public class ExtendedCarData extends CarData {
     public final int playerIndex;
 
     /** previous carData */
-    public final Optional<ExtendedCarData> previousCarData;
+    public Optional<ExtendedCarData> previousCarData;
+
+    /** True if this car is a "valid" bot */
+    public final boolean isBot;
 
     public ExtendedCarData(PlayerInfo playerInfo, Optional<ExtendedCarData> previousCarData, int playerIndex, float elapsedSeconds) {
         super(playerInfo, elapsedSeconds);
@@ -60,5 +63,7 @@ public class ExtendedCarData extends CarData {
         this.isDemolished = playerInfo.isDemolished();
 
         this.previousCarData = previousCarData;
+
+        this.isBot = playerInfo.isBot();
     }
 }

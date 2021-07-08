@@ -12,8 +12,8 @@ import util.state_machine.State;
 
 public class SpinToPredictedPlayerPosition implements State {
 
-    private static final double BOSS_MOVING_SPEED = 4000;
-    private static final int AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION = 55;
+    private static final int AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION = 72;
+    private static final double TIME_TO_EXECUTE_MOVEMENT = AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION * RlConstants.BOT_REFRESH_TIME_PERIOD;
 
     static final int FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER = 125;
 
@@ -31,9 +31,7 @@ public class SpinToPredictedPlayerPosition implements State {
     @Override
     public void start(DataPacket input) {
         CurrentGame.bossAi.animator.setCurrentFrameIndex(FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER);
-        Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
-        Vector3 distanceFromSpeedPrediction = input.humanCar.velocity.scaled(
-                vectorFromBossToPlayer.magnitude()/(BOSS_MOVING_SPEED));
+        Vector3 distanceFromSpeedPrediction = input.humanCar.velocity.scaled(TIME_TO_EXECUTE_MOVEMENT);
         spinDestination = input.humanCar.position.plus(distanceFromSpeedPrediction)
             .minus(new Vector3(0, 0, 50));
 
@@ -69,8 +67,16 @@ public class SpinToPredictedPlayerPosition implements State {
     @Override
     public void exec(DataPacket input) {
         double valueOfParameterizedAutomation = animationAutomationClip.compute(CurrentGame.bossAi.animator.currentFrameIndex());
+        valueOfParameterizedAutomation = parameterizedSmoothedDisplacementFunction(valueOfParameterizedAutomation);
+
         CurrentGame.bossAi.orientedPosition.position = parameterizedTrajectory.compute(valueOfParameterizedAutomation);
         CurrentGame.bossAi.step(input);
+    }
+
+    static double parameterizedSmoothedDisplacementFunction(double x) {
+        final double a = 0.6;
+        final double b = -2 * Math.tan(-0.5/a);
+        return (a * Math.atan(b * (x - 0.5))) + 0.5;
     }
 
     @Override

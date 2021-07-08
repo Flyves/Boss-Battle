@@ -32,6 +32,7 @@ public class EndSpinAttack implements State {
     @Override
     public void exec(DataPacket input) {
         double valueOfParameterizedAutomation = animationAutomationClip.compute(CurrentGame.bossAi.animator.currentFrameIndex());
+        valueOfParameterizedAutomation = SpinToPredictedPlayerPosition.parameterizedSmoothedDisplacementFunction(valueOfParameterizedAutomation);
         CurrentGame.bossAi.orientedPosition.position = parameterizedTrajectory.compute(valueOfParameterizedAutomation);
         CurrentGame.bossAi.step(input);
     }

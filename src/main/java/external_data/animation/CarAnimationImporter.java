@@ -1,5 +1,6 @@
 package external_data.animation;
 
+import rlbotexample.animations.AnimatedCarObject;
 import rlbotexample.animations.CarGroup;
 import rlbotexample.animations.IndexedCarGroup;
 import rlbotexample.animations.CarGroupAnimation;
@@ -9,9 +10,7 @@ import util.math.vector.Vector3;
 import util.parameter_configuration.IOFile;
 import util.parameter_configuration.ObjectSerializer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -58,8 +57,8 @@ public class CarAnimationImporter {
                     .collect(Collectors.toList());
 
             // find the car state for this specific car and for this specific frame that we are currently parsing
-            int objectId = valuesDouble.get(0).intValue();
-            int frameId = valuesDouble.get(1).intValue();
+            int objectId = round(valuesDouble.get(0));
+            int frameId = round(valuesDouble.get(1));
 
             Vector3 objectPosition = new Vector3(valuesDouble.get(2), valuesDouble.get(3), valuesDouble.get(4));
             Matrix3By3 objectRotationMatrix = new Matrix3By3(
@@ -67,6 +66,9 @@ public class CarAnimationImporter {
                     valuesDouble.get(8), valuesDouble.get(9), valuesDouble.get(10),
                     valuesDouble.get(11), valuesDouble.get(12), valuesDouble.get(13)
             );
+
+            int teamId = round(valuesDouble.get(14));
+
 
             // update current frame id reference
             newFrameIdRef.set(frameId);
@@ -82,12 +84,20 @@ public class CarAnimationImporter {
             CarGroup mesh = carMeshFrames.get(carMeshFrames.size()-1).carGroup;
 
             // add the parsed car in the frame
-            mesh.orientedPositions.add(new ZyxOrientedPosition(
-                    objectPosition,
-                    objectRotationMatrix.toEulerZyx()));
+            ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, objectRotationMatrix.toEulerZyx());
+            AnimatedCarObject carObject = new AnimatedCarObject(objectId, teamId, zyxOrientedPosition);
+            mesh.carObjects.add(carObject);
         });
+
+        carMeshFrames.stream()
+            .map(indexedCarGroup -> indexedCarGroup.carGroup)
+            .forEach(carGroup -> carGroup.carObjects.sort(Comparator.comparingInt(c -> c.carId)));
 
         // serialize the data in a file for easy loading
         ObjectSerializer.save(new CarGroupAnimation(carMeshFrames), filePath.replaceAll("\\" + ANIMATIONS_EXTENSION_NAME, OBJECT_STREAMING_EXTENSION_NAME));
+    }
+
+    private static int round(Double x) {
+        return (int)(x + 0.5);
     }
 }

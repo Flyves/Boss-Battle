@@ -10,12 +10,14 @@ import rlbotexample.app.physics.game.states.stats_handling.demolition_states.Wai
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
+import util.resource_handling.cars.CarResourceHandler;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.StateMachine;
 
 public class CurrentGame {
 
     public static final int BOSS_INITIAL_HP = 1000;
+    public static final int PLAYER_INITIAL_HP = 100;
     public static final double BOSS_MAX_SPEED = 2700/RlConstants.BOT_REFRESH_RATE;
     public static final double BOSS_DASH_SPEED = 17000/RlConstants.BOT_REFRESH_RATE;
     public static HumanPlayer humanPlayer;
@@ -61,7 +63,8 @@ public class CurrentGame {
     }
 
     public static void triggerGameOver() {
-        demolishPlayer();
+        //demolishPlayer();
+
         /* TODO: add game over state, menu state, etc.
             Set the game over trigger to true, and stuff...
             In the "game over" state, demolish the player, play some "game over" scene/animation or idk, and go back to the menu.

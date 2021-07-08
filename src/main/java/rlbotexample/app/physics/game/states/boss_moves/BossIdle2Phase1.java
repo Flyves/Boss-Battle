@@ -11,7 +11,7 @@ public class BossIdle2Phase1 implements State {
     private int amountOfTimesBossJumped;
 
     public BossIdle2Phase1() {
-        this.idle2Phase1 = new BossIdlePhase1();
+        this.idle2Phase1 = new BossIdle1Phase1();
         this.amountOfTimesBossJumped = 0;
     }
 
@@ -25,7 +25,7 @@ public class BossIdle2Phase1 implements State {
         idle2Phase1.exec(input);
         if(CurrentGame.bossAi.animator.isFinished()) {
             amountOfTimesBossJumped++;
-            idle2Phase1 = new BossIdlePhase1();
+            idle2Phase1 = new BossIdle1Phase1();
             idle2Phase1.start(input);
         }
     }

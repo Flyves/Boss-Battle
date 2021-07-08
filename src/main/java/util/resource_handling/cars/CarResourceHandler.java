@@ -7,20 +7,20 @@ import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CarResourceHandler {
 
-    private static final List<Integer> freeCarIndexes = new ArrayList<>();
+    public static final List<Integer> freeCarIndexes = new ArrayList<>();
+    private static final Map<Integer, Integer> carIdToTeamId = new HashMap<>();
 
     public static void initialize(List<ExtendedCarData> allCars) {
         freeCarIndexes.addAll(allCars.stream()
                 .map(carData -> carData.playerIndex)
                 .collect(Collectors.toList()));
+        allCars.forEach(carData ->
+                carIdToTeamId.put(carData.playerIndex, allCars.get(carData.playerIndex).team));
     }
 
     public static Optional<Integer> alloc(PlayerIndex playerIndexObj) {
@@ -64,9 +64,46 @@ public class CarResourceHandler {
                 .forEach(CarResourceHandler::free);
     }
 
+    public static Optional<List<Integer>> alloc(List<Integer> teamIds) {
+        List<Integer> blueTeamIndexes = freeCarIndexes.stream()
+                .filter(index -> 0 == carIdToTeamId.get(index))
+                .collect(Collectors.toList());
+        List<Integer> orangeTeamIndexes = freeCarIndexes.stream()
+                .filter(index -> 1 == carIdToTeamId.get(index))
+                .collect(Collectors.toList());
+
+        int requestedOrangeAmount = teamIds.stream()
+                .mapToInt(teamId -> teamId)
+                .sum();
+        int requestedBlueAmount = teamIds.size() - requestedOrangeAmount;
+
+        if(blueTeamIndexes.size() < requestedBlueAmount
+                || orangeTeamIndexes.size() < requestedOrangeAmount) {
+            return Optional.empty();
+        }
+
+        List<Integer> orderedAllocatedCars = new ArrayList<>(teamIds.size());
+        teamIds.forEach(teamId -> {
+                    if(teamId == 0) {
+                        int i = blueTeamIndexes.size()-1;
+                        orderedAllocatedCars.add(blueTeamIndexes.get(i));
+                        blueTeamIndexes.remove(i);
+                    }
+                    else {
+                        int i = orangeTeamIndexes.size()-1;
+                        orderedAllocatedCars.add(orangeTeamIndexes.get(i));
+                        orangeTeamIndexes.remove(i);
+                    }
+                });
+
+        freeCarIndexes.removeAll(orderedAllocatedCars);
+
+        return Optional.of(orderedAllocatedCars);
+    }
+
     public static List<ExtendedCarData> dereferenceIndexes(DataPacket input, List<Integer> carIndexes) {
-        return input.allCars.stream()
-                .filter(carData -> carIndexes.contains(carData.playerIndex))
+        return carIndexes.stream()
+                .map(input.allCars::get)
                 .collect(Collectors.toList());
     }
 

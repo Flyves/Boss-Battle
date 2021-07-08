@@ -14,6 +14,7 @@ import util.resource_handling.cars.PlayerAmount;
 import util.resource_handling.cars.PlayerIndex;
 import util.state_machine.State;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,7 +26,9 @@ public class DemolishPlayer implements State {
     @Override
     public void start(DataPacket input) {
         demolitionCarIndexOptRef.set(Optional.empty());
-        Optional<List<Integer>> demolitionCarIndexOpt = CarResourceHandler.alloc(new PlayerAmount(1));
+        List<Integer> botTeamInList = new ArrayList<>();
+        botTeamInList.add(1 - input.humanCar.team);
+        Optional<List<Integer>> demolitionCarIndexOpt = CarResourceHandler.alloc(botTeamInList);
         demolitionCarIndexOpt.ifPresent(demolitionCarIndexes -> demolitionCarIndexOptRef.set(Optional.of(demolitionCarIndexes.get(0))));
     }
 
@@ -34,7 +37,7 @@ public class DemolishPlayer implements State {
         demolitionCarIndexOptRef.get().ifPresent(demolitionCarIndex -> {
             ExtendedCarData demolitionCar = input.allCars.get(demolitionCarIndex);
             ExtendedCarData humanCar = input.humanCar;
-            Vector3 killingPosition = humanCar.position.minus(humanCar.orientation.noseVector.scaled(80));
+            Vector3 killingPosition = humanCar.position.minus(humanCar.orientation.noseVector.scaled(300));
             Vector3 noseOrientation = humanCar.position.minus(killingPosition).normalized().scaled(-1);
             Vector3 roofOrientation = humanCar.orientation.roofVector;
             ZyxOrientedPosition demolitionZyxOrientedPosition = new OrientedPosition(killingPosition, new Orientation(noseOrientation, roofOrientation)).toZyxOrientedPosition();
@@ -46,7 +49,7 @@ public class DemolishPlayer implements State {
 
     @Override
     public void stop(DataPacket input) {
-        demolitionCarIndexOptRef.get().ifPresent(demolitionCar -> CarResourceHandler.free(new PlayerIndex(input.allCars.get(demolitionCar).playerIndex)));
+        demolitionCarIndexOptRef.get().ifPresent(demolitionCarIndex -> CarResourceHandler.free(new PlayerIndex(demolitionCarIndex)));
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * This class is here for your convenience, it is NOT part of the framework. You can change it as much
@@ -43,13 +44,11 @@ public class DataPacket {
 
     public static boolean carResourceHandlerHasBeenInitialized = false;
 
-    /** The previous input we received from the framework */
-    public Optional<DataPacket> previousInput;
-
     public DataPacket(GameTickPacket request, AtomicReference<Optional<DataPacket>> previousDataPacketOptRef, int playerIndex) {
         this.botIndex = playerIndex;
         this.allCars = new ArrayList<>();
-        this.previousInput = previousDataPacketOptRef.get();
+        Optional<DataPacket> previousInput = previousDataPacketOptRef.get();
+
         for (int i = 0; i < request.playersLength(); i++) {
             final rlbot.flat.PlayerInfo playerInfo = request.players(i);
             final float elapsedSeconds = request.gameInfo().secondsElapsed();
@@ -58,19 +57,20 @@ public class DataPacket {
             previousInput.ifPresent(previousInputPresent -> previousCarOptRef.set(Optional.of(previousInputPresent.allCars.get(finalI))));
 
             allCars.add(new ExtendedCarData(playerInfo, previousCarOptRef.get(), i, elapsedSeconds));
-            if(!request.players(i).isBot()) {
-                humanIndex = i;
-                humanCar = allCars.get(i);
-            }
+            allCars.get(i).previousCarData.ifPresent(previousCarData -> previousCarData.previousCarData = Optional.empty());
         }
 
+        ExtendedCarData firstNonBotCar = allCars.stream()
+                .filter(carData -> !carData.isBot)
+                .collect(Collectors.toList())
+                .get(0);
+        humanCar = firstNonBotCar;
+        humanIndex = firstNonBotCar.playerIndex;
 
-        if(humanCar.playerIndex == request.playersLength()-1) {
-            indexOfBotThatLoadsData.set(humanIndex-1);
-        }
-        else {
-            indexOfBotThatLoadsData.set(humanIndex+1);
-        }
+        indexOfBotThatLoadsData.set(allCars.stream()
+                        .map(carData -> carData.playerIndex)
+                        .filter(carIndex -> carIndex != humanIndex)
+                        .collect(Collectors.toList()).get(0));
 
         this.car = allCars.get(playerIndex);
         this.team = this.car.team;

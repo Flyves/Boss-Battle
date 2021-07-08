@@ -1,16 +1,14 @@
 package rlbotexample.animations;
 
-import util.math.vector.ZyxOrientedPosition;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarGroup implements Serializable {
 
-    public final List<ZyxOrientedPosition> orientedPositions;
+    public final List<AnimatedCarObject> carObjects;
 
     public CarGroup() {
-        this.orientedPositions = new ArrayList<>();
+        this.carObjects = new ArrayList<>();
     }
 }

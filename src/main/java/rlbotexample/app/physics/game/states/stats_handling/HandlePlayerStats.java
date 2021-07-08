@@ -7,6 +7,7 @@ import rlbotexample.app.physics.game.entity.HumanPlayer;
 import rlbotexample.app.physics.game.states.stats_handling.demolition_states.WaitForDemolitionRequest;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
+import util.math.vector.Vector3;
 import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
 import util.state_machine.StateMachine;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 public class HandlePlayerStats implements State {
 
     private static final StateMachine PLAYER_DEMOLITION_MACHINE = new StateMachine(new WaitForDemolitionRequest());
+    
+    private static final int HP_DEALT_FOR_EVERY_DEMOLITION = 30;
 
     @Override
     public void start(DataPacket input) {
@@ -48,10 +51,10 @@ public class HandlePlayerStats implements State {
                     }
                     return false;
                 })
-                .filter(newDemolishedCar -> input.humanCar.position.minus(newDemolishedCar.position).magnitudeSquared() < 300*300)
+                .filter(newDemolishedCar -> newDemolishedCar.position.z > -200)
                 .collect(Collectors.toList());
 
-        CurrentGame.bossAi.health -= allNewDemos.size() * 30;
+        CurrentGame.bossAi.health -= HP_DEALT_FOR_EVERY_DEMOLITION * allNewDemos.size();
     }
 
     @Override
@@ -64,6 +67,7 @@ public class HandlePlayerStats implements State {
 
     @Override
     public void debug(DataPacket input, Renderer renderer) {
-        renderer.drawString3d(Integer.toString(CurrentGame.bossAi.health), Color.CYAN, CurrentGame.bossAi.centerOfMass.toFlatVector(), 2, 2);
+
+        renderer.drawString3d(Integer.toString(CurrentGame.bossAi.health), Color.CYAN, CurrentGame.bossAi.centerOfMass.plus(new Vector3(0, 0, 500)).toFlatVector(), 2, 2);
     }
 }

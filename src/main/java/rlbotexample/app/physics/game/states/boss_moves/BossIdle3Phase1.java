@@ -5,7 +5,7 @@ import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
 
-import static rlbotexample.app.physics.game.states.boss_moves.BossIdlePhase1.FRAME_AT_WHICH_BOSS_ENDS_TO_MOVE_TO_THE_SIDE;
+import static rlbotexample.app.physics.game.states.boss_moves.BossIdle1Phase1.FRAME_AT_WHICH_BOSS_ENDS_TO_MOVE_TO_THE_SIDE;
 
 public class BossIdle3Phase1 implements State {
 
@@ -13,7 +13,7 @@ public class BossIdle3Phase1 implements State {
     private int amountOfTimesBossJumped;
 
     public BossIdle3Phase1() {
-        this.idle2Phase1 = new BossIdlePhase1();
+        this.idle2Phase1 = new BossIdle1Phase1();
         this.amountOfTimesBossJumped = 0;
     }
 
@@ -27,7 +27,7 @@ public class BossIdle3Phase1 implements State {
         idle2Phase1.exec(input);
         if(CurrentGame.bossAi.animator.isFinished()) {
             amountOfTimesBossJumped++;
-            idle2Phase1 = new BossIdlePhase1();
+            idle2Phase1 = new BossIdle1Phase1();
             idle2Phase1.start(input);
         }
     }

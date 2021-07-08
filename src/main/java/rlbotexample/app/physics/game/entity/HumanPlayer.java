@@ -26,7 +26,7 @@ public class HumanPlayer implements PlayableEntity {
         System.out.println("Player Health: " + health);
 
         //knock back
-        PhysicsOfBossBattle.setVelocity(newVelocity, input.humanCar);
+        PhysicsOfBossBattle.setVelocity(input.humanCar.velocity.scaled(0.9).plus(newVelocity), input.humanCar);
 
         // TODO: add knock back for the angular velocity too!
     }

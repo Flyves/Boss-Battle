@@ -46,7 +46,7 @@ public class BossSpinAttackPhase1 implements State {
             Vector3 hitDirection = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass).normalized();
 
             if (isBossCollidingWithPLayer) {
-                CurrentGame.humanPlayer.takeDamage(input, ATTACK_DAMAGE, hitDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(2200));
+                CurrentGame.humanPlayer.takeDamage(input, ATTACK_DAMAGE, hitDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(3000));
             }
         }
     }

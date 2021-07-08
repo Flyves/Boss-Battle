@@ -9,7 +9,7 @@ import util.state_machine.State;
 public class StayOnPlaceWhileSpinning implements State{
 
     private static final int FRAME_INDEX_AT_WHICH_WAIT_ON_PLACE_BEGINS = 177;
-    private static final int FRAME_INDEX_AT_WHICH_WAIT_ON_PLACE_ENDS = 357 - 40*3;
+    private static final int FRAME_INDEX_AT_WHICH_WAIT_ON_PLACE_ENDS = 357 - 40*5;
 
     private final BossSpinAttackPhase1 bossSpinAttackPhase1;
 
