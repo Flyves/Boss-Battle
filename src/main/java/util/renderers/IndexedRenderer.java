@@ -29,8 +29,4 @@ public class IndexedRenderer extends Renderer implements Closeable {
     public void close() {
         RLBotDll.sendRenderPacket(this.finishPacket());
     }
-
-    public Renderer getRenderer() {
-        return SampleBot.generateNewRenderer();
-    }
 }

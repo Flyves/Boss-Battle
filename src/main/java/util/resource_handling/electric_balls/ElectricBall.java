@@ -37,8 +37,8 @@ public class ElectricBall {
         amountOfFramesSpent++;
     }
 
-    public void render(Renderer renderer) {
-        Renderer renderer1 = SampleBot.generateNewRenderer();
+    public void render(DataPacket input, Renderer renderer) {
+        Renderer renderer1 = input.bot.getRenderer();
 
         NamedRenderer namedRenderer = new NamedRenderer("ElectricBallRenderGroup" + amountOfGeneratedElectricBallsInTotal);
         namedRenderer.startPacket();

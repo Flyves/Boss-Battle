@@ -26,7 +26,6 @@ public class SampleBot implements Bot {
     private long time2;
     private long deltaTime;
     public static double currentFps;
-    public static Bot staticSelfReference;
 
     private final AtomicReference<Optional<DataPacket>> previousDataPacketOptRef;
 
@@ -44,12 +43,10 @@ public class SampleBot implements Bot {
         currentFps = 0;
 
         this.previousDataPacketOptRef = new AtomicReference<>(Optional.empty());
-
-        staticSelfReference = this;
     }
 
-    public static Renderer generateNewRenderer() {
-        return BotLoopRenderer.forBotLoop(staticSelfReference);
+    public Renderer getRenderer() {
+        return BotLoopRenderer.forBotLoop(this);
     }
 
     /**
@@ -57,13 +54,15 @@ public class SampleBot implements Bot {
      * Modify it to make your bot smarter!
      */
     private ControlsOutput processInput(DataPacket input, GameTickPacket packet) {
-
-        processDefaultInputs(input);
-
-        // Bot behaviour
         botOutput = botBehaviour.processInput(input, packet);
+        botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
 
-        // just some debug calculations all the way down to the return...
+        fpsDataCalc();
+
+        return botOutput.getForwardedOutput();
+    }
+
+    private void fpsDataCalc() {
         previousFpsTime = currentFpsTime;
         currentFpsTime = System.currentTimeMillis();
 
@@ -72,18 +71,6 @@ public class SampleBot implements Bot {
         }
         currentFps = 1.0 / ((currentFpsTime - previousFpsTime) / 1000.0);
         averageFps = (averageFps*29 + (currentFps)) / 30.0;
-
-        botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
-
-        // Output the calculated states
-        return botOutput.getForwardedOutput();
-    }
-
-    private void processDefaultInputs(DataPacket input) {
-    }
-
-    private Renderer getRenderer() {
-        return BotLoopRenderer.forBotLoop(this);
     }
 
     @Override
@@ -107,7 +94,7 @@ public class SampleBot implements Bot {
 
         // Translate the raw packet data (which is in an unpleasant format) into our custom DataPacket class.
         // The DataPacket might not include everything from GameTickPacket, so improve it if you need to!
-        DataPacket dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex);
+        DataPacket dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex, this);
 
         // if the bot running the thread does not correspond to THE bot
         // that we want to use, stop its execution as soon as possible.

@@ -1,6 +1,7 @@
 package rlbotexample.dynamic_objects;
 
 import rlbot.flat.GameTickPacket;
+import rlbotexample.SampleBot;
 import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.ball.BallData;
@@ -44,7 +45,10 @@ public class DataPacket {
 
     public static boolean carResourceHandlerHasBeenInitialized = false;
 
-    public DataPacket(GameTickPacket request, AtomicReference<Optional<DataPacket>> previousDataPacketOptRef, int playerIndex) {
+    public final SampleBot bot;
+
+    public DataPacket(GameTickPacket request, AtomicReference<Optional<DataPacket>> previousDataPacketOptRef, int playerIndex, SampleBot bot) {
+        this.bot = bot;
         this.botIndex = playerIndex;
         this.allCars = new ArrayList<>();
         Optional<DataPacket> previousInput = previousDataPacketOptRef.get();

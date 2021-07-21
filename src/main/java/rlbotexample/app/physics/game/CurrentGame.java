@@ -41,7 +41,7 @@ public class CurrentGame {
 
         displayBlockedGoals(input, renderer);
 
-        ElectricBallsResourceHandler.renderElectricBalls(renderer);
+        ElectricBallsResourceHandler.renderElectricBalls(input, renderer);
 
         PLAYER_STATS_MACHINE.debug(input, renderer);
     }
