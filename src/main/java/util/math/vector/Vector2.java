@@ -1,5 +1,6 @@
 package util.math.vector;
 
+import java.awt.*;
 import java.io.Serializable;
 
 /**
@@ -163,5 +164,9 @@ public class Vector2 implements Serializable {
 
     public Vector2 inverse() {
         return new Vector2(1/x, 1/y);
+    }
+
+    public Point toAwtPoint() {
+        return new Point((int)x, (int)y);
     }
 }

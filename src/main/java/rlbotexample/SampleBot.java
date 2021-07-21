@@ -26,6 +26,7 @@ public class SampleBot implements Bot {
     private long time2;
     private long deltaTime;
     public static double currentFps;
+    public static Bot staticSelfReference;
 
     private final AtomicReference<Optional<DataPacket>> previousDataPacketOptRef;
 
@@ -43,6 +44,12 @@ public class SampleBot implements Bot {
         currentFps = 0;
 
         this.previousDataPacketOptRef = new AtomicReference<>(Optional.empty());
+
+        staticSelfReference = this;
+    }
+
+    public static Renderer generateNewRenderer() {
+        return BotLoopRenderer.forBotLoop(staticSelfReference);
     }
 
     /**

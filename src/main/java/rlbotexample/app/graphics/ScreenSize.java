@@ -1,5 +1,7 @@
 package rlbotexample.app.graphics;
 
+import util.math.vector.Vector2;
+
 import java.awt.*;
 
 // The following code was found on this website:
@@ -18,4 +20,6 @@ public class ScreenSize {
 
     // height will store the height of the screen
     public static final int HEIGHT = (int)size.getHeight();
+
+    public static final Vector2 FULL_HD_RATIO = new Vector2(WIDTH/1920.0, HEIGHT/1080.0);
 }

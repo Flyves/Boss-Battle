@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BossAi implements PlayableEntity, AutoCloseable {
 
-    public ExtendedCarData mainCar;
     public int health;
     public OrientedPosition orientedPosition;
     public Vector3 centerOfMass;
@@ -22,7 +21,6 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     public CarGroupAnimator animator;
 
     public BossAi(ExtendedCarData mainCar) {
-        this.mainCar = mainCar;
         this.health = CurrentGame.BOSS_INITIAL_HP;
         this.orientedPosition = new OrientedPosition();
         this.orientedPosition.position = new Vector3();

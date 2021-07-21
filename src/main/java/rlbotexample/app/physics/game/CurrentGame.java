@@ -37,12 +37,13 @@ public class CurrentGame {
     }
 
     public static void displayRenderer(DataPacket input, Renderer renderer) {
-        PLAYER_STATS_MACHINE.debug(input, renderer);
         BOSS_PHASE_MACHINE.debug(input, renderer);
 
         displayBlockedGoals(input, renderer);
 
         ElectricBallsResourceHandler.renderElectricBalls(renderer);
+
+        PLAYER_STATS_MACHINE.debug(input, renderer);
     }
 
     public static void blockGoals(DataPacket input) {
