@@ -11,7 +11,6 @@ import util.shapes.Triangle3D;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * A simple 3d vector class with the most essential operations.

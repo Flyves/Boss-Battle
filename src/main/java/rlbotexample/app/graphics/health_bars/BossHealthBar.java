@@ -16,7 +16,7 @@ public class BossHealthBar {
 
     private static final Color HEALTH_BAR_COLOR = new Color(229, 20, 20);
 
-    public static void renderOnScreen(Renderer renderer, double hpRatio) {
+    public static void renderOnScreen(double hpRatio) {
         final double hpBar1Health = hpRatio > 2.0/3 ? (hpRatio - (2.0/3)) * 3 : 0;
 
         final double hpBar2Health;
@@ -38,8 +38,8 @@ public class BossHealthBar {
             hpBar3Health = hpRatio * 3;
         }
 
-        //HealthBarSegment.printOnScreen(renderer, HP_BAR_1_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
-        //HealthBarSegment.printOnScreen(renderer, HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
-        //HealthBarSegment.printOnScreen(renderer, HP_BAR_3_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(HP_BAR_3_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
     }
 }

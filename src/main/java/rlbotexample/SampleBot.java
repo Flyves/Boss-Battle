@@ -9,6 +9,7 @@ import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
+import util.renderers.RenderTasks;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -56,6 +57,8 @@ public class SampleBot implements Bot {
     private ControlsOutput processInput(DataPacket input, GameTickPacket packet) {
         botOutput = botBehaviour.processInput(input, packet);
         botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
+        RenderTasks.render();
+        RenderTasks.clearTaskBuffer();
 
         fpsDataCalc();
 

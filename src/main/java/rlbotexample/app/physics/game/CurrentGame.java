@@ -10,6 +10,7 @@ import rlbotexample.app.physics.game.states.stats_handling.demolition_states.Wai
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
+import util.renderers.RenderTasks;
 import util.resource_handling.cars.CarResourceHandler;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.StateMachine;
@@ -41,7 +42,7 @@ public class CurrentGame {
 
         displayBlockedGoals(input, renderer);
 
-        ElectricBallsResourceHandler.renderElectricBalls(input, renderer);
+        ElectricBallsResourceHandler.renderElectricBalls(input);
 
         PLAYER_STATS_MACHINE.debug(input, renderer);
     }

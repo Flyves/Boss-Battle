@@ -4,10 +4,11 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.9
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 mainClassName = 'rlbotexample.JavaExample'
@@ -19,7 +20,7 @@ applicationDefaultJvmArgs = ["-Djna.library.path=" + dllDirectory]
 
 dependencies {
     // Fetch the framework jar file
-    compile 'org.rlbot.commons:framework:1.+'
+    compile 'org.rlbot.commons:framework:2.1.0'
 
     // This is makes it easy to find the dll when running in intellij, where JVM args don't get passed from gradle.
     runtime files(dllDirectory)
@@ -88,3 +89,4 @@ installDist {
         }
     }
 }
+targetCompatibility = JavaVersion.VERSION_1_9

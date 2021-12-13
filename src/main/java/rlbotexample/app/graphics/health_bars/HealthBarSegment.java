@@ -1,9 +1,9 @@
 package rlbotexample.app.graphics.health_bars;
 
-import rlbot.render.Renderer;
 import rlbotexample.app.graphics.ScreenSize;
 import util.math.vector.Vector2;
 import util.math.vector.Vector2Int;
+import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
 
 import java.awt.*;
@@ -16,7 +16,7 @@ public class HealthBarSegment {
     private static final Vector2 offsetCD = new Vector2(8, 8).scaled(ScreenSize.FULL_HD_RATIO);
     private static final Vector2 widthHeightXY = new Vector2(315, 16).scaled(ScreenSize.FULL_HD_RATIO);
 
-    public static void printOnScreen(Renderer renderer, Vector2 position, double hpRatio, Color color) {
+    public static void printOnScreen(Vector2 position, double hpRatio, Color color) {
         if(hpRatio > 1) {
             hpRatio = 1;
         }
@@ -30,11 +30,9 @@ public class HealthBarSegment {
 
 
         // in progress
-        new RenderTasks()
-                .append(r -> r.drawRectangle2d(bgColor, position.toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true))
-                //.append(r -> r.drawRectangle2d(bgColor, position.plus(offsetAB).toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true))
-                //.append(r -> r.drawRectangle2d(color, position.plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true))
-                //.append(r -> r.drawRectangle2d(color, position.plus(offsetAB).plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true))
-                .render(renderer);
+        //RenderTasks.append(r -> r.drawRectangle2d(bgColor, position.toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true));
+        //RenderTasks.append(r -> r.drawRectangle2d(bgColor, position.plus(offsetAB).toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true));
+        RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
+        //RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetAB).plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
     }
 }

@@ -8,23 +8,28 @@ import java.util.function.Consumer;
 
 public class RenderTasks {
 
-    private final List<Consumer<Renderer>> tasks;
+    private static final List<Consumer<IndexedRenderer>> tasks = new ArrayList<>();
+    private static final List<IndexedRenderer> renderers = new ArrayList<>();
 
-    public RenderTasks() {
-        tasks = new ArrayList<>();
-    }
+    public RenderTasks() {}
 
-    public RenderTasks append(Consumer<Renderer> renderingTask) {
+    public static void append(final Consumer<IndexedRenderer> renderingTask) {
         tasks.add(renderingTask);
-        return this;
+        while (renderers.size() < tasks.size()) {
+            renderers.add(new IndexedRenderer());
+        }
     }
 
-    public void render(Renderer renderer) {
-        tasks.forEach(renderingTask -> {
-            IndexedRenderer indexedRenderer = new IndexedRenderer();
-            renderingTask.accept(renderer);
-            indexedRenderer.close();
-        });
+    public static void render() {
+        for(int i = 0; i < tasks.size(); i++) {
+            renderers.get(i).open();
+            tasks.get(i).accept(renderers.get(i));
+            renderers.get(i).close();
+        }
+        System.out.println(tasks.size());
     }
 
+    public static void clearTaskBuffer() {
+        tasks.clear();
+    }
 }

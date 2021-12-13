@@ -11,7 +11,7 @@ public class PlayerHealthBar {
     private static final Color HEALTH_BAR_COLOR = new Color(49, 231, 52);
 
     public static void renderOnScreen(Renderer renderer, double hpRatio) {
-        HealthBarSegment.printOnScreen(renderer, UPPER_LEFT_POSITION, hpRatio, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(UPPER_LEFT_POSITION, hpRatio, HEALTH_BAR_COLOR);
     }
 
 }
