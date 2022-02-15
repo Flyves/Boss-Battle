@@ -5,16 +5,15 @@ import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
 
-public class MainMenu implements State {
+public class GameOverPlayerWon implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.isGameOver = false;
+
     }
 
     @Override
     public void exec(DataPacket input) {
-
     }
 
     @Override
@@ -24,7 +23,7 @@ public class MainMenu implements State {
 
     @Override
     public State next(DataPacket input) {
-        return new GameActive();
+        return this;
     }
 
     @Override

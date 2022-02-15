@@ -14,7 +14,6 @@ import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
 import util.state_machine.StateMachine;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +56,10 @@ public class HandlePlayerStats implements State {
                 .collect(Collectors.toList());
 
         CurrentGame.bossAi.health -= HP_DEALT_FOR_EVERY_DEMOLITION * allNewDemos.size();
+
+        if(CurrentGame.bossAi.health <= 0) {
+            CurrentGame.triggerGameOver();
+        }
     }
 
     @Override

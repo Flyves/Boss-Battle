@@ -2,7 +2,10 @@ package rlbotexample.app.graphics.health_bars;
 
 import rlbot.render.Renderer;
 import rlbotexample.app.graphics.ScreenSize;
+import rlbotexample.app.physics.game.CurrentGame;
 import util.math.vector.Vector2;
+import util.math.vector.Vector3;
+import util.renderers.RenderTasks;
 
 import java.awt.*;
 
@@ -37,9 +40,11 @@ public class BossHealthBar {
         else {
             hpBar3Health = hpRatio * 3;
         }
+        
+        RenderTasks.append(renderer -> renderer.drawString2d(Integer.toString(CurrentGame.bossAi.health), Color.CYAN, new Point(0, 0), 2, 2));
 
-        HealthBarSegment.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
-        HealthBarSegment.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
-        HealthBarSegment.printOnScreen(HP_BAR_3_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
+        //HealthBarSegment.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
+        //HealthBarSegment.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
+        //HealthBarSegment.printOnScreen(HP_BAR_3_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
     }
 }

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * With this, we can load rocket league animations that we carefully crafted in blender.
  */
 public class CarAnimationImporter {
-
     public static final String ANIMATIONS_BASE_FOLDER_PATH = "src\\main\\resources\\car animations";
     public static final String ANIMATIONS_EXTENSION_NAME = ".cop";
     public static final String OBJECT_STREAMING_EXTENSION_NAME = ".sob";
@@ -41,33 +40,33 @@ public class CarAnimationImporter {
 
     // object streaming of data generated from blender
     private static void fileDataToStreamedObject(String filePath) {
-        List<String> fileData = IOFile.getFileContent(filePath);
+        final List<String> fileData = IOFile.getFileContent(filePath);
 
-        AtomicReference<Integer> previousFrameIdRef = new AtomicReference<>(-1);
-        AtomicReference<Integer> newFrameIdRef = new AtomicReference<>(0);
+        final AtomicReference<Integer> previousFrameIdRef = new AtomicReference<>(-1);
+        final AtomicReference<Integer> newFrameIdRef = new AtomicReference<>(0);
 
-        List<IndexedCarGroup> carMeshFrames = new ArrayList<>();
+        final List<IndexedCarGroup> carMeshFrames = new ArrayList<>();
 
         // for each car in every frame
         fileData.forEach(s -> {
             // just get the floats in an array
-            String[] valuesStr = s.split(":");
-            List<Double> valuesDouble = Arrays.stream(valuesStr)
+            final String[] valuesStr = s.split(":");
+            final List<Double> valuesDouble = Arrays.stream(valuesStr)
                     .map(Double::valueOf)
                     .collect(Collectors.toList());
 
             // find the car state for this specific car and for this specific frame that we are currently parsing
-            int objectId = round(valuesDouble.get(0));
-            int frameId = round(valuesDouble.get(1));
+            final int objectId = round(valuesDouble.get(0));
+            final int frameId = round(valuesDouble.get(1));
 
-            Vector3 objectPosition = new Vector3(valuesDouble.get(2), valuesDouble.get(3), valuesDouble.get(4));
-            Matrix3By3 objectRotationMatrix = new Matrix3By3(
+            final Vector3 objectPosition = new Vector3(valuesDouble.get(2), valuesDouble.get(3), valuesDouble.get(4));
+            final Matrix3By3 objectRotationMatrix = new Matrix3By3(
                     valuesDouble.get(5), valuesDouble.get(6), valuesDouble.get(7),
                     valuesDouble.get(8), valuesDouble.get(9), valuesDouble.get(10),
                     valuesDouble.get(11), valuesDouble.get(12), valuesDouble.get(13)
             );
 
-            int teamId = round(valuesDouble.get(14));
+            final int teamId = round(valuesDouble.get(14));
 
 
             // update current frame id reference
@@ -76,16 +75,16 @@ public class CarAnimationImporter {
             // if this is a new frame
             if(!previousFrameIdRef.get().equals(newFrameIdRef.get())) {
                 previousFrameIdRef.set(frameId);
-                int safeFrameId = carMeshFrames.size();
+                final int safeFrameId = carMeshFrames.size();
                 carMeshFrames.add(new IndexedCarGroup(safeFrameId));
             }
 
             // get the latest frame that we are building
-            CarGroup mesh = carMeshFrames.get(carMeshFrames.size()-1).carGroup;
+            final CarGroup mesh = carMeshFrames.get(carMeshFrames.size()-1).carGroup;
 
             // add the parsed car in the frame
-            ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, objectRotationMatrix.toEulerZyx());
-            AnimatedCarObject carObject = new AnimatedCarObject(objectId, teamId, zyxOrientedPosition);
+            final ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, objectRotationMatrix.toEulerZyx());
+            final AnimatedCarObject carObject = new AnimatedCarObject(objectId, teamId, zyxOrientedPosition);
             mesh.carObjects.add(carObject);
         });
 

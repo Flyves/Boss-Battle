@@ -1,10 +1,9 @@
-# RlBot FlyveController
-An abstraction layer of the RlBot framework for controlling rocket league bots, in Java. 
+## Fight the Rocket Slayer! 
+The ultimate bad guy just arrived to destroy the world of rocket league!  Answer the call! Fight with all you have!  
+The future of rocket league depends on you.
 
-## The idea
-The purpose of this project is to try to solve one of the biggest problems for rocket league bots:
-What inputs do we need to provide in order to reach a specific physic state at a specified moment in time?
 
-## How to use
-There are two classes that you need to be aware of. The first one is ```DesiredCarState```, and the second one is ```BotController```. As the names suggest, ```DesiredCarState``` is for specifying a future desired state, and ```BotController``` is where the actual computations are done.
-You can find examples of these classes in the folder dedicated to that. 
+## Credits
+Many thanks to:
+- [Abstrack](https://abstrack.newgrounds.com/audio), who helped out a lot regarding the sound design;
+- My family for giving feedback on the general design.

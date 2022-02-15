@@ -7,7 +7,6 @@ import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.math.vector.Vector3;
 import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
-import util.resource_handling.cars.PlayerAmount;
 
 import java.util.ArrayList;
 import java.util.List;

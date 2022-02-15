@@ -4,14 +4,11 @@ import rlbot.render.Renderer;
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.game.entity.BossAi;
 import rlbotexample.app.physics.game.entity.HumanPlayer;
-import rlbotexample.app.physics.game.states.boss_phase.InitBossPhase;
-import rlbotexample.app.physics.game.states.stats_handling.HandlePlayerStats;
-import rlbotexample.app.physics.game.states.stats_handling.demolition_states.WaitForDemolitionRequest;
+import rlbotexample.app.physics.game.states.menu_and_game_over.GameActive;
+import rlbotexample.app.physics.game.states.menu_and_game_over.MainMenu;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
-import util.renderers.RenderTasks;
-import util.resource_handling.cars.CarResourceHandler;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.StateMachine;
 
@@ -23,14 +20,13 @@ public class CurrentGame {
     public static final double BOSS_DASH_SPEED = 17000/RlConstants.BOT_REFRESH_RATE;
     public static HumanPlayer humanPlayer;
     public static BossAi bossAi;
-
     public static boolean playerDemolitionRequest = false;
-    private static final StateMachine PLAYER_STATS_MACHINE = new StateMachine(new HandlePlayerStats());
-    private static final StateMachine BOSS_PHASE_MACHINE = new StateMachine(new InitBossPhase());
+    public static boolean isGameOver = false;
+
+    private static final StateMachine GAME_MACHINE = new StateMachine(new MainMenu());
 
     public static void step(DataPacket input) {
-        PLAYER_STATS_MACHINE.exec(input);
-        BOSS_PHASE_MACHINE.exec(input);
+        GAME_MACHINE.exec(input);
 
         blockGoals(input);
 
@@ -38,13 +34,11 @@ public class CurrentGame {
     }
 
     public static void displayRenderer(DataPacket input, Renderer renderer) {
-        BOSS_PHASE_MACHINE.debug(input, renderer);
+        GAME_MACHINE.debug(input, renderer);
 
         displayBlockedGoals(input, renderer);
 
         ElectricBallsResourceHandler.renderElectricBalls(input);
-
-        PLAYER_STATS_MACHINE.debug(input, renderer);
     }
 
     public static void blockGoals(DataPacket input) {
@@ -65,6 +59,7 @@ public class CurrentGame {
     }
 
     public static void triggerGameOver() {
+        isGameOver = true;
         //demolishPlayer();
 
         /* TODO: add game over state, menu state, etc.

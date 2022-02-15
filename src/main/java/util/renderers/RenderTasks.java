@@ -7,24 +7,20 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class RenderTasks {
+    private static final List<Consumer<Renderer>> tasks = new ArrayList<>();
+    private static Renderer renderer;
 
-    private static final List<Consumer<IndexedRenderer>> tasks = new ArrayList<>();
-    private static final List<IndexedRenderer> renderers = new ArrayList<>();
+    public static void setRenderer(final Renderer renderer) {
+        RenderTasks.renderer = renderer;
+    }
 
-    public RenderTasks() {}
-
-    public static void append(final Consumer<IndexedRenderer> renderingTask) {
+    public static void append(final Consumer<Renderer> renderingTask) {
         tasks.add(renderingTask);
-        while (renderers.size() < tasks.size()) {
-            renderers.add(new IndexedRenderer());
-        }
     }
 
     public static void render() {
         for(int i = 0; i < tasks.size(); i++) {
-            renderers.get(i).open();
-            tasks.get(i).accept(renderers.get(i));
-            renderers.get(i).close();
+            tasks.get(i).accept(renderer);
         }
         System.out.println(tasks.size());
     }

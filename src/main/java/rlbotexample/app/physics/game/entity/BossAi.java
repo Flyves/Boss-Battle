@@ -50,4 +50,8 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     public void close() throws RuntimeException {
         animator.close();
     }
+
+    public boolean hasLost() {
+        return health <= 0;
+    }
 }

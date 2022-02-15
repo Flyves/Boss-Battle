@@ -32,7 +32,7 @@ public class HealthBarSegment {
         // in progress
         //RenderTasks.append(r -> r.drawRectangle2d(bgColor, position.toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true));
         //RenderTasks.append(r -> r.drawRectangle2d(bgColor, position.plus(offsetAB).toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true));
-        RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
+        //RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
         //RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetAB).plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
     }
 }

@@ -53,24 +53,24 @@ public class CarGroupAnimator implements AutoCloseable {
     public void step(DataPacket input) {
         final AtomicInteger safeBotIndex = new AtomicInteger(0);
 
-        List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, carIndexesUsedForTheAnimation);
+        final List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, carIndexesUsedForTheAnimation);
         carsUsedForTheAnimation.forEach(carData -> {
             if(carData.isDemolished) {
                 PhysicsOfBossBattle.setOrientedPosition(ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED, carData);
             }
             else {
                 // ... uhm, what am I doing?
-                ZyxOrientedPosition localZyxOrientedPosition =
+                final ZyxOrientedPosition localZyxOrientedPosition =
                         meshAnimation.queryFrame(frameCount)
                         .carObjects.stream()
                         .map(carObject -> carObject.zyxOrientedPosition)
                         .collect(Collectors.toList())
                         .get(safeBotIndex.get());
-                OrientedPosition localOrientedPosition = localZyxOrientedPosition.toCarOrientedPosition();
+                final OrientedPosition localOrientedPosition = localZyxOrientedPosition.toCarOrientedPosition();
                 OrientedPosition orientedPosition = localOrientedPosition.toGlobalPosition(this.orientedPosition);
 
                 if(carData.position.minus(orientedPosition.position).magnitude() < 10000) {
-                    Vector3 positionWithRigidity = carData.position.plus(orientedPosition.position.minus(carData.position).scaled(carsRigidity));
+                    final Vector3 positionWithRigidity = carData.position.plus(orientedPosition.position.minus(carData.position).scaled(carsRigidity));
                     orientedPosition = new OrientedPosition(positionWithRigidity, orientedPosition.orientation);
                 }
 
