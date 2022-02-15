@@ -26,7 +26,9 @@ public class HandlePlayerStats implements State {
     @Override
     public void start(DataPacket input) {
         CurrentGame.humanPlayer = new HumanPlayer();
-        CurrentGame.bossAi = new BossAi(input.car);
+        CurrentGame.bossAi = new BossAi();
+        CurrentGame.humanPlayer.health = CurrentGame.PLAYER_INITIAL_HP;
+        CurrentGame.bossAi.health = CurrentGame.BOSS_INITIAL_HP;
     }
 
     @Override
@@ -72,9 +74,6 @@ public class HandlePlayerStats implements State {
 
     @Override
     public void debug(DataPacket input, Renderer renderer) {
-        //renderer.drawString3d(Integer.toString(CurrentGame.bossAi.health), Color.CYAN, CurrentGame.bossAi.centerOfMass.plus(new Vector3(0, 0, 500)).toFlatVector(), 2, 2);
-
-        PlayerHealthBar.renderOnScreen(renderer, CurrentGame.humanPlayer.health/(double)CurrentGame.PLAYER_INITIAL_HP);
-        //BossHealthBar.renderOnScreen(renderer, CurrentGame.bossAi.health/(double)CurrentGame.BOSS_INITIAL_HP);
+        PlayerHealthBar.renderOnScreen();
     }
 }

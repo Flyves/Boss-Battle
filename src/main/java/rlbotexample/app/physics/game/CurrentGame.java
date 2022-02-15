@@ -4,8 +4,7 @@ import rlbot.render.Renderer;
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.game.entity.BossAi;
 import rlbotexample.app.physics.game.entity.HumanPlayer;
-import rlbotexample.app.physics.game.states.menu_and_game_over.GameActive;
-import rlbotexample.app.physics.game.states.menu_and_game_over.MainMenu;
+import rlbotexample.app.physics.game.states.menu_and_game_over.WaitForAssetsToLoad;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
@@ -23,7 +22,7 @@ public class CurrentGame {
     public static boolean playerDemolitionRequest = false;
     public static boolean isGameOver = false;
 
-    private static final StateMachine GAME_MACHINE = new StateMachine(new MainMenu());
+    private static final StateMachine GAME_MACHINE = new StateMachine(new WaitForAssetsToLoad());
 
     public static void step(DataPacket input) {
         GAME_MACHINE.exec(input);
@@ -60,6 +59,7 @@ public class CurrentGame {
 
     public static void triggerGameOver() {
         isGameOver = true;
+        CurrentGame.bossAi.close();
         //demolishPlayer();
 
         /* TODO: add game over state, menu state, etc.

@@ -4,7 +4,9 @@ import rlbot.Bot;
 import rlbot.ControllerState;
 import rlbot.flat.GameTickPacket;
 import rlbot.manager.BotLoopRenderer;
+import rlbot.manager.BotManager;
 import rlbot.render.Renderer;
+import rlbotexample.animations.GameAnimations;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
@@ -12,6 +14,7 @@ import rlbotexample.generic_bot.output.ControlsOutput;
 import util.renderers.RenderTasks;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SampleBot implements Bot {
@@ -27,10 +30,12 @@ public class SampleBot implements Bot {
     private long time2;
     private long deltaTime;
     public static double currentFps;
+    public BotManager botManager;
 
     private final AtomicReference<Optional<DataPacket>> previousDataPacketOptRef;
 
-    public SampleBot(int playerIndex, BotBehaviour botBehaviour) {
+    public SampleBot(int playerIndex, BotBehaviour botBehaviour, BotManager botManager) {
+        this.botManager = botManager;
         this.playerIndex = playerIndex;
         this.botOutput = new BotOutput();
         this.botBehaviour = botBehaviour;
@@ -55,6 +60,11 @@ public class SampleBot implements Bot {
      * Modify it to make your bot smarter!
      */
     private ControlsOutput processInput(DataPacket input, GameTickPacket packet) {
+        RenderTasks.setRenderer(renderer);
+        if(!GameAnimations.areLoading) {
+            GameAnimations.areLoading = true;
+            new Thread(GameAnimations::loadAnimations).start();
+        }
         botOutput = botBehaviour.processInput(input, packet);
         botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
         RenderTasks.render();
@@ -95,17 +105,13 @@ public class SampleBot implements Bot {
             return new ControlsOutput();
         }
 
-        // Translate the raw packet data (which is in an unpleasant format) into our custom DataPacket class.
-        // The DataPacket might not include everything from GameTickPacket, so improve it if you need to!
-        DataPacket dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex, this);
-
-        // if the bot running the thread does not correspond to THE bot
-        // that we want to use, stop its execution as soon as possible.
-        if(DataPacket.indexOfBotThatLoadsData.get() != dataPacket.car.playerIndex) {
+        DataPacket dataPacket;
+        try {
+            dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex, this);
+        }
+        catch (RuntimeException runtimeException) {
             return new ControlsOutput();
         }
-
-        // Do the actual logic using our dataPacket.
         ControlsOutput controlsOutput = processInput(dataPacket, packet);
 
         previousDataPacketOptRef.set(Optional.of(dataPacket));

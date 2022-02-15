@@ -1,5 +1,6 @@
 package rlbotexample.dynamic_objects;
 
+import jdk.jshell.spi.ExecutionControl;
 import rlbot.flat.GameTickPacket;
 import rlbotexample.SampleBot;
 import rlbotexample.animations.GameAnimations;
@@ -39,10 +40,6 @@ public class DataPacket {
     public int humanIndex = 0;
 
     /** The index of the bot that is going to reload the ball prediction (if there is many bots) */
-    public static final AtomicInteger indexOfBotThatLoadsData = new AtomicInteger(-1);
-
-    private static volatile boolean dataLoaded = false;
-
     public static boolean carResourceHandlerHasBeenInitialized = false;
 
     public final SampleBot bot;
@@ -71,20 +68,17 @@ public class DataPacket {
         humanCar = firstNonBotCar;
         humanIndex = firstNonBotCar.playerIndex;
 
-        indexOfBotThatLoadsData.set(allCars.stream()
-                        .map(carData -> carData.playerIndex)
-                        .filter(carIndex -> carIndex != humanIndex)
-                        .collect(Collectors.toList()).get(0));
-
         this.car = allCars.get(playerIndex);
         this.team = this.car.team;
         this.ball = new BallData(request.ball());
 
-        // omg
-        if(indexOfBotThatLoadsData.get() == playerIndex) {
-            loadData(request);
-            dataLoaded = true;
+        if(allCars.stream()
+                .map(carData -> carData.playerIndex)
+                .filter(carIndex -> carIndex != humanIndex)
+                .collect(Collectors.toList()).get(0) != playerIndex) {
+            throw new RuntimeException("non-running bot");
         }
+        loadData(request);
     }
 
     private void loadData(GameTickPacket request) {

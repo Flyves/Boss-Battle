@@ -20,11 +20,11 @@ public class BossAi implements PlayableEntity, AutoCloseable {
 
     public CarGroupAnimator animator;
 
-    public BossAi(ExtendedCarData mainCar) {
+    public BossAi() {
         this.health = CurrentGame.BOSS_INITIAL_HP;
         this.orientedPosition = new OrientedPosition();
         this.orientedPosition.position = new Vector3();
-        this.centerOfMass = mainCar.position;
+        this.centerOfMass = new Vector3(0, 0, 500);
         this.animator = new CarGroupAnimator(GameAnimations.quadrupedal_boss_rigged_walk);
     }
 

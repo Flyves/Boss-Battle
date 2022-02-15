@@ -25,6 +25,7 @@ public class CarAnimationImporter {
     public static final String ANIMATIONS_BASE_FOLDER_PATH = "src\\main\\resources\\car animations";
     public static final String ANIMATIONS_EXTENSION_NAME = ".cop";
     public static final String OBJECT_STREAMING_EXTENSION_NAME = ".sob";
+    private static int amountOfFileSerialized = 0;
 
     public static void main(String[] args) {
         IOFile.getFileNamesIn("src\\main\\resources\\car animations")
@@ -36,10 +37,12 @@ public class CarAnimationImporter {
                 })
                 .map(fileName -> ANIMATIONS_BASE_FOLDER_PATH + "\\" + fileName)
                 .forEach(CarAnimationImporter::fileDataToStreamedObject);
+        System.out.println("\nSerialized " + amountOfFileSerialized + " files.");
     }
 
     // object streaming of data generated from blender
     private static void fileDataToStreamedObject(String filePath) {
+        System.out.println("Serializing \"" + filePath + "\"...");
         final List<String> fileData = IOFile.getFileContent(filePath);
 
         final AtomicReference<Integer> previousFrameIdRef = new AtomicReference<>(-1);
@@ -94,6 +97,7 @@ public class CarAnimationImporter {
 
         // serialize the data in a file for easy loading
         ObjectSerializer.save(new CarGroupAnimation(carMeshFrames), filePath.replaceAll("\\" + ANIMATIONS_EXTENSION_NAME, OBJECT_STREAMING_EXTENSION_NAME));
+        amountOfFileSerialized++;
     }
 
     private static int round(Double x) {

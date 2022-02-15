@@ -48,6 +48,9 @@ public class CarGroupAnimator implements AutoCloseable {
                 .collect(Collectors.toList());
         Optional<List<Integer>> allocatedCarsOpt = CarResourceHandler.alloc(teamIds);
         this.carIndexesUsedForTheAnimation.addAll(allocatedCarsOpt.orElseGet(ArrayList::new));
+        if(teamIds.size() != carIndexesUsedForTheAnimation.size()) {
+            throw new RuntimeException("not enough cars to load the animation");
+        }
     }
 
     public void step(DataPacket input) {

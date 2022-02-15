@@ -11,10 +11,13 @@ import util.math.vector.Vector3;
 
 public class BallStateSetter {
 
+    private static final Vector3 DEFAULT_TARGET = new Vector3(0, 0, 500);
+    private static Vector3 target = DEFAULT_TARGET;
+
     private static final ExponentialSmoother3D smoother = new ExponentialSmoother3D(0.95);
 
     public static void handleBallState(DataPacket input) {
-        BallStateSetter.useBallAsCameraFor(input.humanCar, smoother.apply(CurrentGame.bossAi.centerOfMass));
+        BallStateSetter.useBallAsCameraFor(input.humanCar, smoother.apply(target));
     }
 
     private static void useBallAsCameraFor(ExtendedCarData playerCar, Vector3 focusCar) {
@@ -31,5 +34,9 @@ public class BallStateSetter {
                 .withVelocity(new DesiredVector3(0f, 0f, 0f))));
 
         GameSituation.applyGameState(gameState);
+    }
+
+    public static void setTarget(final Vector3 newTarget) {
+        target = newTarget;
     }
 }
