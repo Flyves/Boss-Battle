@@ -21,7 +21,7 @@ public class HandlePlayerStats implements State {
 
     private static final StateMachine PLAYER_DEMOLITION_MACHINE = new StateMachine(new WaitForDemolitionRequest());
     
-    private static final int HP_DEALT_FOR_EVERY_DEMOLITION = 10;
+    private static final int HP_DEALT_FOR_EVERY_DEMOLITION = 20;
 
     @Override
     public void start(DataPacket input) {

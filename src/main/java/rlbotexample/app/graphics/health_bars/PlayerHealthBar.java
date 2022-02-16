@@ -9,13 +9,20 @@ import util.renderers.RenderTasks;
 import java.awt.*;
 
 public class PlayerHealthBar {
-
     private static final Vector2 UPPER_LEFT_POSITION = new Vector2(43, 962);
     private static final Color HEALTH_BAR_COLOR = new Color(49, 231, 52);
 
     public static void renderOnScreen() {
+        Color lifeColor = Color.CYAN;
+        if(CurrentGame.humanPlayer.health < 20) {
+            lifeColor = Color.red;
+        }
+        else if(CurrentGame.humanPlayer.health < 50) {
+            lifeColor = Color.yellow;
+        }
+        final Color finalLifeColor = lifeColor;
         RenderTasks.append(renderer -> renderer.drawString2d("Player HP: " + CurrentGame.humanPlayer.health,
-                Color.CYAN, new Point(20, (int)(ScreenSize.HEIGHT/1.05)),
+                finalLifeColor, new Point(20, (int)(ScreenSize.HEIGHT/1.05)),
                 2, 2));
     }
 

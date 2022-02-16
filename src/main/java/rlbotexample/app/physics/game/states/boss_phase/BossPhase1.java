@@ -3,7 +3,7 @@ package rlbotexample.app.physics.game.states.boss_phase;
 import rlbot.render.Renderer;
 import rlbotexample.app.graphics.health_bars.BossHealthBar;
 import rlbotexample.app.physics.game.CurrentGame;
-import rlbotexample.app.physics.game.states.boss_moves.*;
+import rlbotexample.app.physics.game.states.boss_moves.phase1.BossIdle3Phase1;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
 import util.state_machine.StateMachine;
@@ -37,6 +37,6 @@ public class BossPhase1 implements State {
 
     @Override
     public void debug(DataPacket input, Renderer renderer) {
-        BossHealthBar.renderOnScreen(CurrentGame.bossAi.health/(double)CurrentGame.BOSS_INITIAL_HP);
+        BossHealthBar.renderOnScreen(CurrentGame.bossAi.health/(double)CurrentGame.BOSS_INITIAL_HP, input);
     }
 }

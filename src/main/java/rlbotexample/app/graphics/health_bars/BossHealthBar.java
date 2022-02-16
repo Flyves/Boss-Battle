@@ -3,6 +3,7 @@ package rlbotexample.app.graphics.health_bars;
 import rlbot.render.Renderer;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.dynamic_objects.DataPacket;
 import util.math.vector.Vector2;
 import util.math.vector.Vector3;
 import util.renderers.RenderTasks;
@@ -19,7 +20,7 @@ public class BossHealthBar {
 
     private static final Color HEALTH_BAR_COLOR = new Color(229, 20, 20);
 
-    public static void renderOnScreen(double hpRatio) {
+    public static void renderOnScreen(double hpRatio, DataPacket input) {
         final double hpBar1Health = hpRatio > 2.0/3 ? (hpRatio - (2.0/3)) * 3 : 0;
 
         final double hpBar2Health;
@@ -41,10 +42,11 @@ public class BossHealthBar {
             hpBar3Health = hpRatio * 3;
         }
 
-        RenderTasks.append(renderer -> renderer.drawString2d("Boss HP: " + (int) (CurrentGame.bossAi.health - (CurrentGame.BOSS_INITIAL_HP * (2 / 3.0))) * 3,
-                Color.CYAN, new Point(20, 20),
-                2, 2));
-
+        final int renderedHealth = (int) (CurrentGame.bossAi.health - (CurrentGame.BOSS_INITIAL_HP * (2 / 3.0))) * 3;
+        final double stringScale = Math.atan(1000/CurrentGame.bossAi.centerOfMass.distance(input.humanCar.position));
+        RenderTasks.append(renderer -> renderer.drawString3d("HP: " + renderedHealth,
+                Color.CYAN, CurrentGame.bossAi.centerOfMass.plus(new Vector3(0, 0, 500)).toFlatVector(),
+                (int)(5*stringScale), (int)(5*stringScale)));
         //HealthBarSegment.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
         //HealthBarSegment.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
         //HealthBarSegment.printOnScreen(HP_BAR_3_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
