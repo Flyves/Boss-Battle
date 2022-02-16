@@ -74,9 +74,21 @@ applicationDistribution.exclude(dllDirectory)
 // You can run gradew.bat distZip to generate a zip file suitable for tournament submissions.
 // It will be generated in build/distributions
 distZip {
-    into ('python') {
+    into('python') {
         from fileTree('src/main/python') {
             exclude '__pycache__'
+        }
+    }
+    into('Boss-Battle/bin/src/main/resources/') {
+        into('car animations') {
+            from fileTree('src/main/resources/car animations') {
+                exclude '*.cop'
+            }
+        }
+        into('sounds') {
+            from fileTree('src/main/resources/sounds') {
+
+            }
         }
     }
 }
