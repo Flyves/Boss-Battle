@@ -72,10 +72,11 @@ public class DataPacket {
         this.team = this.car.team;
         this.ball = new BallData(request.ball());
 
-        if(allCars.stream()
+        final List<Integer> botIndexList = allCars.stream()
                 .map(carData -> carData.playerIndex)
                 .filter(carIndex -> carIndex != humanIndex)
-                .collect(Collectors.toList()).get(0) != playerIndex) {
+                .collect(Collectors.toList());
+        if(botIndexList.get(0) != playerIndex) {
             throw new RuntimeException("non-running bot");
         }
         loadData(request);

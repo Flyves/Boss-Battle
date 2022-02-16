@@ -13,6 +13,7 @@ public class BallStateSetter {
 
     private static final Vector3 DEFAULT_TARGET = new Vector3(0, 0, 500);
     private static Vector3 target = DEFAULT_TARGET;
+    private static final Vector3 inGoalPosition = new Vector3(0, 5400, 100);
 
     private static final ExponentialSmoother3D smoother = new ExponentialSmoother3D(0.95);
 
@@ -38,5 +39,11 @@ public class BallStateSetter {
 
     public static void setTarget(final Vector3 newTarget) {
         target = newTarget;
+    }
+
+    public static void quitGame() {GameState gameState = GameSituation.getCurrentGameState();
+        gameState.withBallState(new BallState(new PhysicsState()
+                .withLocation(new DesiredVector3((float)-inGoalPosition.x, (float)inGoalPosition.y, (float)inGoalPosition.z))));
+        GameSituation.applyGameState(gameState);
     }
 }

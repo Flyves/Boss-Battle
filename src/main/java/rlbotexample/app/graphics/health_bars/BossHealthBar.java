@@ -41,7 +41,9 @@ public class BossHealthBar {
             hpBar3Health = hpRatio * 3;
         }
 
-        RenderTasks.append(renderer -> renderer.drawString2d(Integer.toString((int)(CurrentGame.bossAi.health - (CurrentGame.BOSS_INITIAL_HP*(2/3.0)))*3), Color.CYAN, new Point(0, 0), 2, 2));
+        RenderTasks.append(renderer -> renderer.drawString2d("Boss HP: " + (int) (CurrentGame.bossAi.health - (CurrentGame.BOSS_INITIAL_HP * (2 / 3.0))) * 3,
+                Color.CYAN, new Point(20, 20),
+                2, 2));
 
         //HealthBarSegment.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
         //HealthBarSegment.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);

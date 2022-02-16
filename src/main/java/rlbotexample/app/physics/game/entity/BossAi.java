@@ -52,6 +52,6 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     }
 
     public boolean hasLost() {
-        return health <= 0;
+        return health <= 666;
     }
 }

@@ -22,7 +22,6 @@ public class RenderTasks {
         for(int i = 0; i < tasks.size(); i++) {
             tasks.get(i).accept(renderer);
         }
-        System.out.println(tasks.size());
     }
 
     public static void clearTaskBuffer() {

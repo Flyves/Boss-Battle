@@ -4,9 +4,12 @@ import rlbot.render.Renderer;
 import rlbotexample.animations.CarGroupAnimator;
 import rlbotexample.animations.GameAnimations;
 import rlbotexample.app.graphics.health_bars.BossHealthBar;
+import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
+import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
+import util.math.vector.ZyxOrientedPosition;
 import util.state_machine.State;
 
 public class TransitionFromPhase0ToPhase1 implements State {
@@ -20,9 +23,11 @@ public class TransitionFromPhase0ToPhase1 implements State {
     @Override
     public void exec(DataPacket input) {
         CurrentGame.bossAi.orientedPosition.position = new Vector3();
-        if(CurrentGame.bossAi.animator.currentFrameIndex() < 100) {
-            CurrentGame.bossAi.orientedPosition.position = new Vector3(0, 0, -30 * CurrentGame.bossAi.animator.currentFrameIndex() - 500);
-        }
+        /*if(CurrentGame.bossAi.animator.currentFrameIndex() < CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation.size()) {
+            CurrentGame.bossAi.orientedPosition.position = new Vector3(0, 0, -1000);
+            final int carIndexToKill = CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation.get(CurrentGame.bossAi.animator.currentFrameIndex());
+            PhysicsOfBossBattle.setOrientedPosition(new ZyxOrientedPosition(new Vector3((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, -10000), new Vector3()), input.allCars.get(carIndexToKill));
+        }*/
         CurrentGame.bossAi.step(input);
     }
 

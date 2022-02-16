@@ -100,11 +100,6 @@ public class SampleBot implements Bot {
         // timestamp before executing the bot
         time1 = System.currentTimeMillis();
 
-        if (packet.playersLength() <= playerIndex || packet.ball() == null || !packet.gameInfo().isRoundActive()) {
-            // Just return immediately if something looks wrong with the data. This helps us avoid stack traces.
-            return new ControlsOutput();
-        }
-
         DataPacket dataPacket;
         try {
             dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex, this);

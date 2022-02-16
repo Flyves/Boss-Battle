@@ -36,7 +36,7 @@ public class WaitForAssetsToLoad implements State {
         loadingMessage += "%";
         final String finalLoadingMessage = loadingMessage;
         RenderTasks.append(renderer -> renderer.drawString2d(finalLoadingMessage,
-                Color.LIGHT_GRAY, new Point(20, (int)(ScreenSize.HEIGHT-70)),
+                Color.WHITE, new Point(20, ScreenSize.HEIGHT-70),
                 2, 2));
     }
 
@@ -48,7 +48,7 @@ public class WaitForAssetsToLoad implements State {
     @Override
     public State next(DataPacket input) {
         if(GameAnimations.areReady) {
-            return new GameActive();
+            return new MainMenu();
         }
         return this;
     }

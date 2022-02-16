@@ -21,7 +21,7 @@ public class HandlePlayerStats implements State {
 
     private static final StateMachine PLAYER_DEMOLITION_MACHINE = new StateMachine(new WaitForDemolitionRequest());
     
-    private static final int HP_DEALT_FOR_EVERY_DEMOLITION = 30;
+    private static final int HP_DEALT_FOR_EVERY_DEMOLITION = 10;
 
     @Override
     public void start(DataPacket input) {
@@ -59,7 +59,8 @@ public class HandlePlayerStats implements State {
 
         CurrentGame.bossAi.health -= HP_DEALT_FOR_EVERY_DEMOLITION * allNewDemos.size();
 
-        if(CurrentGame.bossAi.health <= 0) {
+        if(CurrentGame.bossAi.health <= 666) {
+            CurrentGame.bossAi.health = 0;
             CurrentGame.triggerGameOver();
         }
     }

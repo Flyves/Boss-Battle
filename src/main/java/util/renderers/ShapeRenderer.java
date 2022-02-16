@@ -139,14 +139,14 @@ public class ShapeRenderer {
     }
 
     public void renderSwerlingSphere(Vector3 position, double radii, Color color) {
-        Vector3 rotator1 = new Vector3(1, 0, 0).rotate(new Vector3(0, 1, 0).scaled((System.currentTimeMillis()/500.0)%(Math.PI*2)));
-        Vector3 rotator2 = new Vector3(1, 1, 0).rotate(new Vector3(0, 1, 0).scaled((System.currentTimeMillis()/300.0)%(Math.PI*2)));
-        Vector3 orientation1 = new Vector3(0, 0, 1).rotate(rotator1.scaled((System.currentTimeMillis()/2000.0)%(Math.PI*2)));
-        Vector3 orientation2 = new Vector3(0, 1, 0).rotate(rotator1.scaled((System.currentTimeMillis()/1700.0 + Math.PI/3)%(Math.PI*2)));
-        Vector3 orientation3 = new Vector3(1, 3, 0).rotate(rotator2.scaled((System.currentTimeMillis()/1800.0 + Math.PI/7)%(Math.PI*2)));
-        Vector3 orientation4 = new Vector3(1, 0, 2.5).rotate(rotator2.scaled((System.currentTimeMillis()/1300.0 + 3*(Math.PI/13))%(Math.PI*2)));
-        Vector3 orientation5 = new Vector3(1, 2, 3).rotate(rotator2.scaled((System.currentTimeMillis()/1200.0 + 5*(Math.PI/17))%(Math.PI*2)));
-        Vector3 orientation6 = new Vector3(10, 7, 19).rotate(rotator2.scaled((System.currentTimeMillis()/1500.0 + 7*(Math.PI/31))%(Math.PI*2)));
+        Vector3 rotator1 = new Vector3(1, 0, 0).rotate(new Vector3(0, 1, 0).scaled((System.currentTimeMillis()/500.0)));
+        Vector3 rotator2 = new Vector3(1, 1, 0).rotate(new Vector3(0, 1, 0).scaled((System.currentTimeMillis()/300.0)));
+        Vector3 orientation1 = new Vector3(0, 0, 1).rotate(rotator1.scaled((System.currentTimeMillis()/2000.0)));
+        Vector3 orientation2 = new Vector3(0, 1, 0).rotate(rotator1.scaled((System.currentTimeMillis()/1700.0 + Math.PI/3)));
+        Vector3 orientation3 = new Vector3(1, 3, 0).rotate(rotator2.scaled((System.currentTimeMillis()/1800.0 + Math.PI/7)));
+        Vector3 orientation4 = new Vector3(1, 0, 2.5).rotate(rotator2.scaled((System.currentTimeMillis()/1300.0 + 3*(Math.PI/13))));
+        Vector3 orientation5 = new Vector3(1, 2, 3).rotate(rotator2.scaled((System.currentTimeMillis()/1200.0 + 5*(Math.PI/17))));
+        Vector3 orientation6 = new Vector3(10, 7, 19).rotate(rotator2.scaled((System.currentTimeMillis()/1500.0 + 7*(Math.PI/31))));
         Circle3D circle1 = new Circle3D(new Ray3(position, orientation1), radii);
         Circle3D circle2 = new Circle3D(new Ray3(position, orientation2), radii);
         Circle3D circle3 = new Circle3D(new Ray3(position, orientation3), radii);

@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class ElectricBall {
 
-    public static final double RADII = 150;
+    public static final double RADII = 200;
     public static final double MAX_SPEED = 16000;
     public static final double LIFE_SPAN_IN_FRAMES = 0.5*60;
     public static final Color COLOR = new Color(4, 228, 248);
