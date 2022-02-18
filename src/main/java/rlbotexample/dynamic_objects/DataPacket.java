@@ -77,7 +77,7 @@ public class DataPacket {
                 .filter(carIndex -> carIndex != humanIndex)
                 .collect(Collectors.toList());
         if(botIndexList.get(0) != playerIndex) {
-            throw new RuntimeException("non-running bot");
+            //throw new RuntimeException("non-running bot");
         }
         loadData(request);
     }

@@ -22,7 +22,7 @@ public class JavaExample {
     private static final Integer DEFAULT_PORT = 17357;
 
     public static void main(String[] args) {
-        BotManager botManager = new BotManager();
+        BotManager botManager = new SingleBotManager();
         Integer port = PortReader.readPortFromArgs(args).orElseGet(() -> {
             System.out.println("Could not read port from args, using default!");
             return DEFAULT_PORT;

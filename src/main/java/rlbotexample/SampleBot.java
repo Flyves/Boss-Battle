@@ -52,7 +52,7 @@ public class SampleBot implements Bot {
     }
 
     public Renderer getRenderer() {
-        return BotLoopRenderer.forBotLoop(this);
+        return SingleBotLoopRenderer.forBotLoop(this);
     }
 
     /**
@@ -60,13 +60,13 @@ public class SampleBot implements Bot {
      * Modify it to make your bot smarter!
      */
     private ControlsOutput processInput(DataPacket input, GameTickPacket packet) {
-        RenderTasks.setRenderer(renderer);
         if(!GameAnimations.areLoading) {
             GameAnimations.areLoading = true;
             new Thread(GameAnimations::loadAnimations).start();
         }
         botOutput = botBehaviour.processInput(input, packet);
         botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
+        RenderTasks.setRenderer(renderer);
         RenderTasks.render();
         RenderTasks.clearTaskBuffer();
 
@@ -119,7 +119,7 @@ public class SampleBot implements Bot {
     }
 
     public void retire() {
-        System.out.println("Retiring bot " + playerIndex);
+        //System.out.println("Retiring bot " + playerIndex);
         renderer.eraseFromScreen();
     }
 }

@@ -12,10 +12,12 @@ public class BossPhase1 implements State {
 
     private static final double BOSS_HEALTH_THRESHOLD_FACTOR = 0.666666666;
 
-    private static final StateMachine bossAttackPattern = new StateMachine(new BossIdle3Phase1());
+    private static StateMachine bossAttackPattern;
 
     @Override
-    public void start(DataPacket input) {}
+    public void start(DataPacket input) {
+        bossAttackPattern = new StateMachine(new BossIdle3Phase1());
+    }
 
     @Override
     public void exec(DataPacket input) {
