@@ -40,19 +40,19 @@ public class SampleBot implements Bot {
         this.botOutput = new BotOutput();
         this.botBehaviour = botBehaviour;
         this.renderer = getRenderer();
-        averageFps = 0;
+        SampleBot.averageFps = 0;
         this.currentFpsTime = 0;
         this.previousFpsTime = 0;
         this.time1 = 0;
         this.time2 = 0;
         this.deltaTime = 0;
-        currentFps = 0;
+        SampleBot.currentFps = 0;
 
         this.previousDataPacketOptRef = new AtomicReference<>(Optional.empty());
     }
 
     public Renderer getRenderer() {
-        return SingleBotLoopRenderer.forBotLoop(this);
+        return BotLoopRenderer.forBotLoop(this);
     }
 
     /**
