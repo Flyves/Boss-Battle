@@ -14,10 +14,11 @@ import rlbotexample.generic_bot.output.ControlsOutput;
 import util.renderers.RenderTasks;
 
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SampleBot implements Bot {
+
+    private static final int AMOUNT_OF_BOTS_TO_KEEP_ALIVE = 60;
 
     private final int playerIndex;
     private BotOutput botOutput;
@@ -114,7 +115,7 @@ public class SampleBot implements Bot {
             dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex);
         }
         catch (RuntimeException runtimeException) {
-            if(amountOfBotsRunning > 60) {
+            if(amountOfBotsRunning > AMOUNT_OF_BOTS_TO_KEEP_ALIVE) {
                 killBot();
             }
             return new ControlsOutput();
