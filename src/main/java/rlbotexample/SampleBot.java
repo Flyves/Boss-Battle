@@ -32,7 +32,11 @@ public class SampleBot implements Bot {
     public static double currentFps;
     public BotManager botManager;
 
+    private boolean isAnimationsLoaderStarted;
+
     private final AtomicReference<Optional<DataPacket>> previousDataPacketOptRef;
+
+    public static int amountOfBotsRunning = 0;
 
     public SampleBot(int playerIndex, BotBehaviour botBehaviour, BotManager botManager) {
         this.botManager = botManager;
@@ -48,7 +52,11 @@ public class SampleBot implements Bot {
         this.deltaTime = 0;
         SampleBot.currentFps = 0;
 
+        this.isAnimationsLoaderStarted = false;
+
         this.previousDataPacketOptRef = new AtomicReference<>(Optional.empty());
+
+        amountOfBotsRunning++;
     }
 
     public Renderer getRenderer() {
@@ -60,9 +68,10 @@ public class SampleBot implements Bot {
      * Modify it to make your bot smarter!
      */
     private ControlsOutput processInput(DataPacket input, GameTickPacket packet) {
-        if(!GameAnimations.areLoading) {
-            GameAnimations.areLoading = true;
+        if(!isAnimationsLoaderStarted) {
             new Thread(GameAnimations::loadAnimations).start();
+            GameAnimations.areLoading = true;
+            isAnimationsLoaderStarted = true;
         }
         botOutput = botBehaviour.processInput(input, packet);
         botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
@@ -102,9 +111,12 @@ public class SampleBot implements Bot {
 
         DataPacket dataPacket;
         try {
-            dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex, this);
+            dataPacket = new DataPacket(packet, previousDataPacketOptRef, playerIndex);
         }
         catch (RuntimeException runtimeException) {
+            if(amountOfBotsRunning > 60) {
+                killBot();
+            }
             return new ControlsOutput();
         }
         ControlsOutput controlsOutput = processInput(dataPacket, packet);
@@ -121,5 +133,10 @@ public class SampleBot implements Bot {
     public void retire() {
         //System.out.println("Retiring bot " + playerIndex);
         renderer.eraseFromScreen();
+    }
+
+    public void killBot() {
+        botManager.retireBot(playerIndex);
+        amountOfBotsRunning--;
     }
 }

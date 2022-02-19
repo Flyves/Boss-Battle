@@ -38,11 +38,9 @@ public class ElectricBall {
     }
 
     public void render(DataPacket input, Renderer renderer) {
-        Renderer renderer1 = input.bot.getRenderer();
-
         NamedRenderer namedRenderer = new NamedRenderer("ElectricBallRenderGroup" + amountOfGeneratedElectricBallsInTotal);
         namedRenderer.startPacket();
-        ShapeRenderer shapeRenderer = new ShapeRenderer(renderer1);
+        ShapeRenderer shapeRenderer = new ShapeRenderer(renderer);
         shapeRenderer.renderSwerlingSphere(position, RADII, COLOR);
         namedRenderer.finishAndSend();
     }

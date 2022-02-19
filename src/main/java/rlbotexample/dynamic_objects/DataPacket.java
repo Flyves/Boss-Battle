@@ -42,10 +42,7 @@ public class DataPacket {
     /** The index of the bot that is going to reload the ball prediction (if there is many bots) */
     public static boolean carResourceHandlerHasBeenInitialized = false;
 
-    public final SampleBot bot;
-
-    public DataPacket(GameTickPacket request, AtomicReference<Optional<DataPacket>> previousDataPacketOptRef, int playerIndex, SampleBot bot) {
-        this.bot = bot;
+    public DataPacket(GameTickPacket request, AtomicReference<Optional<DataPacket>> previousDataPacketOptRef, int playerIndex) {
         this.botIndex = playerIndex;
         this.allCars = new ArrayList<>();
         Optional<DataPacket> previousInput = previousDataPacketOptRef.get();
@@ -77,7 +74,7 @@ public class DataPacket {
                 .filter(carIndex -> carIndex != humanIndex)
                 .collect(Collectors.toList());
         if(botIndexList.get(0) != playerIndex) {
-            //throw new RuntimeException("non-running bot");
+            throw new RuntimeException("non-running bot");
         }
         loadData(request);
     }
