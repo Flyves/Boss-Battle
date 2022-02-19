@@ -1,5 +1,6 @@
 package rlbotexample;
 
+import com.google.flatbuffers.Constants;
 import rlbot.Bot;
 import rlbot.ControllerState;
 import rlbot.flat.GameTickPacket;
@@ -11,6 +12,7 @@ import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
+import util.game_constants.RlConstants;
 import util.renderers.RenderTasks;
 
 import java.util.Optional;
@@ -24,13 +26,13 @@ public class SampleBot implements Bot {
     private BotOutput botOutput;
     private final BotBehaviour botBehaviour;
     private final Renderer renderer;
-    public static double averageFps;
+    public double averageFps;
     private long currentFpsTime;
     private long previousFpsTime;
     private long time1;
     private long time2;
     private long deltaTime;
-    public static double currentFps;
+    public double currentFps;
     public BotManager botManager;
 
     private boolean isAnimationsLoaderStarted;
@@ -45,13 +47,13 @@ public class SampleBot implements Bot {
         this.botOutput = new BotOutput();
         this.botBehaviour = botBehaviour;
         this.renderer = getRenderer();
-        SampleBot.averageFps = 0;
+        this.averageFps = 0;
         this.currentFpsTime = 0;
         this.previousFpsTime = 0;
         this.time1 = 0;
         this.time2 = 0;
         this.deltaTime = 0;
-        SampleBot.currentFps = 0;
+        this.currentFps = 0;
 
         this.isAnimationsLoaderStarted = false;
 
@@ -93,7 +95,7 @@ public class SampleBot implements Bot {
             currentFpsTime++;
         }
         currentFps = 1.0 / ((currentFpsTime - previousFpsTime) / 1000.0);
-        averageFps = (averageFps*29 + (currentFps)) / 30.0;
+        averageFps = (averageFps*(RlConstants.BOT_REFRESH_RATE-1) + (currentFps)) / RlConstants.BOT_REFRESH_RATE;
     }
 
     @Override
