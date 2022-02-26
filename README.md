@@ -5,5 +5,6 @@ The future of rocket league depends on you.
 
 ## Credits
 Many thanks to:
-- [Abstrack](https://abstrack.newgrounds.com/audio), who helped out a lot regarding the sound design;
+- [Abstrack](https://abstrack.newgrounds.com/audio), lead sound designer;
+- SpicyTaco, for improving the developpment workflow, 
 - My family, for giving feedback on the general design.
