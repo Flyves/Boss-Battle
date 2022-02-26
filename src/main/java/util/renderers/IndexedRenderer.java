@@ -5,26 +5,30 @@ import rlbot.cppinterop.RLBotDll;
 import rlbot.render.RenderPacket;
 import rlbot.render.Renderer;
 
-import java.io.Closeable;
+/**
+ * This renderer must be constructed with a specific unique name. You can draw, clear, etc. independently of
+ * other renderers.
+ */
+public class IndexedRenderer extends Renderer {
+    public final int index;
 
-public class IndexedRenderer extends Renderer implements Closeable {
+    private static Integer amountOfRenderersCreated = 0;
 
-    private static int rendererCount = 0;
-
-    public IndexedRenderer() {
-        super(Integer.valueOf(rendererCount++).hashCode());
+    public IndexedRenderer(final Integer offset) {
+        super(Integer.valueOf(amountOfRenderersCreated + offset).hashCode());
+        this.index = amountOfRenderersCreated + offset;
+        IndexedRenderer.amountOfRenderersCreated++;
     }
 
-    public void open() {
-        this.builder = new FlatBufferBuilder(1000);
+    public void startPacket() {
+        builder = new FlatBufferBuilder(0);
     }
 
-    private RenderPacket finishPacket() {
-        return this.doFinishPacket();
+    public RenderPacket finishPacket() {
+        return doFinishPacket();
     }
 
-    @Override
-    public void close() {
-        RLBotDll.sendRenderPacket(this.finishPacket());
+    public void finishAndSend() {
+        RLBotDll.sendRenderPacket(finishPacket());
     }
 }

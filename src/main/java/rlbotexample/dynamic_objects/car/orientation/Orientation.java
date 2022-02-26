@@ -9,8 +9,7 @@ import util.math.vector.Vector3;
  *
  * This class is here for your convenience, it is NOT part of the framework. You can change it as much
  * as you want, or delete it.
- */
-public class Orientation {
+ */public class Orientation {
 
     /** The direction that the front of the car is facing */
     public Vector3 noseVector;
@@ -22,13 +21,12 @@ public class Orientation {
     public Vector3 rightVector;
 
     public Orientation() {
-        this.noseVector = new Vector3(Vector3.X_VECTOR);
-        this.roofVector = new Vector3(Vector3.UP_VECTOR);
+        this.noseVector = Vector3.X_VECTOR;
+        this.roofVector = Vector3.UP_VECTOR;
         this.rightVector = noseVector.crossProduct(roofVector);
     }
 
     public Orientation(Vector3 noseVector, Vector3 roofVector) {
-
         this.noseVector = noseVector;
         this.roofVector = roofVector;
         this.rightVector = noseVector.crossProduct(roofVector);
@@ -45,7 +43,6 @@ public class Orientation {
      * All params are in radians.
      */
     private static Orientation convert(double pitch, double yaw, double roll) {
-
         double noseX = -1 * Math.cos(pitch) * Math.cos(yaw);
         double noseY = Math.cos(pitch) * Math.sin(yaw);
         double noseZ = Math.sin(pitch);
@@ -58,10 +55,55 @@ public class Orientation {
     }
 
     public Orientation rotate(Vector3 orientationRotator) {
-        return new Orientation(noseVector.rotate(orientationRotator), roofVector.rotate(orientationRotator));
+        return new Orientation(
+                noseVector.rotate(orientationRotator),
+                roofVector.rotate(orientationRotator));
     }
 
-    public Orientation matrixRotation(Orientation orientation) {
-        return new Orientation(noseVector.matrixRotation(orientation), roofVector.matrixRotation(orientation));
+    public Vector3 findAngularDisplacementTo(Orientation that) {
+        final Vector3 noseRotationDisk = findRotationDisk(this.noseVector, that.noseVector);
+        final Vector3 roofRotationDisk = findRotationDisk(this.roofVector, that.roofVector);
+        final Vector3 directionOfDisplacementVector = computeDirectionOfDisplacementVector(noseRotationDisk, roofRotationDisk);
+        final Vector3 flatteningRotator = directionOfDisplacementVector.findRotator(Vector3.UP_VECTOR);
+
+        final double displacementVectorMagnitude;
+        if(!noseRotationDisk.isZero()) {
+            displacementVectorMagnitude = signedAngleBetweenDirectionsForASpecificRotator(that.noseVector, this.noseVector, flatteningRotator);
+        }
+        else {
+            displacementVectorMagnitude = signedAngleBetweenDirectionsForASpecificRotator(that.roofVector, this.roofVector, flatteningRotator);
+        }
+
+        return directionOfDisplacementVector.scaledToMagnitude(displacementVectorMagnitude);
+    }
+
+    private Vector3 computeDirectionOfDisplacementVector(final Vector3 noseRotationDisk, final Vector3 roofRotationDisk) {
+        final Vector3 directionOfDisplacementVector = noseRotationDisk.crossProduct(roofRotationDisk);
+
+        if(directionOfDisplacementVector.isZero()) {
+            if(!noseRotationDisk.isZero()) {
+                return this.roofVector;
+            }
+            else if(!roofRotationDisk.isZero()) {
+                return this.noseVector;
+            }
+        }
+
+        return directionOfDisplacementVector;
+    }
+
+    private Vector3 findRotationDisk(final Vector3 direction1, final Vector3 direction2) {
+        final Vector3 middleNoseVector = direction1.plus(direction2).mutableNormalized();
+        return middleNoseVector.crossProduct(direction1).mutableCrossProduct(middleNoseVector);
+    }
+
+    private double signedAngleBetweenDirectionsForASpecificRotator(final Vector3 direction1, final Vector3 direction2, final Vector3 rotator) {
+        final Vector3 rotatorCopy = new Vector3(rotator);
+        return direction2.mutableParamRotate(rotatorCopy).flatten()
+                .correctionAngle(direction1.mutableParamRotate(rotator).flatten());
+    }
+
+    public Vector3 asAngularDisplacement() {
+        return new Orientation().findAngularDisplacementTo(this);
     }
 }

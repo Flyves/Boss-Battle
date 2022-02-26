@@ -1,0 +1,29 @@
+Nickname: Plads
+Discord ID: Plads#2247
+Bot name: Rocket Slayer
+Language: Java 8
+
+
+Any additional installation steps needed for your bot?
+@
+You need:
+- 1 human player in the blue team;
+- 72 Rocket Slayer bots in the blue team;
+- 20 Rocket Slayer bots in the orange team;
+- if you want to make sure you can run the bots without too much lag, you can fill the teams with the "Rocket Slayer DEMO" bot instead to test how your hardware handles 92 bots in a game (it should also be 72 in blue + 20 in red! And also, make sure to do this BEFORE the competition! Please contact me if there's any problem regarding the lag).
+@
+
+
+Any changed match settings? (Default = Soccar, 1vX, no mutators, standard map)
+@
+- Match length: Unlimited (if it takes too long, you can quit at any moment),
+- Max score: 1 Goal,
+- Enable Rendering (of course),
+- Enable State Setting (of course).
+@
+
+
+Any additional existing bots to be used?
+@
+no
+@

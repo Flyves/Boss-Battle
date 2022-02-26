@@ -19,17 +19,17 @@ public class OrientedPosition implements Serializable {
     }
 
     public ZyxOrientedPosition toZyxOrientedPosition() {
-        Vector3 restOrientation = new Vector3(1, 0, 0);
-        Vector3 flatFront = new Vector3(orientation.noseVector.flatten(), 0);
-        Vector3 rotatorZ = restOrientation.findRotator(flatFront);
-        double angleZ = rotatorZ.dotProduct(Vector3.UP_VECTOR);
+        final Vector3 restOrientation = new Vector3(1, 0, 0);
+        final Vector3 flatFront = new Vector3(orientation.noseVector.flatten(), 0);
+        final Vector3 rotatorZ = restOrientation.findRotator(flatFront);
+        final double angleZ = rotatorZ.dotProduct(Vector3.UP_VECTOR);
 
-        Orientation restOrientationRotatedInZ = new Orientation().rotate(rotatorZ);
-        Vector3 rotatorY = restOrientationRotatedInZ.noseVector.findRotator(orientation.noseVector);
-        double angleY = rotatorY.dotProduct(Vector3.Y_VECTOR.rotate(rotatorZ));
+        final Orientation restOrientationRotatedInZ = new Orientation().rotate(rotatorZ);
+        final Vector3 rotatorY = restOrientationRotatedInZ.noseVector.findRotator(orientation.noseVector);
+        final double angleY = rotatorY.dotProduct(Vector3.Y_VECTOR.rotate(rotatorZ));
 
-        Orientation restOrientationRotatedInZy = restOrientationRotatedInZ.rotate(rotatorY);
-        Vector3 rotatorX = restOrientationRotatedInZy.roofVector.findRotator(orientation.roofVector);
+        final Orientation restOrientationRotatedInZy = restOrientationRotatedInZ.rotate(rotatorY);
+        final Vector3 rotatorX = restOrientationRotatedInZy.roofVector.findRotator(orientation.roofVector);
         double angleX = rotatorX.dotProduct(Vector3.X_VECTOR.rotate(rotatorZ).rotate(rotatorY));
         // ugly fix but it seems to work now!
         if(orientation.roofVector.z < 0 && Math.abs(angleX) < 0.00000001) {
@@ -42,22 +42,34 @@ public class OrientedPosition implements Serializable {
     // this function assumes that the origin of this object is zeroed, and outputs the same object, but with the specified origin in parameters:
     // position of origin = (0, 0, 0),
     // orientation = ((1, 0, 0), (0, 0, 1))
+    /*
     public OrientedPosition toGlobalPosition(OrientedPosition globalOrigin) {
         ZyxOrientedPosition zyxGlobalOrigin = globalOrigin.toZyxOrientedPosition();
-        Vector3 rotatorZ = Vector3.UP_VECTOR.scaled(zyxGlobalOrigin.eulerZYX.z);
-        Vector3 rotatorY = Vector3.Y_VECTOR.rotate(rotatorZ).scaled(zyxGlobalOrigin.eulerZYX.y);
-        Vector3 rotatorXPosition = Vector3.X_VECTOR.rotate(rotatorZ).rotate(rotatorY).scaled(zyxGlobalOrigin.eulerZYX.x);
-        Vector3 rotatorXOrientation = Vector3.X_VECTOR.rotate(rotatorZ).rotate(rotatorY).scaled(-zyxGlobalOrigin.eulerZYX.x);// wtf?
+        Vector3 rotatorZPosition = Vector3.UP_VECTOR.scaled(zyxGlobalOrigin.eulerZYX.z);
+        Vector3 rotatorYPosition = Vector3.Y_VECTOR.rotate(rotatorZPosition).scaled(zyxGlobalOrigin.eulerZYX.y);
+        Vector3 rotatorXPosition = Vector3.X_VECTOR.rotate(rotatorZPosition).rotate(rotatorYPosition).scaled(zyxGlobalOrigin.eulerZYX.x);
+
+        Vector3 rotatorZOrientation = Vector3.UP_VECTOR.scaled(zyxGlobalOrigin.eulerZYX.z);
+        Vector3 rotatorYOrientation = Vector3.Y_VECTOR.rotate(rotatorZPosition).scaled(zyxGlobalOrigin.eulerZYX.y);
+        Vector3 rotatorXOrientation = Vector3.X_VECTOR.rotate(rotatorZPosition).rotate(rotatorYPosition).scaled(zyxGlobalOrigin.eulerZYX.x);
 
         Vector3 rotatedTranslatedPosition = position
-                .rotate(rotatorZ)
-                .rotate(rotatorY)
+                .rotate(rotatorZPosition)
+                .rotate(rotatorYPosition)
                 .rotate(rotatorXPosition)
                 .plus(globalOrigin.position);
         Orientation rotatedOrientation = orientation
-                .rotate(rotatorZ)
-                .rotate(rotatorY)
+                .rotate(rotatorZOrientation)
+                .rotate(rotatorYOrientation)
                 .rotate(rotatorXOrientation);
+
+        return new OrientedPosition(rotatedTranslatedPosition, rotatedOrientation);
+    }*/
+    public OrientedPosition toGlobalPosition(final OrientedPosition globalOrigin) {
+        final Vector3 angularDisplacement = globalOrigin.orientation.asAngularDisplacement();
+
+        final Vector3 rotatedTranslatedPosition = position.rotate(angularDisplacement).plus(globalOrigin.position);
+        final Orientation rotatedOrientation = orientation.rotate(angularDisplacement);
 
         return new OrientedPosition(rotatedTranslatedPosition, rotatedOrientation);
     }

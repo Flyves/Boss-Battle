@@ -46,7 +46,7 @@ public class EndSpinAttack implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {
+    public void debug(DataPacket input) {
 
     }
 }

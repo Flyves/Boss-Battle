@@ -62,7 +62,6 @@ public class CarGroupAnimator implements AutoCloseable {
                 PhysicsOfBossBattle.setOrientedPosition(ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED, carData);
             }
             else {
-                // ... uhm, what am I doing?
                 final ZyxOrientedPosition localZyxOrientedPosition =
                         meshAnimation.queryFrame(frameCount)
                         .carObjects.stream()

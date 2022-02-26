@@ -84,17 +84,17 @@ public class CarResourceHandler {
 
         List<Integer> orderedAllocatedCars = new ArrayList<>(teamIds.size());
         teamIds.forEach(teamId -> {
-                    if(teamId == 0) {
-                        int i = blueTeamIndexes.size()-1;
-                        orderedAllocatedCars.add(blueTeamIndexes.get(i));
-                        blueTeamIndexes.remove(i);
-                    }
-                    else {
-                        int i = orangeTeamIndexes.size()-1;
-                        orderedAllocatedCars.add(orangeTeamIndexes.get(i));
-                        orangeTeamIndexes.remove(i);
-                    }
-                });
+            if(teamId == 0) {
+                int i = blueTeamIndexes.size()-1;
+                orderedAllocatedCars.add(blueTeamIndexes.get(i));
+                blueTeamIndexes.remove(i);
+            }
+            else {
+                int i = orangeTeamIndexes.size()-1;
+                orderedAllocatedCars.add(orangeTeamIndexes.get(i));
+                orangeTeamIndexes.remove(i);
+            }
+        });
 
         freeCarIndexes.removeAll(orderedAllocatedCars);
 

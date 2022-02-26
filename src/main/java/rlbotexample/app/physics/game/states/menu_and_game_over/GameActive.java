@@ -40,8 +40,8 @@ public class GameActive implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {
-        playerStatsMachine.debug(input, renderer);
-        bossPhaseMachine.debug(input, renderer);
+    public void debug(DataPacket input) {
+        playerStatsMachine.debug(input);
+        bossPhaseMachine.debug(input);
     }
 }

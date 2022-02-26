@@ -1,20 +1,24 @@
 package rlbotexample;
 
-import com.google.flatbuffers.Constants;
 import rlbot.Bot;
 import rlbot.ControllerState;
 import rlbot.flat.GameTickPacket;
-import rlbot.manager.BotLoopRenderer;
 import rlbot.manager.BotManager;
 import rlbot.render.Renderer;
+import rlbot.vector.Vector3;
 import rlbotexample.animations.GameAnimations;
+import rlbotexample.app.graphics.health_bars.HealthBarSegment;
+import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
 import util.game_constants.RlConstants;
+import util.math.vector.Vector2;
+import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
 
+import java.awt.*;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,7 +29,6 @@ public class SampleBot implements Bot {
     private final int playerIndex;
     private BotOutput botOutput;
     private final BotBehaviour botBehaviour;
-    private final Renderer renderer;
     public double averageFps;
     private long currentFpsTime;
     private long previousFpsTime;
@@ -46,7 +49,6 @@ public class SampleBot implements Bot {
         this.playerIndex = playerIndex;
         this.botOutput = new BotOutput();
         this.botBehaviour = botBehaviour;
-        this.renderer = getRenderer();
         this.averageFps = 0;
         this.currentFpsTime = 0;
         this.previousFpsTime = 0;
@@ -60,10 +62,11 @@ public class SampleBot implements Bot {
         this.previousDataPacketOptRef = new AtomicReference<>(Optional.empty());
 
         amountOfBotsRunning++;
+        RenderTasks.init();
     }
 
-    public Renderer getRenderer() {
-        return BotLoopRenderer.forBotLoop(this);
+    public static IndexedRenderer getNewIndexedRenderer() {
+        return new IndexedRenderer(0);
     }
 
     /**
@@ -77,13 +80,12 @@ public class SampleBot implements Bot {
             isAnimationsLoaderStarted = true;
         }
         botOutput = botBehaviour.processInput(input, packet);
-        botBehaviour.updateGui(renderer, input, currentFps, averageFps, deltaTime);
-        RenderTasks.setRenderer(renderer);
+        botBehaviour.updateGui(input, currentFps, averageFps, deltaTime);
+        RenderTasks.init();
         RenderTasks.render();
         RenderTasks.clearTaskBuffer();
 
         fpsDataCalc();
-
         return botOutput.getForwardedOutput();
     }
 
@@ -135,7 +137,7 @@ public class SampleBot implements Bot {
 
     public void retire() {
         //System.out.println("Retiring bot " + playerIndex);
-        renderer.eraseFromScreen();
+        RenderTasks.close();
     }
 
     public void killBot() {

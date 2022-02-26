@@ -46,5 +46,5 @@ public class BossIdle2Phase1 implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {}
+    public void debug(DataPacket input) {}
 }

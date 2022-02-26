@@ -23,8 +23,8 @@ public class BossBattleBot extends FlyveBot {
     }
 
     @Override
-    public void updateGui(Renderer renderer, DataPacket input, double currentFps, double averageFps, long botExecutionTime) {
-        //super.updateGui(renderer, input, currentFps, averageFps, botExecutionTime);
-        GraphicsOfBossBattle.print(input, renderer);
+    public void updateGui(DataPacket input, double currentFps, double averageFps, long botExecutionTime) {
+        //super.updateGui(input, currentFps, averageFps, botExecutionTime);
+        GraphicsOfBossBattle.print(input);
     }
 }

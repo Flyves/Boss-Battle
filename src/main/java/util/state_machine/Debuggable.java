@@ -4,5 +4,5 @@ import rlbot.render.Renderer;
 import rlbotexample.dynamic_objects.DataPacket;
 
 public interface Debuggable {
-    void debug(DataPacket input, Renderer renderer);
+    void debug(DataPacket input);
 }

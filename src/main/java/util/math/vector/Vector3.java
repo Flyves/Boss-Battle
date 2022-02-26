@@ -89,6 +89,13 @@ public class Vector3 implements Serializable {
                 x*scale.a1.z + y*scale.a2.z + z*scale.a3.z);
     }
 
+    public Vector3 mutableScaled(double scale) {
+        x = x * scale;
+        y = y * scale;
+        z = z * scale;
+        return this;
+    }
+
     /**
      * If magnitude is negative, we will return a vector facing the opposite direction.
      */
@@ -113,6 +120,15 @@ public class Vector3 implements Serializable {
             scaleRequiredZ = magnitudeZ;
         }
         return scaled(scaleRequiredX, scaleRequiredY, scaleRequiredZ);
+    }
+
+
+    public Vector3 mutableScaledToMagnitude(double magnitude) {
+        if (isZero()) {
+            return this;
+        }
+        double scaleRequired = magnitude / magnitude();
+        return mutableScaled(scaleRequired);
     }
 
     public double distance(Vector3 other) {
@@ -142,6 +158,14 @@ public class Vector3 implements Serializable {
         return this.scaled(1 / magnitude());
     }
 
+    public Vector3 mutableNormalized() {
+
+        if (isZero()) {
+            return this;
+        }
+        return this.mutableScaled(1 / magnitude());
+    }
+
     public double dotProduct(Vector3 other) {
         return x * other.x + y * other.y + z * other.z;
     }
@@ -157,8 +181,12 @@ public class Vector3 implements Serializable {
     public double angle(Vector3 v) {
         double mag2 = magnitudeSquared();
         double vmag2 = v.magnitudeSquared();
+        final double det = Math.sqrt(mag2 * vmag2);
+        if(Math.sqrt(mag2 * vmag2) < 0.000000001) {
+            return 0;
+        }
         double dot = dotProduct(v);
-        return Math.acos(dot / Math.sqrt(mag2 * vmag2));
+        return Math.acos(dot / det);
     }
 
     public Vector3 crossProduct(Vector3 v) {
@@ -166,6 +194,16 @@ public class Vector3 implements Serializable {
         double ty = z * v.x - x * v.z;
         double tz = x * v.y - y * v.x;
         return new Vector3(tx, ty, tz);
+    }
+
+    public Vector3 mutableCrossProduct(Vector3 v) {
+        final double x2 = y * v.z - z * v.y;
+        final double y2 = z * v.x - x * v.z;
+        final double z2 = x * v.y - y * v.x;
+        x = x2;
+        y = y2;
+        z = z2;
+        return this;
     }
 
     public Vector3 projectOnto(Vector3 vectorToProjectOnto) {
@@ -177,15 +215,7 @@ public class Vector3 implements Serializable {
                 .plus(plane.normal.offset.projectOnto(plane.normal.direction));
     }
 
-    public double angleWith(Vector3 vector) {
-        double cosine = this.dotProduct(vector)/(this.magnitude()*vector.magnitude());
-        return Math.acos(cosine);
-    }
-
-    /*
-
-
-     */
+    @Deprecated
     public Vector3 matrixRotation(Vector3 forwardFacingVector, Vector3 roofFacingVector) {
         Vector3 result = new Vector3(this);
 
@@ -205,6 +235,7 @@ public class Vector3 implements Serializable {
         return result;
     }
 
+    @Deprecated
     public Vector3 matrixRotation(Orientation orientation) {
         Vector3 result = new Vector3(this);
 
@@ -224,11 +255,13 @@ public class Vector3 implements Serializable {
         return result;
     }
 
+    @Deprecated
     public Vector3 toFrameOfReference(Orientation orientation)
     {
         return toFrameOfReference(orientation.noseVector, orientation.roofVector);
     }
 
+    @Deprecated
     public Vector3 toFrameOfReference(Vector3 frontDirection, Vector3 topDirection)
     {
         // Calculate the vector without any roll yet (the roll is calculated from the topDirection vector)
@@ -258,6 +291,16 @@ public class Vector3 implements Serializable {
         final Quaternion qr2 = new Quaternion(r2.x, sr.scaled(-1));
 
         return qr.multiply(qa.multiply(qr2)).toVector3();
+    }
+
+
+    public Vector3 mutableParamRotate(final Vector3 r) {
+        final double a = r.magnitude()*0.5;
+        final Vector3 sr = r.mutableScaledToMagnitude(Math.sin(a));
+        final Quaternion qr = new Quaternion(Math.cos(a), sr);
+        final Quaternion qv = new Quaternion(0, this);
+
+        return ((qr.multiply(qv)).multiply(qr.mutableConjugate())).mutableToVector3();
     }
 
     @Deprecated
@@ -403,18 +446,17 @@ public class Vector3 implements Serializable {
     }
 
     public Vector3 findRotator(Vector3 v) {
-        if(minus(v).magnitudeSquared() < 0.0000000001) {
+        final double angleBetweenVectors = angle(v);
+        if(angleBetweenVectors < 0.000001) {
             return new Vector3();
         }
-        if(crossProduct(v).magnitudeSquared() < 0.0000000001) {
+        if(crossProduct(v).magnitudeSquared() < 0.000001) {
             if(v.x != 0 && v.y != 0) {
-                return findRotator(new Vector3(0, 0, 1)).scaledToMagnitude(angle(v));
-            }
-            else {
-                return findRotator(new Vector3(1, 0, 0)).scaledToMagnitude(angle(v));
+                return findRotator(new Vector3(0, 0, 1)).scaledToMagnitude(angleBetweenVectors);
             }
         }
-        return crossProduct(v).scaledToMagnitude(angle(v));
+
+        return crossProduct(v).scaledToMagnitude(angleBetweenVectors);
     }
 
     public double distanceSquared(Vector3 that) {

@@ -32,10 +32,10 @@ public class CurrentGame {
         ElectricBallsResourceHandler.updateElectricBalls(input);
     }
 
-    public static void displayRenderer(DataPacket input, Renderer renderer) {
-        GAME_MACHINE.debug(input, renderer);
+    public static void displayRenderer(DataPacket input) {
+        GAME_MACHINE.debug(input);
 
-        displayBlockedGoals(input, renderer);
+        displayBlockedGoals(input);
 
         ElectricBallsResourceHandler.renderElectricBalls(input);
     }
@@ -49,7 +49,7 @@ public class CurrentGame {
         }
     }
 
-    public static void displayBlockedGoals(DataPacket input, Renderer renderer) {
+    public static void displayBlockedGoals(DataPacket input) {
 
     }
 

@@ -2,11 +2,11 @@ package util.resource_handling.electric_balls;
 
 import rlbot.render.NamedRenderer;
 import rlbot.render.Renderer;
-import rlbotexample.SampleBot;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
+import util.renderers.RenderTasks;
 import util.renderers.ShapeRenderer;
 
 import java.awt.*;
@@ -37,11 +37,10 @@ public class ElectricBall {
         amountOfFramesSpent++;
     }
 
-    public void render(DataPacket input, Renderer renderer) {
-        NamedRenderer namedRenderer = new NamedRenderer("ElectricBallRenderGroup" + amountOfGeneratedElectricBallsInTotal);
-        namedRenderer.startPacket();
-        ShapeRenderer shapeRenderer = new ShapeRenderer(renderer);
-        shapeRenderer.renderSwerlingSphere(position, RADII, COLOR);
-        namedRenderer.finishAndSend();
+    public void render(DataPacket input) {
+        RenderTasks.append(r -> {
+            ShapeRenderer shapeRenderer = new ShapeRenderer(r);
+            shapeRenderer.renderSwerlingSphere(position, RADII, COLOR);
+        });
     }
 }

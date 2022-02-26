@@ -3,6 +3,7 @@ package rlbotexample.app.graphics.health_bars;
 import rlbotexample.app.graphics.ScreenSize;
 import util.math.vector.Vector2;
 import util.math.vector.Vector2Int;
+import util.math.vector.Vector3;
 import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
 
@@ -28,11 +29,12 @@ public class HealthBarSegment {
         final Vector2Int bgPieceSize = widthHeightXY.plus(offsetCD.scaled(2)).toVector2Int();
         final Vector2Int coloredHealthPieceSize = new Vector2Int((int)(widthHeightXY.x * hpRatio), (int)widthHeightXY.y);
 
-
         // in progress
-        //RenderTasks.append(r -> r.drawRectangle2d(bgColor, position.toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true));
-        //RenderTasks.append(r -> r.drawRectangle2d(bgColor, position.plus(offsetAB).toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true));
-        //RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
-        //RenderTasks.append(r -> r.drawRectangle2d(color, position.plus(offsetAB).plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true));
+        RenderTasks.append(r -> {
+            r.drawRectangle2d(bgColor, position.toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true);
+            r.drawRectangle2d(bgColor, position.plus(offsetAB).toAwtPoint(), bgPieceSize.x, bgPieceSize.y, true);
+            r.drawRectangle2d(color, position.plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true);
+            r.drawRectangle2d(color, position.plus(offsetAB).plus(offsetCD).toAwtPoint(), coloredHealthPieceSize.x, coloredHealthPieceSize.y, true);
+        });
     }
 }

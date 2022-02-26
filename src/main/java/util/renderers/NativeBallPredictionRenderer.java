@@ -13,18 +13,20 @@ import java.awt.*;
  */
 public class NativeBallPredictionRenderer {
 
-    public static void drawTillMoment(BallPrediction ballPrediction, float gameSeconds, Color color, Renderer renderer) {
-        Vector3 previousLocation = null;
-        for (int i = 0; i < ballPrediction.slicesLength(); i += 4) {
-            PredictionSlice slice = ballPrediction.slices(i);
-            if (slice.gameSeconds() > gameSeconds) {
-                break;
+    public static void drawTillMoment(BallPrediction ballPrediction, float gameSeconds, Color color) {
+        RenderTasks.append(r -> {
+            Vector3 previousLocation = null;
+            for (int i = 0; i < ballPrediction.slicesLength(); i += 4) {
+                PredictionSlice slice = ballPrediction.slices(i);
+                if (slice.gameSeconds() > gameSeconds) {
+                    break;
+                }
+                Vector3 location = new Vector3(slice.physics().location());
+                if (previousLocation != null) {
+                    r.drawLine3d(color, previousLocation.toFlatVector(), location.toFlatVector());
+                }
+                previousLocation = location;
             }
-            Vector3 location = new Vector3(slice.physics().location());
-            if (previousLocation != null) {
-                renderer.drawLine3d(color, previousLocation.toFlatVector(), location.toFlatVector());
-            }
-            previousLocation = location;
-        }
+        });
     }
 }

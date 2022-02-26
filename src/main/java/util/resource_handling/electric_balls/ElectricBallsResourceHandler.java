@@ -17,7 +17,7 @@ public class ElectricBallsResourceHandler {
 
     private static final List<ElectricBall> currentlyUsedElectricBalls = new ArrayList<>();
 
-    private static final IndexedRenderer indexedRenderer1 = new IndexedRenderer();
+    private static final IndexedRenderer indexedRenderer1 = new IndexedRenderer(4000);
 
     public static void allocAt(Vector3 initialPosition, ExtendedCarData target) {
         final ElectricBall electricBall = new ElectricBall(initialPosition, target);
@@ -42,7 +42,7 @@ public class ElectricBallsResourceHandler {
 
     public static void renderElectricBalls(DataPacket input) {
         currentlyUsedElectricBalls.forEach(electricBall -> {
-            RenderTasks.append(renderer -> electricBall.render(input, renderer));
+            electricBall.render(input);
         });
     }
 }

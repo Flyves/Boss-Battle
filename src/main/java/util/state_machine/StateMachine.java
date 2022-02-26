@@ -26,7 +26,7 @@ public class StateMachine implements Behaviour, Debuggable {
         }
     }
 
-    public void debug(DataPacket input, Renderer renderer) {
-        state.debug(input, renderer);
+    public void debug(DataPacket input) {
+        state.debug(input);
     }
 }

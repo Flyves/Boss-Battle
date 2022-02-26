@@ -41,7 +41,7 @@ public class GameOverPlayerWon implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer unused) {
+    public void debug(DataPacket input) {
         RenderTasks.append(renderer -> renderer.drawString2d("You Won!",
                 Color.green, new Point((int)(ScreenSize.WIDTH/2.3), ScreenSize.HEIGHT/6),
                 3, 3));

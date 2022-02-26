@@ -7,7 +7,7 @@ import util.renderers.ShapeRenderer;
 
 public class GraphicsOfBossBattle {
 
-    public static void print(DataPacket input, Renderer renderer) {
-        CurrentGame.displayRenderer(input, renderer);
+    public static void print(DataPacket input) {
+        CurrentGame.displayRenderer(input);
     }
 }

@@ -43,7 +43,7 @@ public class TransitionFromPhase0ToPhase1 implements State {
     }
 
     @Override
-    public void debug(DataPacket input, Renderer renderer) {
+    public void debug(DataPacket input) {
         BossHealthBar.renderOnScreen(CurrentGame.bossAi.health/(double)CurrentGame.BOSS_INITIAL_HP, input);
     }
 

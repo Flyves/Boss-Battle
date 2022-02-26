@@ -33,5 +33,5 @@ public abstract class BotBehaviour {
 
     public abstract BotOutput processInput(DataPacket input, GameTickPacket packet);
 
-    public abstract void updateGui(Renderer renderer, DataPacket input, double currentFps, double averageFps, long botExecutionTime);
+    public abstract void updateGui(DataPacket input, double currentFps, double averageFps, long botExecutionTime);
 }
