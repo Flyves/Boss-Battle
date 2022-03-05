@@ -1,16 +1,18 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
-import rlbotexample.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
 import util.math.vector.Vector3;
 import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
+import util.tinysound.Sound;
+import util.tinysound.TinySound;
 
 import java.util.List;
 
@@ -29,17 +31,29 @@ public class BossDashAttackPhase1 implements State {
 
     private Vector3 dashDirection = new Vector3();
 
+    private Sound shootingSound;
+
+
     @Override
     public void start(DataPacket input) {
         CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_dash_attack);
         CurrentGame.bossAi.animator.looping(false);
         CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
 
+        TinySound.init();
+
+        Sound buildupSound = TinySound.loadSound(GameSoundFiles.dash_buildup);
+        buildupSound.play(0.1);
+        shootingSound = TinySound.loadSound(GameSoundFiles.dash_shooting);
     }
 
     @Override
     public void exec(DataPacket input) {
         BasicRigidityTransitionHandler.handle(CurrentGame.bossAi.animator);
+
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 177) {
+            shootingSound.play(0.1);
+        }
 
         if(CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH < DASH_DURATION
                 && CurrentGame.bossAi.animator.currentFrameIndex() > AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {

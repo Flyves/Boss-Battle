@@ -1,14 +1,15 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 public class BossIdle2Phase1 implements State {
 
-    private State idle2Phase1;
+    private BossIdle1Phase1 idle2Phase1;
     private int amountOfTimesBossJumped;
 
     public BossIdle2Phase1() {

@@ -1,10 +1,11 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 import static rlbotexample.app.physics.game.states.boss_moves.phase1.BossIdle1Phase1.FRAME_AT_WHICH_BOSS_ENDS_TO_MOVE_TO_THE_SIDE;
 

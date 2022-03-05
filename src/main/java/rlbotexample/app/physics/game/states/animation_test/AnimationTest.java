@@ -1,8 +1,7 @@
 package rlbotexample.app.physics.game.states.animation_test;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;

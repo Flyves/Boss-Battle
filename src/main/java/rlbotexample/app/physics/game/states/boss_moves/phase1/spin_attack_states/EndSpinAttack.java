@@ -2,11 +2,13 @@ package rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_state
 
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.math.linear_transform.LinearNormalizer;
 import util.math.linear_transform.ParameterizedSegment;
 import util.math.vector.Vector3;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 public class EndSpinAttack implements State {
 
@@ -27,6 +29,7 @@ public class EndSpinAttack implements State {
         Vector3 initialAnimationPosition = CurrentGame.bossAi.orientedPosition.position;
         Vector3 finalAnimationPosition = new Vector3();     // center of the map
         parameterizedTrajectory = new ParameterizedSegment(initialAnimationPosition, finalAnimationPosition);
+        TinySound.loadSound(GameSoundFiles.helicopter_attack).play(0.2);
     }
 
     @Override

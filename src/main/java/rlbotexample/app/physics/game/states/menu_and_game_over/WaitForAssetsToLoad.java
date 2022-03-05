@@ -1,12 +1,12 @@
 package rlbotexample.app.physics.game.states.menu_and_game_over;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.GameAnimations;
+import rlbotexample.assets.animations.GameAnimations;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.renderers.RenderTasks;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 import java.awt.*;
 
@@ -36,7 +36,7 @@ public class WaitForAssetsToLoad implements State {
         loadingMessage += "%";
         final String finalLoadingMessage = loadingMessage;
         RenderTasks.append(renderer -> renderer.drawString2d(finalLoadingMessage,
-                Color.WHITE, new Point(20, ScreenSize.HEIGHT-70),
+                Color.WHITE, new Point(20, (int)(ScreenSize.HEIGHT*0.85)),
                 2, 2));
     }
 

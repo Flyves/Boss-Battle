@@ -3,12 +3,14 @@ package rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_state
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.BossSpinAttackPhase1;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.math.linear_transform.LinearNormalizer;
 import util.math.linear_transform.ParameterizedSegment;
 import util.math.vector.Vector3;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 public class SpinToPredictedPlayerPosition implements State {
 
@@ -62,6 +64,7 @@ public class SpinToPredictedPlayerPosition implements State {
 
         Vector3 bossAnimationPosition = CurrentGame.bossAi.animator.orientedPosition.position;
         parameterizedTrajectory = new ParameterizedSegment(bossAnimationPosition, spinDestination);
+        TinySound.loadSound(GameSoundFiles.helicopter_attack).play(0.2);
     }
 
     @Override

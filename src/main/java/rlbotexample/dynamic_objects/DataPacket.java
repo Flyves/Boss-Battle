@@ -1,10 +1,6 @@
 package rlbotexample.dynamic_objects;
 
-import jdk.jshell.spi.ExecutionControl;
 import rlbot.flat.GameTickPacket;
-import rlbotexample.SampleBot;
-import rlbotexample.animations.GameAnimations;
-import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.ball.BallData;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.resource_handling.cars.CarResourceHandler;
@@ -13,7 +9,6 @@ import util.resource_handling.cars.PlayerIndex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 

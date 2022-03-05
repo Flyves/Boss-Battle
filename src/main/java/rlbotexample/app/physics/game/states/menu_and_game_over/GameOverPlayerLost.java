@@ -4,11 +4,13 @@ import rlbot.render.Renderer;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.states.menu_and_game_over.ui_components.SphericalButton;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.math.vector.Vector3;
 import util.renderers.RenderTasks;
 import util.renderers.ShapeRenderer;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 import java.awt.*;
 
@@ -19,7 +21,8 @@ public class GameOverPlayerLost implements State {
 
     @Override
     public void start(DataPacket input) {
-
+        TinySound.init();
+        TinySound.loadSound(GameSoundFiles.game_lost).play(0.15);
     }
 
     @Override
@@ -29,7 +32,7 @@ public class GameOverPlayerLost implements State {
 
     @Override
     public void stop(DataPacket input) {
-
+        TinySound.shutdown();
     }
 
     @Override

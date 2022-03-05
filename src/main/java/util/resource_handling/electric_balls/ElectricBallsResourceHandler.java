@@ -17,8 +17,6 @@ public class ElectricBallsResourceHandler {
 
     private static final List<ElectricBall> currentlyUsedElectricBalls = new ArrayList<>();
 
-    private static final IndexedRenderer indexedRenderer1 = new IndexedRenderer(4000);
-
     public static void allocAt(Vector3 initialPosition, ExtendedCarData target) {
         final ElectricBall electricBall = new ElectricBall(initialPosition, target);
         currentlyUsedElectricBalls.add(electricBall);
@@ -33,11 +31,12 @@ public class ElectricBallsResourceHandler {
 
         currentlyUsedElectricBalls.forEach(ElectricBall::updatePosition);
 
-        Optional<ElectricBall> electricBallCollisionOpt = currentlyUsedElectricBalls.stream()
+        final Optional<ElectricBall> electricBallCollisionOpt = currentlyUsedElectricBalls.stream()
                 .filter(electricBall -> input.humanCar.hitBox.isCollidingWith(electricBall))
                 .findFirst();
 
-        electricBallCollisionOpt.ifPresent(electricBall -> CurrentGame.humanPlayer.takeDamage(input, 2, input.humanCar.position.minus(electricBall.position).normalized().plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(500)));
+        electricBallCollisionOpt.ifPresent(electricBall -> CurrentGame.humanPlayer.takeDamage(input, 3, input.humanCar.position.minus(electricBall.position).normalized().plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(700)));
+        electricBallCollisionOpt.ifPresent(currentlyUsedElectricBalls::remove);
     }
 
     public static void renderElectricBalls(DataPacket input) {

@@ -1,14 +1,10 @@
 package rlbotexample.app.physics.game.states.menu_and_game_over;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.GameAnimations;
-import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.states.menu_and_game_over.ui_components.SphericalButton;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.math.vector.Vector3;
-import util.renderers.RenderTasks;
 import util.state_machine.State;
 
 import java.awt.*;

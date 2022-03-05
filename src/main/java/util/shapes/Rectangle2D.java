@@ -1,8 +1,8 @@
 package util.shapes;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.math.vector.Vector3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rectangle2D {
@@ -15,6 +15,6 @@ public class Rectangle2D {
     }
 
     public List<Rectangle2D> findEquivalent1x2rectangles(final Rectangle2D rectangle2D) {
-        throw new NotImplementedException();
+        return new ArrayList<>();
     }
 }

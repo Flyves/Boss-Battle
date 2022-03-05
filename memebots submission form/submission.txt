@@ -10,16 +10,29 @@ You need:
 - 1 human player in the blue team;
 - 72 Rocket Slayer bots in the blue team;
 - 20 Rocket Slayer bots in the orange team;
-- if you want to make sure you can run the bots without too much lag, you can fill the teams with the "Rocket Slayer DEMO" bot instead to test how your hardware handles 92 bots in a game (it should also be 72 in blue + 20 in red! And also, make sure to do this BEFORE the competition! Please contact me if there's any problem regarding the lag).
+
+Make sure you have at least Java 11 installed. Any newer version should work just fine.
+I compiled the code with Java 11.
+I only tested it on other computers with Java 17.
+
+You should probably make sure you can run the bots without too much lag before the event.
+When you run the bot, you should expect to see a loading at the bottom left of the screen. It should take ~10 seconds to load.
+Once the loading is done, you should see a menu in the game. Don't press anything! Keep the surprise for the event :p
+If you see the menu, you can try to move around the map a little to see if it's playable.
+The lag you'll experience in the menu is about as laggy as it gets with this bot.
+And finally, you should expect some short lag peaks during the event on stream.
+
+There you have it, I hope you enjoy it!
 @
 
 
 Any changed match settings? (Default = Soccar, 1vX, no mutators, standard map)
 @
-- Match length: Unlimited (if it takes too long, you can quit at any moment),
-- Max score: 1 Goal,
-- Enable Rendering (of course),
-- Enable State Setting (of course).
+- Match length: Unlimited,
+- Max score: 1 Goal.
+
+Of course, don't forget to turn on rendering and state setting.
+Any normal map is fine.
 @
 
 

@@ -1,21 +1,21 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
-import rlbotexample.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
-import rlbotexample.sounds.GameSoundFiles;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import util.math.vector.Vector3;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.State;
 import util.tinysound.Sound;
 import util.tinysound.TinySound;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BossElectricBallShootingAttackPhase1 implements State {
 
@@ -23,14 +23,15 @@ public class BossElectricBallShootingAttackPhase1 implements State {
     private Orientation bossInitialOrientation;
     private Vector3 bossInitialPosition;
 
-    private static final List<Integer> FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT = List.of(
+    private static final List<Integer> FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT = Arrays.stream(new Integer[] {
             140, 160, 180, 200, 220, 240, 260, 280,
             135, 155, 175, 195, 215, 235, 255, 275,
             145, 165, 185, 205, 225, 245, 265, 285,
             150, 170, 190, 210, 230, 250, 270, 290
-    );
+    }).collect(Collectors.toList());
 
     private final Sound[] pewpewSounds = new Sound[4];
+    private Sound buildownSound;
 
     @Override
     public void start(DataPacket input) {
@@ -46,6 +47,8 @@ public class BossElectricBallShootingAttackPhase1 implements State {
         for(int i = 0; i < pewpewSounds.length; i++) {
             pewpewSounds[i] = TinySound.loadSound(GameSoundFiles.pewpew_electric_balls[i]);
         }
+        TinySound.loadSound(GameSoundFiles.electric_pewpew_buildup).play(0.1);
+        buildownSound = TinySound.loadSound(GameSoundFiles.electric_pewpew_buildown);
     }
 
     @Override
@@ -55,7 +58,11 @@ public class BossElectricBallShootingAttackPhase1 implements State {
             ElectricBallsResourceHandler.allocAt(CurrentGame.bossAi.centerOfMass, input.humanCar);
 
             int randomSoundIndex = (int)(Math.random() * GameSoundFiles.pewpew_electric_balls.length);
-            pewpewSounds[randomSoundIndex].play(0.1);
+            pewpewSounds[randomSoundIndex].play(0.15);
+        }
+
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 305) {
+            buildownSound.play(0.14);
         }
 
         final Vector3 orientationRotator = Vector3.UP_VECTOR.findRotator(input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass));
@@ -76,7 +83,6 @@ public class BossElectricBallShootingAttackPhase1 implements State {
     @Override
     public void stop(DataPacket input) {
         CurrentGame.bossAi.close();
-
         TinySound.shutdown();
     }
 

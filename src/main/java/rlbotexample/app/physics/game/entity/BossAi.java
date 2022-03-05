@@ -1,7 +1,7 @@
 package rlbotexample.app.physics.game.entity;
 
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;

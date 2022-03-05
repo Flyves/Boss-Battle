@@ -1,16 +1,17 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
-import rlbotexample.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.linear_transform.LinearNormalizer;
 import util.math.linear_transform.ParameterizedSegment;
 import util.math.vector.Vector3;
 import util.state_machine.State;
+import util.tinysound.TinySound;
 
 public class BossIdle1Phase1 implements State {
 
@@ -41,6 +42,9 @@ public class BossIdle1Phase1 implements State {
 
         final Orientation bossAnimationOrientation = CurrentGame.bossAi.orientedPosition.orientation;
         bossAnimationOrientation.noseVector = projectedJumpDirection.normalized();
+
+        TinySound.init();
+        TinySound.loadSound(GameSoundFiles.idle2_sweep).play(0.3);
     }
 
     @Override
@@ -54,6 +58,7 @@ public class BossIdle1Phase1 implements State {
     @Override
     public void stop(DataPacket input) {
         CurrentGame.bossAi.close();
+        TinySound.shutdown();
     }
 
     @Override

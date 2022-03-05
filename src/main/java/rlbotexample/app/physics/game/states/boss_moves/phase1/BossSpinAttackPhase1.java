@@ -1,17 +1,19 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
-import rlbotexample.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_states.BeginSpinAttack;
+import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.math.vector.Vector3;
 import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
 import util.state_machine.StateMachine;
+import util.tinysound.Sound;
+import util.tinysound.TinySound;
 
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class BossSpinAttackPhase1 implements State {
         CurrentGame.bossAi.animator.looping(false);
 
         amountOfTimesAttackOccurred = 0;
+        TinySound.init();
+        TinySound.loadSound(GameSoundFiles.helicopter_buildup).play(0.2);
     }
 
     @Override

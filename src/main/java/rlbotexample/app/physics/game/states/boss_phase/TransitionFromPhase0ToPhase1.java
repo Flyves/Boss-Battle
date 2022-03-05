@@ -1,15 +1,11 @@
 package rlbotexample.app.physics.game.states.boss_phase;
 
-import rlbot.render.Renderer;
-import rlbotexample.animations.CarGroupAnimator;
-import rlbotexample.animations.GameAnimations;
+import rlbotexample.assets.animations.CarGroupAnimator;
+import rlbotexample.assets.animations.GameAnimations;
 import rlbotexample.app.graphics.health_bars.BossHealthBar;
-import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
-import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
-import util.math.vector.ZyxOrientedPosition;
 import util.state_machine.State;
 
 public class TransitionFromPhase0ToPhase1 implements State {
@@ -32,7 +28,9 @@ public class TransitionFromPhase0ToPhase1 implements State {
     }
 
     @Override
-    public void stop(DataPacket input) {}
+    public void stop(DataPacket input) {
+        CurrentGame.bossAi.close();
+    }
 
     @Override
     public State next(DataPacket input) {

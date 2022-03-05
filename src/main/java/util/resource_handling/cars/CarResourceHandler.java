@@ -14,6 +14,7 @@ public class CarResourceHandler {
 
     public static final List<Integer> freeCarIndexes = new ArrayList<>();
     private static final Map<Integer, Integer> carIdToTeamId = new HashMap<>();
+    private static int rotatingIndexForFreeCars = 0;
 
     public static void initialize(List<ExtendedCarData> allCars) {
         freeCarIndexes.addAll(allCars.stream()
@@ -108,7 +109,23 @@ public class CarResourceHandler {
     }
 
     public static void handleFreeCars(DataPacket input) {
-        List<ExtendedCarData> freeCars = dereferenceIndexes(input, freeCarIndexes);
-        freeCars.forEach(carData -> PhysicsOfBossBattle.setOrientedPosition(new OrientedPosition(new Vector3(30000, carData.playerIndex*200, 10000), new Orientation()).toZyxOrientedPosition(), carData));
+        final List<ExtendedCarData> freeCars = dereferenceIndexes(input, freeCarIndexes);
+        final ExtendedCarData dereferencedCar = getRotatingFreeCarReference(freeCars);
+        if(dereferencedCar == null) {
+            return;
+        }
+        PhysicsOfBossBattle.setOrientedPosition(new OrientedPosition(new Vector3(30000, dereferencedCar.playerIndex*200, 50000), new Orientation()).toZyxOrientedPosition(), dereferencedCar);
+    }
+
+    private static ExtendedCarData getRotatingFreeCarReference(final List<ExtendedCarData> freeCars) {
+        if(freeCars.isEmpty()) {
+            return null;
+        }
+        if(rotatingIndexForFreeCars >= freeCars.size()) {
+            rotatingIndexForFreeCars = 0;
+        }
+        final ExtendedCarData referenceToReturn = freeCars.get(rotatingIndexForFreeCars);
+        rotatingIndexForFreeCars++;
+        return referenceToReturn;
     }
 }

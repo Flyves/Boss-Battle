@@ -22,7 +22,7 @@ public class PlayerHealthBar {
         }
         final Color finalLifeColor = lifeColor;
         RenderTasks.append(renderer -> renderer.drawString2d("Player HP: " + CurrentGame.humanPlayer.health,
-                finalLifeColor, new Point(20, (int)(ScreenSize.HEIGHT/1.05)),
+                finalLifeColor, new Point((int)(ScreenSize.WIDTH*0.03), (int)(ScreenSize.HEIGHT*0.85)),
                 2, 2));
     }
 
