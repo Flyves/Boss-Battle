@@ -18,12 +18,13 @@ public class TransitionFromPhase0ToPhase1 implements State {
 
     @Override
     public void exec(DataPacket input) {
+        double bossLife = CurrentGame.bossAi.animator.currentFrameIndex()/(double)CurrentGame.bossAi.animator.meshAnimation.frames.size();
+        bossLife = bossLife*333.3333333 + 666.666666;
+        if(CurrentGame.bossAi.animator.currentFrameIndex() < 50) {
+            bossLife = 670;
+        }
+        CurrentGame.bossAi.health = (int)bossLife;
         CurrentGame.bossAi.orientedPosition.position = new Vector3();
-        /*if(CurrentGame.bossAi.animator.currentFrameIndex() < CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation.size()) {
-            CurrentGame.bossAi.orientedPosition.position = new Vector3(0, 0, -1000);
-            final int carIndexToKill = CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation.get(CurrentGame.bossAi.animator.currentFrameIndex());
-            PhysicsOfBossBattle.setOrientedPosition(new ZyxOrientedPosition(new Vector3((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, -10000), new Vector3()), input.allCars.get(carIndexToKill));
-        }*/
         CurrentGame.bossAi.step(input);
     }
 

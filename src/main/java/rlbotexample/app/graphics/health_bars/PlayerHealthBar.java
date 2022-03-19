@@ -9,8 +9,7 @@ import util.renderers.RenderTasks;
 import java.awt.*;
 
 public class PlayerHealthBar {
-    private static final Vector2 UPPER_LEFT_POSITION = new Vector2(43, 962);
-    private static final Color HEALTH_BAR_COLOR = new Color(49, 231, 52);
+    private static final Vector2 UPPER_LEFT_POSITION = new Vector2(43, 920);
 
     public static void renderOnScreen() {
         Color lifeColor = Color.CYAN;
@@ -21,9 +20,10 @@ public class PlayerHealthBar {
             lifeColor = Color.yellow;
         }
         final Color finalLifeColor = lifeColor;
-        RenderTasks.append(renderer -> renderer.drawString2d("Player HP: " + CurrentGame.humanPlayer.health,
-                finalLifeColor, new Point((int)(ScreenSize.WIDTH*0.03), (int)(ScreenSize.HEIGHT*0.85)),
-                2, 2));
+        HealthBarSegment2.printOnScreen(UPPER_LEFT_POSITION, CurrentGame.humanPlayer.health/(double)CurrentGame.PLAYER_INITIAL_HP, finalLifeColor);
+        RenderTasks.append(renderer -> renderer.drawString2d("Player HP",
+                new Color(0, 0, 0, 200), new Point((int)(ScreenSize.WIDTH*0.085), (int)(ScreenSize.HEIGHT*0.865)),
+                1, 1));
     }
 
 }

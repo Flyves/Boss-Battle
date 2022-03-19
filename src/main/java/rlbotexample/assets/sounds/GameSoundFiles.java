@@ -26,5 +26,6 @@ public class GameSoundFiles {
     public static final File helicopter_attack = new File(BASE_FILE_PATH + "helicopter_attack.wav");
 
     public static final File idle2_sweep = new File(BASE_FILE_PATH + "idle2_sweep.wav");
+    public static final File idle2_sweep_end = new File(BASE_FILE_PATH + "idle2_sweep_end.wav");
 
 }

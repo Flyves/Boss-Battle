@@ -25,7 +25,7 @@ public class CarGroupAnimator implements AutoCloseable {
                             new Vector3(0, 0, -1))  // upside down
             ).toZyxOrientedPosition();
 
-    private final CarGroupAnimation meshAnimation;
+    public final CarGroupAnimation meshAnimation;
     public OrientedPosition orientedPosition;
     private int frameCount;
     private boolean isLooping;

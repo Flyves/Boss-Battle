@@ -49,6 +49,12 @@ public class BossIdle1Phase1 implements State {
 
     @Override
     public void exec(DataPacket input) {
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 55) {
+            TinySound.loadSound(GameSoundFiles.idle2_sweep_end).play(0.12);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 64) {
+            TinySound.loadSound(GameSoundFiles.idle2_sweep_end).play(0.07);
+        }
         BasicRigidityTransitionHandler.handle(CurrentGame.bossAi.animator);
         double valueOfParameterizedAutomation = animationAutomationClip.compute(CurrentGame.bossAi.animator.currentFrameIndex());
         CurrentGame.bossAi.orientedPosition.position = parameterizedTrajectory.compute(valueOfParameterizedAutomation);

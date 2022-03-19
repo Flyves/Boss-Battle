@@ -35,7 +35,7 @@ public class ElectricBallsResourceHandler {
                 .filter(electricBall -> input.humanCar.hitBox.isCollidingWith(electricBall))
                 .findFirst();
 
-        electricBallCollisionOpt.ifPresent(electricBall -> CurrentGame.humanPlayer.takeDamage(input, 3, input.humanCar.position.minus(electricBall.position).normalized().plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(700)));
+        electricBallCollisionOpt.ifPresent(electricBall -> CurrentGame.humanPlayer.takeDamage(input, 2, input.humanCar.position.minus(electricBall.position).normalized().plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(700)));
         electricBallCollisionOpt.ifPresent(currentlyUsedElectricBalls::remove);
     }
 

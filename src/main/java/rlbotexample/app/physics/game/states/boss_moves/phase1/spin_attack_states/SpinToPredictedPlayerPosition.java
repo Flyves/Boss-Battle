@@ -14,7 +14,7 @@ import util.tinysound.TinySound;
 
 public class SpinToPredictedPlayerPosition implements State {
 
-    private static final int AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION = 80;
+    private static final int AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION = 100;
     private static final double TIME_TO_EXECUTE_MOVEMENT = AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION * RlConstants.BOT_REFRESH_TIME_PERIOD;
 
     static final int FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER = 125;

@@ -21,7 +21,7 @@ public class BossPhase2 implements State {
     @Override
     public State next(DataPacket input) {
         if(CurrentGame.bossAi.health < CurrentGame.BOSS_INITIAL_HP * BOSS_HEALTH_THRESHOLD_FACTOR) {
-            return new TransitionFromPhase1ToPhase2();
+            return new TransitionFromPhase2ToPhase3();
         }
         return this;
     }
