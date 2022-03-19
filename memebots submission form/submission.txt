@@ -11,6 +11,10 @@ You need (for a total of 65 cars):
 - 44 Rocket Slayer bots in the blue team,
 - 20 Rocket Slayer bots in the orange team.
 
+Make sure you have at least Java 11 installed. Any newer version should work just fine.
+I compiled the code with Java 11.
+I only tested it on other computers with Java 17.
+
 You should probably make sure you can run the bots without too much lag before the event.
 When you run the bot, you should expect to see a loading at the bottom left of the screen. It should take ~10 seconds to load.
 Once the loading is done, you should see a menu in the game. Don't press anything! Keep the surprise for the event :p

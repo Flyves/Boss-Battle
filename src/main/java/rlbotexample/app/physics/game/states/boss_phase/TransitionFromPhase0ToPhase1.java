@@ -30,6 +30,7 @@ public class TransitionFromPhase0ToPhase1 implements State {
 
     @Override
     public void stop(DataPacket input) {
+        CurrentGame.bossAi.health++;
         CurrentGame.bossAi.close();
     }
 
