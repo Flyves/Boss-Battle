@@ -44,7 +44,6 @@ public class BossDashAttackPhase1 implements State {
 
         Sound buildupSound = TinySound.loadSound(GameSoundFiles.dash_buildup);
         buildupSound.play(0.1);
-        shootingSound = TinySound.loadSound(GameSoundFiles.dash_shooting);
     }
 
     @Override
@@ -52,7 +51,62 @@ public class BossDashAttackPhase1 implements State {
         BasicRigidityTransitionHandler.handle(CurrentGame.bossAi.animator);
 
         if(CurrentGame.bossAi.animator.currentFrameIndex() == 177) {
+            TinySound.shutdown();
+            TinySound.init();
+            shootingSound = TinySound.loadSound(GameSoundFiles.dash_shooting);
             shootingSound.play(0.1);
+        }
+
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 19) {
+            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 27) {
+            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 32) {
+            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 32) {
+            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 37) {
+            TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 54) {
+            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 62) {
+            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 67) {
+            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 72) {
+            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 88) {
+            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 96) {
+            TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 100) {
+            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 106) {
+            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 123) {
+            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 131) {
+            TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 136) {
+            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 141) {
+            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
         }
 
         if(CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH < DASH_DURATION

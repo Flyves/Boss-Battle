@@ -1,11 +1,17 @@
 package rlbotexample;
 
 import rlbot.manager.BotManager;
+import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.assets.sounds.GameSoundGlobals;
 import util.PortReader;
 import util.game_constants.RlConstants;
+import util.tinysound.Sound;
+import util.tinysound.TinySound;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -17,9 +23,10 @@ import java.util.stream.Collectors;
  *
  * Look inside SampleBot.java for the actual bot logic!
  */
-public class JavaExample {
+public class JavaExample implements ChangeListener {
 
     private static final Integer DEFAULT_PORT = 17357;
+    private static Sound sfxChangedSoundSample;
 
     public static void main(String[] args) {
         BotManager botManager = new BotManager();
@@ -28,9 +35,7 @@ public class JavaExample {
             return DEFAULT_PORT;
         });
 
-        // cap refresh rates so the bot can run smoothly on cheap pc
         botManager.setRefreshRate((int)RlConstants.BOT_REFRESH_RATE);
-        // yeah no scrap that we're gonna run schedulers and task serializers instead xD
 
         SamplePythonInterface pythonInterface = new SamplePythonInterface(port, botManager);
         new Thread(pythonInterface::start).start();
@@ -38,10 +43,20 @@ public class JavaExample {
         JFrame frame = new JFrame("Java Bot Handler");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        final JSlider soundVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, 10);
+        soundVolume.addChangeListener(new JavaExample());
+        soundVolume.setMajorTickSpacing(10);
+        soundVolume.setMinorTickSpacing(1);
+        soundVolume.setPaintTicks(true);
+        soundVolume.setPaintLabels(true);
+
         JPanel panel = new JPanel();
+
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         BorderLayout borderLayout = new BorderLayout();
         panel.setLayout(borderLayout);
+
+        // text
         JPanel dataPanel = new JPanel();
         dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
         dataPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -49,8 +64,17 @@ public class JavaExample {
         dataPanel.add(new JLabel("I'm the thing controlling the Java bot, keep me open :)"), BorderLayout.CENTER);
         JLabel botsRunning = new JLabel("Bots running: ");
         dataPanel.add(botsRunning, BorderLayout.CENTER);
+
+        // sound slider
+        dataPanel.add(new JLabel("."));
+        dataPanel.add(new JLabel("."));
+        dataPanel.add(new JLabel("."));
+        dataPanel.add(new JLabel("In-game SFX volume :"));
+        dataPanel.add(soundVolume);
+
         panel.add(dataPanel, BorderLayout.CENTER);
         frame.add(panel);
+
 
         URL url = JavaExample.class.getClassLoader().getResource("icon.png");
         Image image = Toolkit.getDefaultToolkit().createImage(url);
@@ -76,5 +100,18 @@ public class JavaExample {
         };
 
         new Timer(1000, myListener).start();
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        int fps = source.getValue();
+        GameSoundGlobals.sfxVolume = fps/10.0;
+        TinySound.setGlobalVolume(GameSoundGlobals.sfxVolume);
+        if (!source.getValueIsAdjusting()) {
+            TinySound.init();
+            sfxChangedSoundSample = TinySound.loadSound(GameSoundFiles.pewpew_electric_balls[0]);
+            sfxChangedSoundSample.play(0.15);
+        }
     }
 }

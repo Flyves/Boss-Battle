@@ -26,6 +26,13 @@ public class GameSoundFiles {
     public static final File helicopter_attack = new File(BASE_FILE_PATH + "helicopter_attack.wav");
 
     public static final File idle2_sweep = new File(BASE_FILE_PATH + "idle2_sweep.wav");
-    public static final File idle2_sweep_end = new File(BASE_FILE_PATH + "idle2_sweep_end.wav");
+    public static final File leg_step_0 = new File(BASE_FILE_PATH + "leg_step_0.wav");
+    public static final File leg_step_1 = new File(BASE_FILE_PATH + "leg_step_1.wav");
+    public static final File leg_step_2 = new File(BASE_FILE_PATH + "leg_step_2.wav");
+    public static final File leg_step_3 = new File(BASE_FILE_PATH + "leg_step_3.wav");
+    public static final File leg_step_4 = new File(BASE_FILE_PATH + "leg_step_4.wav");
+
+    public static final File bootup_head = new File(BASE_FILE_PATH + "bootup_head.wav");
+    public static final File bootup_tail = new File(BASE_FILE_PATH + "bootup_tail.wav");
 
 }

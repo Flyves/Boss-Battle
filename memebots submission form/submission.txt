@@ -22,6 +22,9 @@ If you see the menu, you can try to move around the map a little to see if it's 
 Keep in mind you are dealing with 65 cars in a game (64 bots + you), this puts a huge load on your computer's processor.
 Closing any other non-necessary application might help a little.
 
+Also, it's worth noting that I added a volume slider in the small interface that pops up when you launch the bot.
+You can use that to adjust the sound level of the sounds I added.
+
 I hope you enjoy it!
 @
 

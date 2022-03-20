@@ -45,10 +45,6 @@ public class BossIdle3Phase1 implements State {
         if(amountOfTimesBossJumped == 1) {
             return new BossElectricBallShootingAttackPhase1();
         }
-        if (CurrentGame.bossAi.animator.currentFrameIndex() > FRAME_AT_WHICH_BOSS_ENDS_TO_MOVE_TO_THE_SIDE + 10
-                && input.humanCar.position.z > 500) {
-            return new BossElectricBallShootingAttackPhase1();
-        }
         return this;
     }
 

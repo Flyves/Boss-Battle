@@ -50,11 +50,25 @@ public class BossIdle1Phase1 implements State {
     @Override
     public void exec(DataPacket input) {
         if(CurrentGame.bossAi.animator.currentFrameIndex() == 55) {
-            TinySound.loadSound(GameSoundFiles.idle2_sweep_end).play(0.12);
+            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.12);
         }
         if(CurrentGame.bossAi.animator.currentFrameIndex() == 64) {
-            TinySound.loadSound(GameSoundFiles.idle2_sweep_end).play(0.07);
+            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.07);
         }
+
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 104) {
+            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.04);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 110) {
+            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.04);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 119) {
+            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.04);
+        }
+        if(CurrentGame.bossAi.animator.currentFrameIndex() == 129) {
+            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.04);
+        }
+
         BasicRigidityTransitionHandler.handle(CurrentGame.bossAi.animator);
         double valueOfParameterizedAutomation = animationAutomationClip.compute(CurrentGame.bossAi.animator.currentFrameIndex());
         CurrentGame.bossAi.orientedPosition.position = parameterizedTrajectory.compute(valueOfParameterizedAutomation);

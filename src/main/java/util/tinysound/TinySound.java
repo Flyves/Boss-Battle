@@ -44,6 +44,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import rlbotexample.assets.sounds.GameSoundGlobals;
 import util.tinysound.internal.ByteList;
 import util.tinysound.internal.MemMusic;
 import util.tinysound.internal.MemSound;
@@ -111,6 +112,7 @@ public class TinySound {
 		//start the line and finish initialization
 		TinySound.outLine.start();
 		TinySound.finishInit();
+		setGlobalVolume(GameSoundGlobals.sfxVolume);
 	}
 	
 	/**

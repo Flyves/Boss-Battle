@@ -7,9 +7,13 @@ import rlbotexample.app.physics.game.entity.HumanPlayer;
 import rlbotexample.app.physics.game.states.menu_and_game_over.WaitForAssetsToLoad;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
+import util.math.vector.Vector;
 import util.math.vector.Vector3;
+import util.renderers.RenderTasks;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.StateMachine;
+
+import java.awt.*;
 
 public class CurrentGame {
 
@@ -35,22 +39,58 @@ public class CurrentGame {
     public static void displayRenderer(DataPacket input) {
         GAME_MACHINE.debug(input);
 
-        displayBlockedGoals(input);
+        displayBlockedGoals();
 
         ElectricBallsResourceHandler.renderElectricBalls(input);
     }
 
     public static void blockGoals(DataPacket input) {
-        if(input.humanCar.position.y > RlConstants.WALL_DISTANCE_Y) {
+        if(input.humanCar.hitBox.closestPointOnSurface(input.humanCar.position.plus(new Vector3(0, 2000, 0))).y > RlConstants.WALL_DISTANCE_Y) {
             PhysicsOfBossBattle.setVelocity(input.humanCar.velocity.minus(new Vector3(0, 8000/RlConstants.BOT_REFRESH_RATE, 0)), input.humanCar);
         }
-        else if(input.humanCar.position.y < -RlConstants.WALL_DISTANCE_Y) {
+        else if(input.humanCar.hitBox.closestPointOnSurface(input.humanCar.position.plus(new Vector3(0, -2000, 0))).y < -RlConstants.WALL_DISTANCE_Y) {
             PhysicsOfBossBattle.setVelocity(input.humanCar.velocity.plus(new Vector3(0, 8000/RlConstants.BOT_REFRESH_RATE, 0)), input.humanCar);
         }
     }
 
-    public static void displayBlockedGoals(DataPacket input) {
+    public static void displayBlockedGoals() {
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(RlConstants.GOAL_SIZE_X/2, RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(RlConstants.GOAL_SIZE_X/3, RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(RlConstants.GOAL_SIZE_X/3, RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(RlConstants.GOAL_SIZE_X/6, RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(RlConstants.GOAL_SIZE_X/6, RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(0, RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(0, RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(-RlConstants.GOAL_SIZE_X/6, RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(-RlConstants.GOAL_SIZE_X/6, RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(-RlConstants.GOAL_SIZE_X/3, RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(-RlConstants.GOAL_SIZE_X/3, RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(-RlConstants.GOAL_SIZE_X/2, RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
 
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(RlConstants.GOAL_SIZE_X/2, -RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(RlConstants.GOAL_SIZE_X/3, -RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(RlConstants.GOAL_SIZE_X/3, -RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(RlConstants.GOAL_SIZE_X/6, -RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(RlConstants.GOAL_SIZE_X/6, -RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(0, -RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(0, -RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(-RlConstants.GOAL_SIZE_X/6, -RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(-RlConstants.GOAL_SIZE_X/6, -RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(-RlConstants.GOAL_SIZE_X/3, -RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
+        RenderTasks.append(r -> r.drawLine3d(Color.red,
+                new Vector3(-RlConstants.GOAL_SIZE_X/3, -RlConstants.WALL_DISTANCE_Y, 0).toFlatVector(),
+                new Vector3(-RlConstants.GOAL_SIZE_X/2, -RlConstants.WALL_DISTANCE_Y, RlConstants.GOAL_SIZE_Z).toFlatVector()));
     }
 
     public static void demolishPlayer() {
