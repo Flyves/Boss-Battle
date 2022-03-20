@@ -5,6 +5,6 @@ The future of rocket league depends on you.
 
 ## Credits
 Many thanks to:
-- [Abstrack](https://soundcloud.com/kcartsba), who generously made some sound samples (initial buildup phase, and the steps);
+- [Abstrack](https://soundcloud.com/kcartsba), who generously made some sound samples (the initial buildup phase, and the steps);
 - SpicyTaco, for improving the developpment workflow;
 - My family, for giving feedback on the general design.
