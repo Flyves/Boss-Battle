@@ -1,18 +1,14 @@
 package rlbotexample.app.graphics.health_bars;
 
-import rlbot.render.Renderer;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.math.vector.Vector2;
-import util.math.vector.Vector3;
 import util.renderers.RenderTasks;
 
 import java.awt.*;
 
 public class BossHealthBar {
-
-    //private static final Vector2 HEALTH_BARS_OFFSET = new Vector2(361, 0).scaled(ScreenSize.FULL_HD_RATIO);
     private static final Vector2 HEALTH_BARS_OFFSET = new Vector2(360, 0).scaled(ScreenSize.FULL_HD_RATIO);
     private static final Vector2 HP_BAR_1_POSITION = new Vector2(410, 105).scaled(ScreenSize.FULL_HD_RATIO);
     private static final Vector2 HP_BAR_2_POSITION = HP_BAR_1_POSITION.plus(HEALTH_BARS_OFFSET);
@@ -49,9 +45,9 @@ public class BossHealthBar {
         RenderTasks.append(renderer -> renderer.drawString3d("HP: " + renderedHealth,
                 Color.CYAN, CurrentGame.bossAi.centerOfMass.plus(new Vector3(0, 0, 500)).toFlatVector(),
                 (int)(5*stringScale), (int)(5*stringScale)));*/
-        HealthBarSegment2.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
-        HealthBarSegment2.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
-        HealthBarSegment2.printOnScreen(HP_BAR_3_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(HP_BAR_1_POSITION, hpBar3Health, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(HP_BAR_2_POSITION, hpBar2Health, HEALTH_BAR_COLOR);
+        HealthBarSegment.printOnScreen(HP_BAR_3_POSITION, hpBar1Health, HEALTH_BAR_COLOR);
         RenderTasks.append(renderer -> renderer.drawString2d("Rocket Slayer HP",
                 new Color(0, 0, 0, 200), new Point((int)(ScreenSize.WIDTH*0.445), (int)(ScreenSize.HEIGHT*0.11)),
                 1, 1));

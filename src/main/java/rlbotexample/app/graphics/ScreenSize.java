@@ -13,13 +13,16 @@ public class ScreenSize {
 
     // getScreenSize() returns the size
     // of the screen in pixels
-    private static final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    //private static final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    private static final Dimension size = new Dimension(1920, 1080);
 
     // width will store the width of the screen
-    public static final int WIDTH = (int)size.getWidth();
+    //public static final int WIDTH = (int)size.getWidth();
+    public static final int WIDTH = 1920;
 
     // height will store the height of the screen
-    public static final int HEIGHT = (int)size.getHeight();
+    //public static final int HEIGHT = (int)size.getHeight();
+    public static final int HEIGHT = 1080;
 
     public static final Vector2 FULL_HD_RATIO = new Vector2(WIDTH/1920.0, HEIGHT/1080.0);
 }
