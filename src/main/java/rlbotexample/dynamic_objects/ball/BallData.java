@@ -18,28 +18,10 @@ public class BallData {
     public final Vector3 spin;
     public final double time;
 
-    public BallData(Physics physics, final double time) {
-        position = new Vector3(physics.location());
-        velocity = new Vector3(physics.velocity());
-        spin = new Vector3(physics.angularVelocity());
-        this.time = time;
-    }
-
     public BallData(final BallInfo ball) {
         this.position = new Vector3(ball.physics().location());
         this.velocity = new Vector3(ball.physics().velocity());
         this.spin = new Vector3(ball.physics().angularVelocity());
         this.time = 0;
-    }
-
-    public BallData(final Vector3 position, final Vector3 velocity, final Vector3 spin, final double time) {
-        this.position = position;
-        this.velocity = velocity;
-        this.spin = spin;
-        this.time = time;
-    }
-
-    public final Vector3 surfaceVelocity(final Vector3 normal) {
-        return spin.crossProduct(normal).scaled(RlConstants.BALL_RADIUS);
     }
 }

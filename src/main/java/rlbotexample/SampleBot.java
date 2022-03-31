@@ -82,13 +82,6 @@ public class SampleBot implements Bot {
         botOutput = botBehaviour.processInput(input, packet);
         botBehaviour.updateGui(input, currentFps, averageFps, deltaTime);
 
-        /*new Rectangle2D(new Vector2(200, 200), new Vector2((Math.sin(System.currentTimeMillis()/1000.0)+1)*80 + 100, 20))
-                .decomposeIntoSmallerRectangles(0.5)
-                .stream()
-                .filter(r -> r.area() > 2)
-                .map(r -> new Rectangle2D(r.upperLeft, r.size))
-                .forEach(r -> r.render(Color.cyan));*/
-
         RenderTasks.init();
         RenderTasks.render();
         RenderTasks.clearTaskBuffer();

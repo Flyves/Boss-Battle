@@ -4,13 +4,11 @@ import rlbotexample.assets.animations.AnimatedCarObject;
 import rlbotexample.assets.animations.CarGroup;
 import rlbotexample.assets.animations.IndexedCarGroup;
 import rlbotexample.assets.animations.CarGroupAnimation;
-import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.matrix.Matrix3By3;
-import util.math.vector.OrientedPosition;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;
-import util.parameter_configuration.IOFile;
-import util.parameter_configuration.ObjectSerializer;
+import util.files.IOFile;
+import util.files.ObjectSerializer;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;

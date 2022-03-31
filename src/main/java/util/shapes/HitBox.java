@@ -21,17 +21,6 @@ public class HitBox {
         this.roofOrientation = roofOrientation;
     }
 
-    public HitBox(Vector3 centerPosition, Vector3 boxSize) {
-        this.centerPositionOfHitBox = centerPosition;
-        // this is HORRIBLY WRONG
-        // but this constructor is only used for prediction of car trajectories.
-        // when this constructor is called, the center position of the car is never used.
-        this.localHitBoxOffset = null;
-        this.cornerPosition = boxSize;
-        this.frontOrientation = new Vector3(1, 0, 0);
-        this.roofOrientation = new Vector3(0, 0, 1);
-    }
-
     private HitBox(Vector3 centerPosition, Vector3 boxSize, Orientation orientation) {
         this.centerPositionOfHitBox = centerPosition;
         // this one is simply wrong LOL
@@ -42,14 +31,6 @@ public class HitBox {
         this.cornerPosition = boxSize;
         this.frontOrientation = orientation.noseVector;
         this.roofOrientation = orientation.roofVector;
-    }
-
-    public HitBox generateHypotheticalHitBox(Vector3 hypotheticalPosition, Orientation hypotheticalOrientation) {
-        return new HitBox(hypotheticalPosition, cornerPosition, hypotheticalOrientation);
-    }
-
-    public HitBox generateHypotheticalHitBox(Vector3 hypotheticalPosition) {
-        return new HitBox(hypotheticalPosition, cornerPosition, new Orientation(frontOrientation, roofOrientation));
     }
 
     // doesn't work if the point is withing the hit box, but we hardly need that
@@ -81,44 +62,6 @@ public class HitBox {
         }
 
         return getGlobal(new Vector3(newXCoordinate, newYCoordinate, newZCoordinate));
-    }
-
-    // z under the car might be badly behaving D: (too much z, maybe because the center of mass is outside the hit box??)
-    public Vector3 projectPointOnSurfaceFromCenterOfMass(Vector3 pointToProject) {
-        final Vector3 localPoint = getLocal(pointToProject);
-        final Vector3 absoluteNonZeroLocalPoint = new Vector3(
-                Math.abs(makeNonZero(localPoint.x)),
-                Math.abs(makeNonZero(localPoint.y)),
-                Math.abs(makeNonZero(localPoint.z)));
-        final Vector3 localHitBoxOffset = new Vector3(
-                localPoint.x<0 ? -this.localHitBoxOffset.x : this.localHitBoxOffset.x,
-                this.localHitBoxOffset.y,
-                localPoint.z<0 ? -this.localHitBoxOffset.z : this.localHitBoxOffset.z);
-        final Vector3 cornerPosition = new Vector3(
-                this.cornerPosition.x+localHitBoxOffset.x,
-                this.cornerPosition.y+localHitBoxOffset.y,
-                this.cornerPosition.z+localHitBoxOffset.z);
-
-        // find the correct side to project onto, and find the right scalar
-        double scalar = 1;
-        if(absoluteNonZeroLocalPoint.x/absoluteNonZeroLocalPoint.y > Math.abs(cornerPosition.x/cornerPosition.y)
-                && absoluteNonZeroLocalPoint.x/absoluteNonZeroLocalPoint.z > Math.abs(cornerPosition.x/cornerPosition.z)) {
-            scalar = cornerPosition.x/absoluteNonZeroLocalPoint.x;
-        }
-        else if(absoluteNonZeroLocalPoint.y/absoluteNonZeroLocalPoint.x > Math.abs(cornerPosition.y/cornerPosition.x)
-                && absoluteNonZeroLocalPoint.y/absoluteNonZeroLocalPoint.z > Math.abs(cornerPosition.y/cornerPosition.z)) {
-            scalar = cornerPosition.y/absoluteNonZeroLocalPoint.y;
-        }
-        else if(absoluteNonZeroLocalPoint.z/absoluteNonZeroLocalPoint.x > Math.abs(cornerPosition.z/cornerPosition.x)
-                && absoluteNonZeroLocalPoint.z/absoluteNonZeroLocalPoint.y > Math.abs(cornerPosition.z/cornerPosition.y)) {
-            scalar = cornerPosition.z/absoluteNonZeroLocalPoint.z;
-        }
-
-        return getGlobal(localPoint
-                .plus(this.localHitBoxOffset)
-                .scaled(scalar)
-                .scaled(1, -1, 1)
-                .minus(this.localHitBoxOffset));
     }
 
     private double makeNonZero(double value) {

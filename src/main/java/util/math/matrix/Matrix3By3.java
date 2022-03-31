@@ -1,13 +1,12 @@
 package util.math.matrix;
 
-import util.math.vector.Vector2;
 import util.math.vector.Vector3;
 
 public class Matrix3By3 {
-
     public static final Matrix3By3 UNIT = new Matrix3By3(1, 0, 0,
             0, 1, 0,
             0, 0, 1);
+
     public final Vector3 a1;
     public final Vector3 a2;
     public final Vector3 a3;

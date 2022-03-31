@@ -1,6 +1,6 @@
 package rlbotexample.assets.animations;
 
-import util.parameter_configuration.ObjectSerializer;
+import util.files.ObjectSerializer;
 
 public class GameAnimations {
 

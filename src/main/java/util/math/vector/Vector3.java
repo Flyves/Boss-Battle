@@ -215,6 +215,14 @@ public class Vector3 implements Serializable {
                 .plus(plane.normal.offset.projectOnto(plane.normal.direction));
     }
 
+    /** very wrongly implemented method. The name is definitely not representative of what it's doing. I was still learning about
+     * how to tackle rotations when I implemented it. It's basically doing euclidian rotations in X-Z order, but from a weird starting orientation.
+     * Don't use it. It's working properly where it's used, but you should definitely use the "rotate" function instead.
+     * The "rotate" function is way more intuitive and reliable.
+     * @param forwardFacingVector
+     * @param roofFacingVector
+     * @return stuff rotated in X-Z order, it's weird don't use it.
+     */
     @Deprecated
     public Vector3 matrixRotation(Vector3 forwardFacingVector, Vector3 roofFacingVector) {
         Vector3 result = new Vector3(this);
@@ -235,6 +243,13 @@ public class Vector3 implements Serializable {
         return result;
     }
 
+    /** very wrongly implemented method. The name is definitely not representative of what it's doing. I was still learning about
+     * how to tackle rotations when I implemented it. It's basically doing euclidian rotations in X-Z order, but from a weird starting orientation.
+     * Don't use it. It's working properly where it's used, but you should definitely use the "rotate" function instead.
+     * The "rotate" function is way more intuitive and reliable.
+     * @param orientation
+     * @return stuff rotated in X-Z order, it's weird don't use it.
+     */
     @Deprecated
     public Vector3 matrixRotation(Orientation orientation) {
         Vector3 result = new Vector3(this);
@@ -255,12 +270,27 @@ public class Vector3 implements Serializable {
         return result;
     }
 
+    /** very wrongly implemented method. The name is definitely not representative of what it's doing. I was still learning about
+     * how to tackle rotations when I implemented it. It's basically doing euclidian rotations in Z-X order, but from a weird starting orientation.
+     * Don't use it. It's working properly where it's used, but you should definitely use the "rotate" function instead.
+     * The "rotate" function is way more intuitive and reliable.
+     * @param orientation
+     * @return stuff rotated in Z-X order, it's weird don't use it.
+     */
     @Deprecated
     public Vector3 toFrameOfReference(Orientation orientation)
     {
         return toFrameOfReference(orientation.noseVector, orientation.roofVector);
     }
 
+    /** very wrongly implemented method. The name is definitely not representative of what it's doing. I was still learning about
+     * how to tackle rotations when I implemented it. It's basically doing euclidian rotations in Z-X order, but from a weird starting orientation.
+     * Don't use it. It's working properly where it's used, but you should definitely use the "rotate" function instead.
+     * The "rotate" function is way more intuitive and reliable.
+     * @param frontDirection
+     * @param topDirection
+     * @return stuff rotated in Z-X order, it's weird don't use it.
+     */
     @Deprecated
     public Vector3 toFrameOfReference(Vector3 frontDirection, Vector3 topDirection)
     {
@@ -282,6 +312,10 @@ public class Vector3 implements Serializable {
         return new Vector3(frameOfRefWithoutRoll.x, planarProjectionZyOfResult.y, planarProjectionZyOfResult.x);
     }
 
+    /** simple rotation of this vector by another using quaternion algebra.
+     * @param r a rotation vector
+     * @return this vector, rotated by the vector r using the right-hand rule.
+     */
     public Vector3 rotate(Vector3 r) {
         final double a = r.magnitude()*0.5;
         final Vector2 r2 = new Vector2(Math.cos(a), Math.sin(a));
@@ -293,7 +327,10 @@ public class Vector3 implements Serializable {
         return qr.multiply(qa.multiply(qr2)).toVector3();
     }
 
-
+    /** Same as "rotate(r)", but it's mutable for the parameter, so it modifies r as a result.
+     * @param r a rotation vector. Watch out, r is going to change as a result of calling this function.
+     * @return this vector, rotated by the vector r using the right-hand rule.
+     */
     public Vector3 mutableParamRotate(final Vector3 r) {
         final double a = r.magnitude()*0.5;
         final Vector3 sr = r.mutableScaledToMagnitude(Math.sin(a));
@@ -303,6 +340,11 @@ public class Vector3 implements Serializable {
         return ((qr.multiply(qv)).multiply(qr.mutableConjugate())).mutableToVector3();
     }
 
+    /** Not the right way to do rotations. It's subtracting the angle of a vector from the X axis in 3D to this vector.
+     * Use the "rotate" function instead.
+     * @param rotationVector
+     * @return this vector, rotated by the negative of the angle between rotationVector and the X axis
+     */
     @Deprecated
     public Vector3 orderedMinusAngle(Vector3 rotationVector) {
         // Rotating the vector in xy beforehand
@@ -317,6 +359,12 @@ public class Vector3 implements Serializable {
         return new Vector3(projectedVectorXz.x, firstRotatedVector.y, projectedVectorXz.y);
     }
 
+
+    /** Not the right way to do rotations. It's adding the angle of a vector from the X axis in 3D to this vector.
+     * Use the "rotate" function instead.
+     * @param rotationVector
+     * @return this vector, rotated by the angle between rotationVector and the X axis
+     */
     @Deprecated
     public Vector3 orderedPlusAngle(Vector3 rotationVector) {
         // Rotating the vector in xy beforehand
@@ -330,63 +378,6 @@ public class Vector3 implements Serializable {
         Vector2 resultXy = firstRotatedVector.flatten().scaledToMagnitude(projectedVectorXyXyz.x);
         // We can now add the x and the z coordinates separately from the firstly calculated y coordinate
         return new Vector3(resultXy.x, resultXy.y, projectedVectorXyXyz.y);
-    }
-
-    public Vector3 minusAngle(Vector3 rotationVector) {
-        // find the correct rotation vector
-        Vector3 rotator = rotationVector.crossProduct(X_VECTOR).scaledToMagnitude(rotationVector.angle(X_VECTOR));
-
-        return rotate(rotator);
-    }
-
-    public Vector3 plusAngle(Vector3 rotationVector) {
-        // find the correct rotation vector
-        Vector3 rotator = X_VECTOR.crossProduct(rotationVector).scaledToMagnitude(X_VECTOR.angle(rotationVector));
-
-        return rotate(rotator);
-    }
-
-    public Vector3 projectOnto(final Triangle3D triangle) {
-        final Vector3 p1 = triangle.point0;
-        final Vector3 p2 = triangle.point1;
-        final Vector3 p3 = triangle.point2;
-        final Vector3 p = this;
-        final Vector3 u = p2.minus(p1);
-        final Vector3 v = p3.minus(p1);
-        final Vector3 n = u.crossProduct(v);
-        final Vector3 w = p.minus(p1);
-        double Y = (u.crossProduct(w).dotProduct(n)) / n.magnitudeSquared();
-        double B = (w.crossProduct(v).dotProduct(n)) / n.magnitudeSquared();
-
-        double a = 1-Y-B;
-
-        if(a >= 0 && a <= 1
-                && B >= 0 && B <= 1
-                && Y >= 0 && Y <= 1) {
-            return p1.scaled(a).plus(p2.scaled(B)).plus(p3.scaled(Y));
-        }
-        else {
-            final Vector3 edgePosition1 = triangleEdgePosition(p1, p2.minus(p1), p);
-            final Vector3 edgePosition2 = triangleEdgePosition(p2, p3.minus(p2), p);
-            final Vector3 edgePosition3 = triangleEdgePosition(p3, p1.minus(p3), p);
-
-            final double dist1 = edgePosition1.minus(p).magnitude();
-            final double dist2 = edgePosition2.minus(p).magnitude();
-            final double dist3 = edgePosition3.minus(p).magnitude();
-
-            if(dist1 <= dist2 && dist1 <= dist3) {
-                return edgePosition1;
-            }
-            if(dist2 <= dist1 && dist2 <= dist3) {
-                return edgePosition2;
-            }
-            return edgePosition3;
-        }
-    }
-
-    private Vector3 triangleEdgePosition(final Vector3 start, final Vector3 dir, final Vector3 p) {
-        final double u = clamp(p.minus(start).dotProduct(dir)/dir.dotProduct(dir), 0, 1);
-        return start.plus(dir.scaled(u));
     }
 
     private double clamp(final double valueToClamp, final double min, final double max) {
@@ -414,10 +405,6 @@ public class Vector3 implements Serializable {
             && this.z == that.z;
     }
 
-    public Quaternion toQuaternion() {
-        return new Quaternion(0, this);
-    }
-
     public DesiredVector3 toDesiredVector3() {
         return new DesiredVector3((float)x, (float)y, (float)z);
     }
@@ -426,23 +413,8 @@ public class Vector3 implements Serializable {
         return new DesiredVector3((float)-x, (float)y, (float)z);
     }
 
-    public DesiredRotation toDesiredRotation() {
-        return new DesiredRotation((float)x, (float)y, (float)z);
-    }
-
-    public Vector3Int toVector3Int() {
-        return new Vector3Int((int)x, (int)y, (int)z);
-    }
-
     public rlbot.vector.Vector3 toFlatVector() {
         return new rlbot.vector.Vector3((float)-x, (float)y, (float)z);
-    }
-
-    public Matrix3By3 asUnitMatrix() {
-        return new Matrix3By3(
-                new Vector3(x, 0, 0),
-                new Vector3(0, y, 0),
-                new Vector3(0, 0, z));
     }
 
     public Vector3 findRotator(Vector3 v) {
@@ -457,29 +429,6 @@ public class Vector3 implements Serializable {
         }
 
         return crossProduct(v).scaledToMagnitude(angleBetweenVectors);
-    }
-
-    public double distanceSquared(Vector3 that) {
-        return this.x*that.x + this.y*that.y + this.z*that.z;
-    }
-
-    public Vector3 abs() {
-        return new Vector3(Math.abs(x), Math.abs(y), Math.abs(z));
-    }
-
-    public static Vector3 generateRandomVector() {
-        return new Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1);
-    }
-
-    public Vector3 capMagnitude(double maximumMagnitude) {
-        if(magnitudeSquared() < maximumMagnitude * maximumMagnitude) {
-            return this;
-        }
-        return scaledToMagnitude(maximumMagnitude);
-    }
-
-    public Vector3 randomizeMagnitude(double maxScale) {
-        return scaled((Math.random()*2 - 1) * maxScale);
     }
 
     public Vector3 nonZeroOrElse(Vector3 vector3) {

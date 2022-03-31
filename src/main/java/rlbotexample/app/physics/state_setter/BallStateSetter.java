@@ -1,11 +1,10 @@
 package rlbotexample.app.physics.state_setter;
 
 import rlbot.gamestate.*;
-import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.discrete_functions.ExponentialSmoother3D;
-import util.game_situation.GameSituation;
+import util.game_situation.GameStateHelper;
 import util.math.vector.Ray3;
 import util.math.vector.Vector3;
 
@@ -29,21 +28,21 @@ public class BallStateSetter {
             ballPosition = camera.offset.plus(camera.direction.scaledToMagnitude(30000).scaled(1/howMuchTooMuchLengthIsZ));
         }
 
-        GameState gameState = GameSituation.getCurrentGameState();
+        GameState gameState = GameStateHelper.getCurrentGameState();
         gameState.withBallState(new BallState(new PhysicsState().withLocation(new DesiredVector3((float)-ballPosition.x, (float)ballPosition.y, (float)ballPosition.z))
                 .withAngularVelocity(new DesiredVector3(0f, 0f, 0f))
                 .withVelocity(new DesiredVector3(0f, 0f, 0f))));
 
-        GameSituation.applyGameState(gameState);
+        GameStateHelper.applyGameState(gameState);
     }
 
     public static void setTarget(final Vector3 newTarget) {
         target = newTarget;
     }
 
-    public static void quitGame() {GameState gameState = GameSituation.getCurrentGameState();
+    public static void quitGame() {GameState gameState = GameStateHelper.getCurrentGameState();
         gameState.withBallState(new BallState(new PhysicsState()
                 .withLocation(new DesiredVector3((float)-inGoalPosition.x, (float)inGoalPosition.y, (float)inGoalPosition.z))));
-        GameSituation.applyGameState(gameState);
+        GameStateHelper.applyGameState(gameState);
     }
 }
