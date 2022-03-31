@@ -58,6 +58,10 @@ public class Vector3 implements Serializable {
         this(location.getX(), location.getY(), location.getZ());
     }
 
+    public static Vector3 generateRandomVector() {
+        return new Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1);
+    }
+
     public int toFlatbuffer(FlatBufferBuilder builder) {
         // Invert the X value again so that rlbot sees the format it expects.
         return rlbot.flat.Vector3.createVector3(builder, (float)-x, (float)y, (float)z);
