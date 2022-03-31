@@ -1,5 +1,6 @@
-package rlbotexample.assets.animations;
+package rlbotexample.asset.animation;
 
+import rlbotexample.asset.animation.discrete_interpolator.Animation;
 import util.files.ObjectSerializer;
 
 public class GameAnimations {
@@ -11,13 +12,12 @@ public class GameAnimations {
     public static int loadingProgress = 0;
     public static int maxAnimationLoadingProgress = 5;
 
-    public static CarGroupAnimation quadrupedal_boss_rigged_walk;
-    public static CarGroupAnimation boss_transformation_0_To_1;
-    public static CarGroupAnimation boss_dash_attack;
-    public static CarGroupAnimation boss_electric_ball_firing;
-    public static CarGroupAnimation quadrupedal_idle_2;
-    public static CarGroupAnimation quadrupedal_beyblade;
-    public static CarGroupAnimation boss_idk;
+    public static Animation boss_transformation_0_To_1;
+    public static Animation boss_dash_attack;
+    public static Animation boss_electric_ball_firing;
+    public static Animation quadrupedal_idle_2;
+    public static Animation quadrupedal_beyblade;
+    public static Animation boss_idk;
 
     public static void loadAnimations() {
         boss_transformation_0_To_1 = ObjectSerializer.load(BASE_FILE_PATH + "boss_transformation_0_To_1.sob");

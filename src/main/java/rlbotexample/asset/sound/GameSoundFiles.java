@@ -1,4 +1,4 @@
-package rlbotexample.assets.sounds;
+package rlbotexample.asset.sound;
 
 import java.io.File;
 

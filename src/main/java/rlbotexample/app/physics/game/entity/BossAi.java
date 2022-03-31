@@ -1,7 +1,7 @@
 package rlbotexample.app.physics.game.entity;
 
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
@@ -18,14 +18,14 @@ public class BossAi implements PlayableEntity, AutoCloseable {
     public OrientedPosition orientedPosition;
     public Vector3 centerOfMass;
 
-    public CarGroupAnimator animator;
+    public DiscreteCarGroupAnimator animator;
 
     public BossAi() {
         this.health = CurrentGame.BOSS_INITIAL_HP;
         this.orientedPosition = new OrientedPosition();
         this.orientedPosition.position = new Vector3();
         this.centerOfMass = new Vector3(0, 0, 500);
-        this.animator = new CarGroupAnimator(GameAnimations.boss_transformation_0_To_1);
+        this.animator = new DiscreteCarGroupAnimator(GameAnimations.boss_transformation_0_To_1);
     }
 
     @Override

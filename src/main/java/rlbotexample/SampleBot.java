@@ -4,22 +4,16 @@ import rlbot.Bot;
 import rlbot.ControllerState;
 import rlbot.flat.GameTickPacket;
 import rlbot.manager.BotManager;
-import rlbotexample.app.graphics.ScreenSize;
-import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
 import util.game_constants.RlConstants;
-import util.math.vector.Vector2;
 import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
-import util.shapes.Rectangle2D;
-import util.tinysound.TinySound;
 
-import java.awt.*;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SampleBot implements Bot {

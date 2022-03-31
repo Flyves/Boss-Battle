@@ -1,9 +1,8 @@
-package rlbotexample.assets.animations;
+package rlbotexample.asset.animation.discrete_interpolator;
 
 import java.io.Serializable;
 
 public class IndexedCarGroup implements Serializable {
-
     public final CarGroup carGroup;
     public final int frameIndex;
 

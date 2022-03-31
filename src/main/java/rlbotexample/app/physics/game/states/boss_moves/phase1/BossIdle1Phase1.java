@@ -1,10 +1,10 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
-import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
+import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sound.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.linear_transform.LinearNormalizer;
@@ -25,7 +25,7 @@ public class BossIdle1Phase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.quadrupedal_idle_2);
+        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.quadrupedal_idle_2);
         CurrentGame.bossAi.animator.looping(false);
 
         animationAutomationClip = new LinearNormalizer(FRAME_AT_WHICH_BOSS_STARTS_TO_MOVE_TO_THE_SIDE, FRAME_AT_WHICH_BOSS_ENDS_TO_MOVE_TO_THE_SIDE);

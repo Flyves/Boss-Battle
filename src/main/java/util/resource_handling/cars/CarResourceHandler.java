@@ -59,7 +59,7 @@ public class CarResourceHandler {
         return Optional.of(allocatedCarIndexes);
     }
 
-    public static void free(List<Integer> requestedCarIndexes) {
+    public static void free(final Collection<Integer> requestedCarIndexes) {
         requestedCarIndexes.stream()
                 .map(PlayerIndex::new)
                 .forEach(CarResourceHandler::free);

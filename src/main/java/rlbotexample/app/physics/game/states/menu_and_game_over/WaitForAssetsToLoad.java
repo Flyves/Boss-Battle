@@ -1,12 +1,11 @@
 package rlbotexample.app.physics.game.states.menu_and_game_over;
 
-import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.renderers.RenderTasks;
 import util.state_machine.State;
-import util.tinysound.TinySound;
 
 import java.awt.*;
 

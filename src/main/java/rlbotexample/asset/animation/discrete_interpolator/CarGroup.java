@@ -1,13 +1,11 @@
-package rlbotexample.assets.animations;
+package rlbotexample.asset.animation.discrete_interpolator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CarGroup implements Serializable {
-
-    public final List<AnimatedCarObject> carObjects;
+    public final List<CarData> carObjects;
 
     public CarGroup() {
         this.carObjects = new ArrayList<>();

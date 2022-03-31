@@ -1,12 +1,12 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
-import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
+import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sound.GameSoundFiles;
 import util.math.vector.Vector3;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.State;
@@ -35,7 +35,7 @@ public class BossElectricBallShootingAttackPhase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_electric_ball_firing);
+        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.boss_electric_ball_firing);
         CurrentGame.bossAi.animator.looping(false);
 
         Vector3 initialNoseOrientation = CurrentGame.bossAi.orientedPosition.orientation.noseVector;

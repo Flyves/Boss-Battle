@@ -1,9 +1,9 @@
 package external_data.animation;
 
-import rlbotexample.assets.animations.AnimatedCarObject;
-import rlbotexample.assets.animations.CarGroup;
-import rlbotexample.assets.animations.IndexedCarGroup;
-import rlbotexample.assets.animations.CarGroupAnimation;
+import rlbotexample.asset.animation.discrete_interpolator.CarData;
+import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
+import rlbotexample.asset.animation.discrete_interpolator.IndexedCarGroup;
+import rlbotexample.asset.animation.discrete_interpolator.Animation;
 import util.math.matrix.Matrix3By3;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;
@@ -87,7 +87,7 @@ public class CarAnimationImporter {
 
             // add the parsed car in the frame
             final ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, objectRotationMatrix.toEulerZyx());
-            final AnimatedCarObject carObject = new AnimatedCarObject(objectId, teamId, zyxOrientedPosition);
+            final CarData carObject = new CarData(objectId, teamId, zyxOrientedPosition);
             mesh.carObjects.add(carObject);
         });
 
@@ -96,7 +96,7 @@ public class CarAnimationImporter {
             .forEach(carGroup -> carGroup.carObjects.sort(Comparator.comparingInt(c -> c.carId)));
 
         // serialize the data in a file for easy loading
-        ObjectSerializer.save(new CarGroupAnimation(carMeshFrames), filePath.replaceAll("\\" + ANIMATIONS_EXTENSION_NAME, OBJECT_STREAMING_EXTENSION_NAME));
+        ObjectSerializer.save(new Animation(carMeshFrames), filePath.replaceAll("\\" + ANIMATIONS_EXTENSION_NAME, OBJECT_STREAMING_EXTENSION_NAME));
         amountOfFileSerialized++;
     }
 

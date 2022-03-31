@@ -1,13 +1,15 @@
-package rlbotexample.assets.animations;
+package rlbotexample.asset.animation.discrete_interpolator;
+
+import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
+import rlbotexample.asset.animation.discrete_interpolator.IndexedCarGroup;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class CarGroupAnimation implements Serializable {
-
+public class Animation implements Serializable {
     public final List<IndexedCarGroup> frames;
 
-    public CarGroupAnimation(List<IndexedCarGroup> frames) {
+    public Animation(List<IndexedCarGroup> frames) {
         this.frames = frames;
     }
 

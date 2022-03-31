@@ -44,7 +44,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import rlbotexample.assets.sounds.GameSoundGlobals;
+import rlbotexample.asset.sound.GameSoundGlobals;
 import util.tinysound.internal.ByteList;
 import util.tinysound.internal.MemMusic;
 import util.tinysound.internal.MemSound;

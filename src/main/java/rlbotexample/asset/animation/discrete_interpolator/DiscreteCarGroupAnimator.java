@@ -1,4 +1,4 @@
-package rlbotexample.assets.animations;
+package rlbotexample.asset.animation.discrete_interpolator;
 
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.dynamic_objects.DataPacket;
@@ -15,17 +15,16 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class CarGroupAnimator implements AutoCloseable {
-
+public class DiscreteCarGroupAnimator implements AutoCloseable {
     private static final ZyxOrientedPosition ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED =
             new OrientedPosition(
                     new Vector3(0, 0, 2050),    // on the ceiling
                     new Orientation(
-                            new Vector3(1, 0, 0),   // nose in some random orientation (any works)
+                            new Vector3(1, 0, 0),   // nose in some random orientation (any on xy plane works)
                             new Vector3(0, 0, -1))  // upside down
             ).toZyxOrientedPosition();
 
-    public final CarGroupAnimation meshAnimation;
+    public final Animation meshAnimation;
     public OrientedPosition orientedPosition;
     private int frameCount;
     private boolean isLooping;
@@ -34,7 +33,7 @@ public class CarGroupAnimator implements AutoCloseable {
 
     public final List<Integer> carIndexesUsedForTheAnimation = new ArrayList<>();
 
-    public CarGroupAnimator(CarGroupAnimation meshAnimation) {
+    public DiscreteCarGroupAnimator(final Animation meshAnimation) {
         this.meshAnimation = meshAnimation;
         this.orientedPosition = new OrientedPosition();
         this.frameCount = 0;
@@ -60,24 +59,10 @@ public class CarGroupAnimator implements AutoCloseable {
         final List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, carIndexesUsedForTheAnimation);
         carsUsedForTheAnimation.forEach(carData -> {
             if(carData.isDemolished) {
-                PhysicsOfBossBattle.setOrientedPosition(ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED, carData);
+                resetDemolitionState(carData);
             }
             else {
-                final ZyxOrientedPosition localZyxOrientedPosition =
-                        meshAnimation.queryFrame(frameCount)
-                        .carObjects.stream()
-                        .map(carObject -> carObject.zyxOrientedPosition)
-                        .collect(Collectors.toList())
-                        .get(safeBotIndex.get());
-                final OrientedPosition localOrientedPosition = localZyxOrientedPosition.toCarOrientedPosition();
-                OrientedPosition orientedPosition = localOrientedPosition.toGlobalPosition(this.orientedPosition);
-
-                if(carData.position.minus(orientedPosition.position).magnitude() < 10000) {
-                    final Vector3 positionWithRigidity = carData.position.plus(orientedPosition.position.minus(carData.position).scaled(carsRigidity));
-                    orientedPosition = new OrientedPosition(positionWithRigidity, orientedPosition.orientation);
-                }
-
-                stateSetWithSnapPhysics(orientedPosition, carData);
+                animateAndStateSet(safeBotIndex, carData);
             }
             safeBotIndex.incrementAndGet();
         });
@@ -91,6 +76,28 @@ public class CarGroupAnimator implements AutoCloseable {
                 close();
             }
         }
+    }
+
+    private void animateAndStateSet(AtomicInteger safeBotIndex, ExtendedCarData carData) {
+        final ZyxOrientedPosition localZyxOrientedPosition =
+                meshAnimation.queryFrame(frameCount)
+                .carObjects.stream()
+                .map(carObject -> carObject.zyxOrientedPosition)
+                .collect(Collectors.toList())
+                .get(safeBotIndex.get());
+        final OrientedPosition localOrientedPosition = localZyxOrientedPosition.toCarOrientedPosition();
+        OrientedPosition orientedPosition = localOrientedPosition.toGlobalPosition(this.orientedPosition);
+
+        if(carData.position.minus(orientedPosition.position).magnitude() < 10000) {
+            final Vector3 positionWithRigidity = carData.position.plus(orientedPosition.position.minus(carData.position).scaled(carsRigidity));
+            orientedPosition = new OrientedPosition(positionWithRigidity, orientedPosition.orientation);
+        }
+
+        stateSetWithSnapPhysics(orientedPosition, carData);
+    }
+
+    private void resetDemolitionState(ExtendedCarData carData) {
+        PhysicsOfBossBattle.setOrientedPosition(ZYX_ORIENTED_POSITION_TO_RESET_CAR_WHEELS_SO_THAT_THE_DEMOLITION_STATE_GETS_RESETED, carData);
     }
 
     private void stateSetWithSnapPhysics(OrientedPosition orientedPosition, ExtendedCarData carData) {

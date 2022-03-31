@@ -1,10 +1,10 @@
 package rlbotexample.app.physics.game.states.boss_phase;
 
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
+import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.app.graphics.health_bars.BossHealthBar;
 import rlbotexample.app.physics.game.CurrentGame;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sound.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.math.vector.Vector3;
 import util.state_machine.State;
@@ -14,7 +14,7 @@ public class TransitionFromPhase0ToPhase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_transformation_0_To_1);
+        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.boss_transformation_0_To_1);
         CurrentGame.bossAi.animator.looping(false);
         TinySound.init();
     }

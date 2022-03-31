@@ -26,7 +26,6 @@
  */
 package util.tinysound.internal;
 
-import rlbotexample.assets.sounds.GameSoundGlobals;
 import util.tinysound.Sound;
 
 /**

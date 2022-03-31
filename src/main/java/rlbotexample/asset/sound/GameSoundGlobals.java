@@ -1,4 +1,4 @@
-package rlbotexample.assets.sounds;
+package rlbotexample.asset.sound;
 
 public class GameSoundGlobals {
     public static double sfxVolume = 1;
