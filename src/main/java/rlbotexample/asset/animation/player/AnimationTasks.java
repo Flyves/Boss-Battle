@@ -5,7 +5,7 @@ import rlbotexample.dynamic_objects.DataPacket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimationTasks {
+public abstract class AnimationTasks {
     private static final List<AnimationPlayer> animationHandlers = new ArrayList<>();
 
     public static void append(final AnimationPlayer animationPlayer) {
@@ -20,7 +20,8 @@ public class AnimationTasks {
         final List<AnimationPlayer> finishedAnimations = new ArrayList<>();
         animationHandlers.stream()
                 .filter(AnimationPlayer::isFinished)
-                .forEach(finishedAnimations::add);
+                .peek(finishedAnimations::add)
+                .forEach(AnimationPlayer::close);
         animationHandlers.removeAll(finishedAnimations);
     }
 }

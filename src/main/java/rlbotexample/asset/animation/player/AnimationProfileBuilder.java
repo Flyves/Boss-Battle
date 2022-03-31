@@ -32,7 +32,7 @@ public class AnimationProfileBuilder implements Builder<AnimationProfile> {
         return this;
     }
 
-    public AnimationProfileBuilder withPlaybackSpeed(final Function<Double, Double> inBetweenFramesInterpolationFunction) {
+    public AnimationProfileBuilder withInterpolation(final Function<Double, Double> inBetweenFramesInterpolationFunction) {
         this.inBetweenFramesInterpolationFunction = inBetweenFramesInterpolationFunction;
         return this;
     }

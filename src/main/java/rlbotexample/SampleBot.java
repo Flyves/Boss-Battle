@@ -4,7 +4,9 @@ import rlbot.Bot;
 import rlbot.ControllerState;
 import rlbot.flat.GameTickPacket;
 import rlbot.manager.BotManager;
+import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.asset.animation.GameAnimations;
+import rlbotexample.asset.animation.player.AnimationTasks;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
@@ -73,12 +75,19 @@ public class SampleBot implements Bot {
             GameAnimations.areLoading = true;
             isAnimationsLoaderStarted = true;
         }
+
         botOutput = botBehaviour.processInput(input, packet);
         botBehaviour.updateGui(input, currentFps, averageFps, deltaTime);
 
+        // renderer
         RenderTasks.init();
         RenderTasks.render();
         RenderTasks.clearTaskBuffer();
+
+        // bot animation
+        AnimationTasks.stateSetAnimations(input);
+        AnimationTasks.clearFinishedTasks();
+        PhysicsOfBossBattle.applyImpulses(input);
 
         fpsDataCalc();
         return botOutput.getForwardedOutput();

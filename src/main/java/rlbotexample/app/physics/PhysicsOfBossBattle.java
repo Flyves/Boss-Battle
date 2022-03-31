@@ -32,8 +32,6 @@ public class PhysicsOfBossBattle {
 
         CarResourceHandler.handleFreeCars(input);
 
-        applyImpulses(input);
-
         BallStateSetter.handleBallState(input);
     }
 

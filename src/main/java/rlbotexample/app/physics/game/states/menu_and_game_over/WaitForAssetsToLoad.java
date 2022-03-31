@@ -1,5 +1,6 @@
 package rlbotexample.app.physics.game.states.menu_and_game_over;
 
+import rlbotexample.app.physics.game.states.animation_test.AnimationTest;
 import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.physics.game.CurrentGame;
@@ -47,7 +48,8 @@ public class WaitForAssetsToLoad implements State {
     @Override
     public State next(DataPacket input) {
         if(GameAnimations.areReady) {
-            return new MainMenu();
+            //return new MainMenu();
+            return new AnimationTest();
         }
         return this;
     }

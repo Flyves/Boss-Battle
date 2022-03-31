@@ -17,7 +17,6 @@ public class GameAnimations {
     public static Animation boss_electric_ball_firing;
     public static Animation quadrupedal_idle_2;
     public static Animation quadrupedal_beyblade;
-    public static Animation boss_idk;
 
     public static void loadAnimations() {
         boss_transformation_0_To_1 = ObjectSerializer.load(BASE_FILE_PATH + "boss_transformation_0_To_1.sob");
