@@ -1,9 +1,9 @@
-package rlbotexample.asset.animation.player;
+package rlbotexample.asset.animation.continuous_player;
 
 import rlbotexample.app.physics.PhysicsOfBossBattle;
-import rlbotexample.asset.animation.discrete_interpolator.Animation;
-import rlbotexample.asset.animation.discrete_interpolator.CarData;
-import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
+import rlbotexample.asset.animation.discrete_player.Animation;
+import rlbotexample.asset.animation.discrete_player.CarData;
+import rlbotexample.asset.animation.discrete_player.CarGroup;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.resource_handling.cars.CarResourceHandler;

@@ -6,7 +6,7 @@ import rlbot.flat.GameTickPacket;
 import rlbot.manager.BotManager;
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.asset.animation.GameAnimations;
-import rlbotexample.asset.animation.player.AnimationTasks;
+import rlbotexample.asset.animation.continuous_player.AnimationTasks;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;

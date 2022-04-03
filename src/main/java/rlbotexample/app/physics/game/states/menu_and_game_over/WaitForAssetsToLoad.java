@@ -48,8 +48,7 @@ public class WaitForAssetsToLoad implements State {
     @Override
     public State next(DataPacket input) {
         if(GameAnimations.areReady) {
-            //return new MainMenu();
-            return new AnimationTest();
+            return new MainMenu();
         }
         return this;
     }

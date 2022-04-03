@@ -1,6 +1,6 @@
 package rlbotexample.asset.animation.rigidity;
 
-import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
 
 public class BasicRigidityTransitionHandler {
 

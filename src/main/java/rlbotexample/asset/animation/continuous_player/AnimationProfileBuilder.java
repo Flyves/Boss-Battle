@@ -1,6 +1,6 @@
-package rlbotexample.asset.animation.player;
+package rlbotexample.asset.animation.continuous_player;
 
-import rlbotexample.asset.animation.discrete_interpolator.Animation;
+import rlbotexample.asset.animation.discrete_player.Animation;
 import util.data_structure.builder.Builder;
 import util.math.vector.OrientedPosition;
 

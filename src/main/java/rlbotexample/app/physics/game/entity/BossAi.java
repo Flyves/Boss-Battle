@@ -1,6 +1,6 @@
 package rlbotexample.app.physics.game.entity;
 
-import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
 import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;

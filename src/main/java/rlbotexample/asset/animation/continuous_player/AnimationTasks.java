@@ -1,4 +1,4 @@
-package rlbotexample.asset.animation.player;
+package rlbotexample.asset.animation.continuous_player;
 
 import rlbotexample.dynamic_objects.DataPacket;
 

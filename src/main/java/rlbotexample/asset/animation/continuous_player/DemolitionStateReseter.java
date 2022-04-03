@@ -1,4 +1,4 @@
-package rlbotexample.asset.animation.player;
+package rlbotexample.asset.animation.continuous_player;
 
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;

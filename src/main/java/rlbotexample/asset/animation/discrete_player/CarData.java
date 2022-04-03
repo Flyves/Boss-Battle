@@ -1,4 +1,4 @@
-package rlbotexample.asset.animation.discrete_interpolator;
+package rlbotexample.asset.animation.discrete_player;
 
 import util.math.vector.ZyxOrientedPosition;
 

@@ -1,9 +1,9 @@
 package external_data.animation;
 
-import rlbotexample.asset.animation.discrete_interpolator.CarData;
-import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
-import rlbotexample.asset.animation.discrete_interpolator.IndexedCarGroup;
-import rlbotexample.asset.animation.discrete_interpolator.Animation;
+import rlbotexample.asset.animation.discrete_player.CarData;
+import rlbotexample.asset.animation.discrete_player.CarGroup;
+import rlbotexample.asset.animation.discrete_player.IndexedCarGroup;
+import rlbotexample.asset.animation.discrete_player.Animation;
 import util.math.matrix.Matrix3By3;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;

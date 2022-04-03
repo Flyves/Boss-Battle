@@ -1,6 +1,6 @@
-package rlbotexample.asset.animation.player;
+package rlbotexample.asset.animation.continuous_player;
 
-import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
+import rlbotexample.asset.animation.discrete_player.CarGroup;
 import rlbotexample.dynamic_objects.DataPacket;
 
 public class AnimationPlayer {

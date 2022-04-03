@@ -1,6 +1,6 @@
 package rlbotexample.asset.animation;
 
-import rlbotexample.asset.animation.discrete_interpolator.Animation;
+import rlbotexample.asset.animation.discrete_player.Animation;
 import util.files.ObjectSerializer;
 
 public class GameAnimations {

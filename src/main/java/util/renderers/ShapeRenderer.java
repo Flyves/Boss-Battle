@@ -2,9 +2,7 @@ package util.renderers;
 
 import rlbot.render.Renderer;
 import util.math.vector.*;
-import util.shapes.Circle;
 import util.shapes.Circle3D;
-import util.shapes.Triangle3D;
 
 import java.awt.*;
 

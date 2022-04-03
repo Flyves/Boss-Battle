@@ -1,7 +1,4 @@
-package rlbotexample.asset.animation.discrete_interpolator;
-
-import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
-import rlbotexample.asset.animation.discrete_interpolator.IndexedCarGroup;
+package rlbotexample.asset.animation.discrete_player;
 
 import java.io.Serializable;
 import java.util.List;

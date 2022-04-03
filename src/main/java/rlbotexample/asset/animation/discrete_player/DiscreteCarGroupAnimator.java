@@ -1,4 +1,4 @@
-package rlbotexample.asset.animation.discrete_interpolator;
+package rlbotexample.asset.animation.discrete_player;
 
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.dynamic_objects.DataPacket;

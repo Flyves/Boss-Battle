@@ -1,13 +1,11 @@
-package rlbotexample.asset.animation.player;
+package rlbotexample.asset.animation.continuous_player;
 
-import rlbotexample.asset.animation.discrete_interpolator.CarData;
-import rlbotexample.asset.animation.discrete_interpolator.CarGroup;
+import rlbotexample.asset.animation.discrete_player.CarData;
+import rlbotexample.asset.animation.discrete_player.CarGroup;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
 import util.math.vector.ZyxOrientedPosition;
-
-import java.util.List;
 
 public class CarGroupUtils {
     public static CarGroup interpolate(final CarGroup carGroup1, final CarGroup carGroup2, final double t) {

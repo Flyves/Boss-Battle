@@ -1,6 +1,6 @@
 package rlbotexample.app.physics.game.states.boss_phase;
 
-import rlbotexample.asset.animation.discrete_interpolator.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
 import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.app.graphics.health_bars.BossHealthBar;
 import rlbotexample.app.physics.game.CurrentGame;
