@@ -75,7 +75,6 @@ public class JavaExample implements ChangeListener {
         panel.add(dataPanel, BorderLayout.CENTER);
         frame.add(panel);
 
-
         URL url = JavaExample.class.getClassLoader().getResource("icon.png");
         Image image = Toolkit.getDefaultToolkit().createImage(url);
         panel.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
