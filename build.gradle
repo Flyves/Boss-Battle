@@ -4,7 +4,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     jcenter()
@@ -101,4 +101,4 @@ installDist {
         }
     }
 }
-targetCompatibility = JavaVersion.VERSION_1_9
+targetCompatibility = JavaVersion.VERSION_1_8
