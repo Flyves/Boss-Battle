@@ -17,7 +17,7 @@ import java.awt.*;
 public class GameOverPlayerLost implements State {
 
     private static final Vector3 SPHERE_BUTTON_POSITION = new Vector3();
-    private static final SphericalButton BACK_TO_MENU_BUTTON = new SphericalButton(SPHERE_BUTTON_POSITION, 300, "Back to main menu", Color.green);
+    private static final SphericalButton BACK_TO_MENU_BUTTON = new SphericalButton(SPHERE_BUTTON_POSITION, 300, "Back to main menu", Color.cyan);
 
     @Override
     public void start(DataPacket input) {

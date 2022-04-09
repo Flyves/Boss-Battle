@@ -39,9 +39,7 @@ public class ElectricBallsResourceHandler {
         electricBallCollisionOpt.ifPresent(currentlyUsedElectricBalls::remove);
     }
 
-    public static void renderElectricBalls(DataPacket input) {
-        currentlyUsedElectricBalls.forEach(electricBall -> {
-            electricBall.render(input);
-        });
+    public static void renderElectricBalls() {
+        currentlyUsedElectricBalls.forEach(ElectricBall::render);
     }
 }

@@ -39,7 +39,7 @@ public class CurrentGame {
 
         displayBlockedGoals();
 
-        ElectricBallsResourceHandler.renderElectricBalls(input);
+        ElectricBallsResourceHandler.renderElectricBalls();
     }
 
     public static void blockGoals(DataPacket input) {

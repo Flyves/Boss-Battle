@@ -1,5 +1,6 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
+import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.assets.animations.CarGroupAnimator;
 import rlbotexample.assets.animations.GameAnimations;
 import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
@@ -15,8 +16,6 @@ import util.tinysound.Sound;
 import util.tinysound.TinySound;
 
 import java.util.List;
-
-import static rlbotexample.app.physics.game.CurrentGame.BOSS_DASH_SPEED;
 
 public class BossDashAttackPhase1 implements State {
 
@@ -113,8 +112,8 @@ public class BossDashAttackPhase1 implements State {
                 && CurrentGame.bossAi.animator.currentFrameIndex() > AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
             CurrentGame.bossAi.orientedPosition.position = CurrentGame.bossAi.orientedPosition.position
                     .plus(dashDirection.scaledToMagnitude(
-                            BOSS_DASH_SPEED
-                            - ((CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (BOSS_DASH_SPEED/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
+                            findDashSpeed()
+                            - ((CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (findDashSpeed()/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
 
             List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation);
             boolean isBossCollidingWithPLayer = carsUsedForTheAnimation.stream()
@@ -129,7 +128,7 @@ public class BossDashAttackPhase1 implements State {
             Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
             dashDirection = vectorFromBossToPlayer.plus(input.humanCar.velocity.scaled(
                     ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
-                            + vectorFromBossToPlayer.magnitude()/(BOSS_DASH_SPEED*RlConstants.BOT_REFRESH_RATE))
+                            + vectorFromBossToPlayer.magnitude()/(findDashSpeed()*RlConstants.BOT_REFRESH_RATE))
                     .scaled(1.4))
                     .scaled(1, 1, 0).normalized();
             Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
@@ -140,7 +139,7 @@ public class BossDashAttackPhase1 implements State {
             Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
             dashDirection = vectorFromBossToPlayer.plus(input.humanCar.velocity.scaled(
                     ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
-                            + vectorFromBossToPlayer.magnitude()/(BOSS_DASH_SPEED*RlConstants.BOT_REFRESH_RATE))
+                            + vectorFromBossToPlayer.magnitude()/(findDashSpeed()*RlConstants.BOT_REFRESH_RATE))
                     .scaled(1.4))
                     .scaled(1, 1, 0).normalized();
             Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
@@ -164,6 +163,20 @@ public class BossDashAttackPhase1 implements State {
             return new BossIdle2Phase1();
         }
         return this;
+    }
+
+    private double findDashSpeed() {
+        switch (GameOptions.gameDifficulty) {
+            case ROCKET_SLEDGE: return 4;
+            case TRIVIAL: return 3000/RlConstants.BOT_REFRESH_RATE;
+            case EASY: return 5000/RlConstants.BOT_REFRESH_RATE;
+            case MEDIUM: return 9000/RlConstants.BOT_REFRESH_RATE;
+            case HARD: return 13000/RlConstants.BOT_REFRESH_RATE;
+            case EXPERT: return 17000/RlConstants.BOT_REFRESH_RATE;
+            case IMPOSSIBLE: return 22000/RlConstants.BOT_REFRESH_RATE;
+            case WTF: return 25000/RlConstants.BOT_REFRESH_RATE;
+        }
+        throw new RuntimeException("No game difficulty selected!");
     }
 
     private boolean isBossDashOutOfBound(Vector3 centerOfMass) {

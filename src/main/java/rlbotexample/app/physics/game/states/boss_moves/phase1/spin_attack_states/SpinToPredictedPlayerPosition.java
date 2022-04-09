@@ -1,7 +1,7 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_states;
 
-import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.BossSpinAttackPhase1;
 import rlbotexample.assets.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
@@ -14,8 +14,8 @@ import util.tinysound.TinySound;
 
 public class SpinToPredictedPlayerPosition implements State {
 
-    private static final int AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION = 100;
-    private static final double TIME_TO_EXECUTE_MOVEMENT = AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION * RlConstants.BOT_REFRESH_TIME_PERIOD;
+    private static int amountOfFramesToReachSpinDestination = findAmountOfFramesToReach();
+    private static final double TIME_TO_EXECUTE_MOVEMENT = amountOfFramesToReachSpinDestination * RlConstants.BOT_REFRESH_TIME_PERIOD;
 
     static final int FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER = 125;
 
@@ -32,6 +32,7 @@ public class SpinToPredictedPlayerPosition implements State {
 
     @Override
     public void start(DataPacket input) {
+        amountOfFramesToReachSpinDestination = findAmountOfFramesToReach();
         CurrentGame.bossAi.animator.setCurrentFrameIndex(FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER);
         Vector3 distanceFromSpeedPrediction = input.humanCar.velocity.scaled(TIME_TO_EXECUTE_MOVEMENT);
         spinDestination = input.humanCar.position.plus(distanceFromSpeedPrediction)
@@ -59,7 +60,7 @@ public class SpinToPredictedPlayerPosition implements State {
 
         animationAutomationClip = new LinearNormalizer(
                 FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER,
-                FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER + AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION);
+                FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER + amountOfFramesToReachSpinDestination);
         animationAutomationClip.isBounded = true;
 
         Vector3 bossAnimationPosition = CurrentGame.bossAi.animator.orientedPosition.position;
@@ -90,10 +91,24 @@ public class SpinToPredictedPlayerPosition implements State {
     @Override
     public State next(DataPacket input) {
         if(CurrentGame.bossAi.animator.currentFrameIndex()
-                >= FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER + AMOUNT_OF_FRAMES_TO_REACH_SPIN_DESTINATION) {
+                >= FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER + amountOfFramesToReachSpinDestination) {
             return new StayOnPlaceWhileSpinning(bossSpinAttackPhase1);
         }
         return this;
+    }
+
+    private static int findAmountOfFramesToReach() {
+        switch (GameOptions.gameDifficulty) {
+            case ROCKET_SLEDGE: return 4;
+            case TRIVIAL: return 180;
+            case EASY: return 160;
+            case MEDIUM: return 140;
+            case HARD: return 120;
+            case EXPERT: return 100;
+            case IMPOSSIBLE: return 90;
+            case WTF: return 80;
+        }
+        throw new RuntimeException("No game difficulty selected!");
     }
 
     @Override

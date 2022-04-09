@@ -12,7 +12,7 @@ import java.awt.*;
 public class MainMenu implements State {
 
     private static final SphericalButton START_GAME_BUTTON = new SphericalButton(new Vector3(0, 0, 1200), 300, "Start", Color.green);
-    private static final SphericalButton OPTIONS_BUTTON = new SphericalButton(new Vector3(1000, 600, 800),200,  "Options (in development)", Color.GRAY);
+    private static final SphericalButton OPTIONS_BUTTON = new SphericalButton(new Vector3(1000, 600, 800),200,  "Difficulty Selection", Color.green);
     private static final SphericalButton CREDITS_BUTTON = new SphericalButton(new Vector3(-900, 300, 1000),160,  "Credits (in development)", Color.GRAY);
     private static final SphericalButton QUIT_GAME_BUTTON = new SphericalButton(new Vector3(1700, 300, 1300), 180, "Quit", Color.red.brighter());
 
@@ -36,6 +36,9 @@ public class MainMenu implements State {
     public State next(DataPacket input) {
         if(START_GAME_BUTTON.isPressed(input)) {
             return new GameActive();
+        }
+        else if(OPTIONS_BUTTON.isPressed(input)) {
+            return new MainMenuOptions();
         }
         else if(QUIT_GAME_BUTTON.isPressed(input)) {
             BallStateSetter.quitGame();

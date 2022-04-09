@@ -3,6 +3,8 @@ package rlbotexample.app.physics.game.states.boss_phase;
 import rlbotexample.app.graphics.ScreenSize;
 import rlbotexample.app.graphics.health_bars.BossHealthBar;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.game_option.DifficultyType;
+import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.BossIdle3Phase1;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
@@ -28,6 +30,12 @@ public class BossPhase1 implements State {
     @Override
     public void exec(DataPacket input) {
         bossAttackPattern.exec(input);
+        if(GameOptions.gameDifficulty == DifficultyType.WTF
+                || GameOptions.gameDifficulty == DifficultyType.IMPOSSIBLE
+                || GameOptions.gameDifficulty == DifficultyType.EXPERT
+                || GameOptions.gameDifficulty == DifficultyType.HARD) {
+            amountOfFramesWithoutDealingHealth = 0;
+        }
         if(CurrentGame.bossAi.health == CurrentGame.BOSS_INITIAL_HP) {
             amountOfFramesWithoutDealingHealth++;
             if(amountOfFramesWithoutDealingHealth > 60 * RlConstants.BOT_REFRESH_RATE) {

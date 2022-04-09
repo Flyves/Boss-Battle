@@ -7,7 +7,7 @@ import bpy
 
 def main():
     # destination folder (yes, using a global path is an horrible idea, why are we doing this)
-    export_path = "C:\\Users\\Plads\\Documents\\GitHub\\Flyves\\Boss-Battle\\src\\main\\resources\\car animations\\"
+    export_path = "/car_animations\\"
     # file extension when exported
     export_extension = ".cop"
 

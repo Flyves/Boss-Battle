@@ -2,6 +2,8 @@ package rlbotexample.app.physics.game.states.menu_and_game_over;
 
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
+import rlbotexample.app.physics.game.game_option.DifficultyType;
+import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.app.physics.game.states.boss_phase.InitBossPhase;
 import rlbotexample.app.physics.game.states.stats_handling.HandlePlayerStats;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
@@ -34,6 +36,9 @@ public class GameActive implements State {
     @Override
     public State next(DataPacket input) {
         if(CurrentGame.isGameOver) {
+            return new GameOver();
+        }
+        else if(GameOptions.gameDifficulty == DifficultyType.ROCKET_SLEDGE) {
             return new GameOver();
         }
         return this;

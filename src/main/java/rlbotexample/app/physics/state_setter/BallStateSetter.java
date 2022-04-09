@@ -10,7 +10,7 @@ import util.math.vector.Vector3;
 
 public class BallStateSetter {
 
-    private static final Vector3 DEFAULT_TARGET = new Vector3(0, 0, 500);
+    public static final Vector3 DEFAULT_TARGET = new Vector3(0, 0, 500);
     private static Vector3 target = DEFAULT_TARGET;
     private static final Vector3 inGoalPosition = new Vector3(0, 5400, 100);
 

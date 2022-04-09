@@ -1,6 +1,5 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_states;
 
-import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.BossSpinAttackPhase1;
 import rlbotexample.dynamic_objects.DataPacket;

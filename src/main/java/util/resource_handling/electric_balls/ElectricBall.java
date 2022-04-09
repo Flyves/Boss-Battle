@@ -1,7 +1,6 @@
 package util.resource_handling.electric_balls;
 
-import rlbot.render.NamedRenderer;
-import rlbot.render.Renderer;
+import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
@@ -14,11 +13,8 @@ import java.awt.*;
 public class ElectricBall {
 
     public static final double RADII = 200;
-    public static final double MAX_SPEED = 14000;
     public static final double LIFE_SPAN_IN_FRAMES = 0.5*60;
     public static final Color COLOR = new Color(4, 228, 248);
-
-    private static int amountOfGeneratedElectricBallsInTotal = 0;
 
     public Vector3 position;
     public Vector3 targetDirection;
@@ -28,16 +24,28 @@ public class ElectricBall {
         this.position = initialPosition;
         this.targetDirection = target.position.minus(position).normalized().plus(Vector3.generateRandomVector().scaled(0.05));
         this.amountOfFramesSpent = 0;
-
-        amountOfGeneratedElectricBallsInTotal++;
     }
 
     public void updatePosition() {
-        position = position.plus(targetDirection.scaledToMagnitude(MAX_SPEED/RlConstants.BOT_REFRESH_RATE));
+        position = position.plus(targetDirection.scaledToMagnitude(findBallSpeed()/RlConstants.BOT_REFRESH_RATE));
         amountOfFramesSpent++;
     }
 
-    public void render(DataPacket input) {
+    private int findBallSpeed() {
+        switch (GameOptions.gameDifficulty) {
+            case ROCKET_SLEDGE: return 3000;
+            case TRIVIAL: return 3000;
+            case EASY: return 6000;
+            case MEDIUM: return 9000;
+            case HARD: return 12000;
+            case EXPERT: return 15000;
+            case IMPOSSIBLE: return 17000;
+            case WTF: return 20000;
+        }
+        throw new RuntimeException("No game difficulty selected!");
+    }
+
+    public void render() {
         RenderTasks.append(r -> {
             ShapeRenderer shapeRenderer = new ShapeRenderer(r);
             shapeRenderer.renderSwerlingSphere(position, RADII, COLOR);

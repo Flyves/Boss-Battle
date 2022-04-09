@@ -6,6 +6,8 @@ import rlbotexample.app.graphics.health_bars.PlayerHealthBar;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.entity.BossAi;
 import rlbotexample.app.physics.game.entity.HumanPlayer;
+import rlbotexample.app.physics.game.game_option.DifficultyType;
+import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.app.physics.game.states.stats_handling.demolition_states.WaitForDemolitionRequest;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
@@ -20,14 +22,16 @@ import java.util.stream.Collectors;
 public class HandlePlayerStats implements State {
 
     private static final StateMachine PLAYER_DEMOLITION_MACHINE = new StateMachine(new WaitForDemolitionRequest());
-    
-    private static final int HP_DEALT_FOR_EVERY_DEMOLITION = 20;
 
     @Override
     public void start(DataPacket input) {
         CurrentGame.humanPlayer = new HumanPlayer();
         CurrentGame.bossAi = new BossAi();
         CurrentGame.humanPlayer.health = CurrentGame.PLAYER_INITIAL_HP;
+        if(GameOptions.gameDifficulty == DifficultyType.WTF) {
+            // niehehe
+            CurrentGame.humanPlayer.health = 1;
+        }
         CurrentGame.bossAi.health = CurrentGame.BOSS_INITIAL_HP;
     }
 
@@ -57,7 +61,7 @@ public class HandlePlayerStats implements State {
                 .filter(newDemolishedCar -> newDemolishedCar.position.z > 0)
                 .collect(Collectors.toList());
 
-        CurrentGame.bossAi.health -= HP_DEALT_FOR_EVERY_DEMOLITION * allNewDemos.size();
+        CurrentGame.bossAi.health -= getHpDealtForEveryDemolition() * allNewDemos.size();
 
         if(CurrentGame.bossAi.health <= 666) {
             CurrentGame.bossAi.health = 0;
@@ -71,6 +75,20 @@ public class HandlePlayerStats implements State {
     @Override
     public State next(DataPacket input) {
         return this;
+    }
+
+    private static int getHpDealtForEveryDemolition() {
+        switch (GameOptions.gameDifficulty) {
+            case ROCKET_SLEDGE: return 4;
+            case TRIVIAL: return 100;
+            case EASY: return 70;
+            case MEDIUM: return 50;
+            case HARD: return 40;
+            case EXPERT: return 20;
+            case IMPOSSIBLE: return 20;
+            case WTF: return 20;
+        }
+        throw new RuntimeException("No game difficulty selected!");
     }
 
     @Override

@@ -7,7 +7,6 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
@@ -101,4 +100,5 @@ installDist {
         }
     }
 }
+
 targetCompatibility = JavaVersion.VERSION_1_8

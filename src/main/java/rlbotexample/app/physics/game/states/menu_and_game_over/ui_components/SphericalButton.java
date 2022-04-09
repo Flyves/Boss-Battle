@@ -12,7 +12,7 @@ public class SphericalButton {
 
     private final Vector3 position;
     private final String name;
-    private final Color color;
+    private Color color;
     private final double radii;
 
     public SphericalButton(final Vector3 position, final double radii, final String name, final Color color) {
@@ -37,5 +37,9 @@ public class SphericalButton {
 
     public Vector3 getPosition() {
         return position;
+    }
+
+    public void setColor(final Color color) {
+        this.color = color;
     }
 }
