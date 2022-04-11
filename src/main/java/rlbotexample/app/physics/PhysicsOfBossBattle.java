@@ -31,10 +31,6 @@ public class PhysicsOfBossBattle {
         CurrentGame.step(input);
 
         CarResourceHandler.handleFreeCars(input);
-
-        applyImpulses(input);
-
-        BallStateSetter.handleBallState(input);
     }
 
     public static void setOrientedPosition(ZyxOrientedPosition orientedPosition, ExtendedCarData carData) {

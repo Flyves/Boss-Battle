@@ -1,18 +1,17 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
-import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
+import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_states.BeginSpinAttack;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.math.vector.Vector3;
 import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
 import util.state_machine.StateMachine;
-import util.tinysound.Sound;
 import util.tinysound.TinySound;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class BossSpinAttackPhase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.quadrupedal_beyblade);
+        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.quadrupedal_beyblade);
         CurrentGame.bossAi.animator.looping(false);
 
         amountOfTimesAttackOccurred = 0;

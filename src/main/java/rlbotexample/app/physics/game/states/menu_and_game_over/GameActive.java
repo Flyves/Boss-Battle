@@ -1,10 +1,9 @@
 package rlbotexample.app.physics.game.states.menu_and_game_over;
 
-import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.game_option.DifficultyType;
 import rlbotexample.app.physics.game.game_option.GameOptions;
-import rlbotexample.app.physics.game.states.boss_phase.InitBossPhase;
+import rlbotexample.app.physics.game.states.boss_phases.InitBossPhase;
 import rlbotexample.app.physics.game.states.stats_handling.HandlePlayerStats;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
 import rlbotexample.dynamic_objects.DataPacket;
@@ -25,7 +24,6 @@ public class GameActive implements State {
     public void exec(DataPacket input) {
         playerStatsMachine.exec(input);
         bossPhaseMachine.exec(input);
-        BallStateSetter.setTarget(CurrentGame.bossAi.centerOfMass);
     }
 
     @Override

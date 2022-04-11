@@ -2,12 +2,10 @@ package util.math.vector;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import rlbot.flat.Rotator;
-import rlbot.gamestate.DesiredRotation;
 import rlbot.gamestate.DesiredVector3;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.matrix.Matrix3By3;
 import util.shapes.Plane3D;
-import util.shapes.Triangle3D;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,7 +18,7 @@ import java.util.Objects;
  */
 public class Vector3 implements Serializable {
 
-    public static final Vector3 UP_VECTOR = new Vector3(0, 0, 1);
+    public static final Vector3 Z_VECTOR = new Vector3(0, 0, 1);
     public static final Vector3 DOWN_VECTOR = new Vector3(0, 0, -1);
     public static final Vector3 X_VECTOR = new Vector3(1, 0, 0);
     public static final Vector3 Y_VECTOR = new Vector3(0, 1, 0);

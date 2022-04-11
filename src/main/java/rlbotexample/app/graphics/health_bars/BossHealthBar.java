@@ -16,9 +16,8 @@ public class BossHealthBar {
 
     private static final Color HEALTH_BAR_COLOR = new Color(229, 20, 20);
 
-    public static void renderOnScreen(double hpRatio, DataPacket input) {
-        final int renderedHealth = (int) (CurrentGame.bossAi.health - (CurrentGame.BOSS_INITIAL_HP * (2 / 3.0))) * 3;
-        hpRatio = renderedHealth/(double)CurrentGame.BOSS_INITIAL_HP;
+    public static void renderOnScreen() {
+        final double hpRatio = CurrentGame.bossAi.health/(double)CurrentGame.BOSS_INITIAL_HP;
         final double hpBar1Health = hpRatio > 2.0/3 ? (hpRatio - (2.0/3)) * 3 : 0;
 
         final double hpBar2Health;

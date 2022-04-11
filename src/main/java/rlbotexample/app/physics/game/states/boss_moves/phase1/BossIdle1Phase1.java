@@ -2,7 +2,7 @@ package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.game_option.GameOptions;
-import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
 

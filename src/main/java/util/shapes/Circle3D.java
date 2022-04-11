@@ -27,8 +27,8 @@ public class Circle3D {
     public Vector3 findPointOnCircle(double rads) {
         final Vector3 localPointOnFlatCircle = new Vector3(flatCircle.findPointOnCircle(rads).minus(flatCircle.center), 0);
 
-        final double angleOfRotation = orientation.angle(Vector3.UP_VECTOR);
-        final Vector3 rotationVector = Vector3.UP_VECTOR.crossProduct(orientation).scaledToMagnitude(angleOfRotation);
+        final double angleOfRotation = orientation.angle(Vector3.Z_VECTOR);
+        final Vector3 rotationVector = Vector3.Z_VECTOR.crossProduct(orientation).scaledToMagnitude(angleOfRotation);
         final Vector3 localPointOn3DCircle = localPointOnFlatCircle.rotate(rotationVector);
         final Vector3 circleOffset = new Vector3(flatCircle.center, height);
 
@@ -56,8 +56,8 @@ public class Circle3D {
     public double findRadsFromClosestPoint(Vector3 v) {
         final Vector3 centerOffset = new Vector3(flatCircle.center, height);
         final Vector3 closestPoint = findClosestPointFrom(v).minus(centerOffset);
-        final double angleOfRotation = orientation.angle(Vector3.UP_VECTOR);
-        final Vector3 rotationVector = Vector3.UP_VECTOR.crossProduct(orientation).scaledToMagnitude(-angleOfRotation);
+        final double angleOfRotation = orientation.angle(Vector3.Z_VECTOR);
+        final Vector3 rotationVector = Vector3.Z_VECTOR.crossProduct(orientation).scaledToMagnitude(-angleOfRotation);
         final Vector3 flattenedPointOnCircle = closestPoint.rotate(rotationVector);
         return Math.atan2(flattenedPointOnCircle.y, flattenedPointOnCircle.x);
     }
@@ -70,7 +70,7 @@ public class Circle3D {
 
         Vector3 offset = new Vector3(flatCircle.center, height);
         Vector3 notRotatedLocalPoint = point.minus(offset);
-        Vector3 rotator = orientation.findRotator(Vector3.UP_VECTOR);
+        Vector3 rotator = orientation.findRotator(Vector3.Z_VECTOR);
 
         Vector3 rotatedLocalPoint = notRotatedLocalPoint.rotate(rotator);
         Vector2 flatPoint = rotatedLocalPoint.flatten();

@@ -1,9 +1,9 @@
 package external_data.animation;
 
-import rlbotexample.assets.animations.AnimatedCarObject;
-import rlbotexample.assets.animations.CarGroup;
-import rlbotexample.assets.animations.IndexedCarGroup;
-import rlbotexample.assets.animations.CarGroupAnimation;
+import rlbotexample.asset.animation.discrete_player.CarData;
+import rlbotexample.asset.animation.discrete_player.CarGroup;
+import rlbotexample.asset.animation.discrete_player.IndexedCarGroup;
+import rlbotexample.asset.animation.discrete_player.Animation;
 import util.math.matrix.Matrix3By3;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;
@@ -13,6 +13,7 @@ import util.files.ObjectSerializer;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This small program works in coordination with blender.
@@ -28,16 +29,20 @@ public class CarAnimationImporter {
     private static int amountOfFileSerialized = 0;
 
     public static void main(String[] args) {
-        IOFile.getFileNamesIn("src\\main\\resources\\car animations")
+        getStreamOfAnimationFileNames()
+                .map(fileName -> ANIMATIONS_BASE_FOLDER_PATH + "\\" + fileName)
+                .forEach(CarAnimationImporter::fileDataToStreamedObject);
+        System.out.println("\nSerialized " + amountOfFileSerialized + " files.");
+    }
+
+    public static Stream<String> getStreamOfAnimationFileNames() {
+        return IOFile.getFileNamesIn("src\\main\\resources\\car animations")
                 .stream()
                 .filter(fileName -> {
                     int extensionIndex = fileName.lastIndexOf('.');
                     String extension = fileName.substring(extensionIndex);
                     return extension.equals(ANIMATIONS_EXTENSION_NAME);
-                })
-                .map(fileName -> ANIMATIONS_BASE_FOLDER_PATH + "\\" + fileName)
-                .forEach(CarAnimationImporter::fileDataToStreamedObject);
-        System.out.println("\nSerialized " + amountOfFileSerialized + " files.");
+                });
     }
 
     // object streaming of data generated from blender
@@ -87,7 +92,7 @@ public class CarAnimationImporter {
 
             // add the parsed car in the frame
             final ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, objectRotationMatrix.toEulerZyx());
-            final AnimatedCarObject carObject = new AnimatedCarObject(objectId, teamId, zyxOrientedPosition);
+            final CarData carObject = new CarData(objectId, teamId, zyxOrientedPosition);
             mesh.carObjects.add(carObject);
         });
 
@@ -96,7 +101,7 @@ public class CarAnimationImporter {
             .forEach(carGroup -> carGroup.carObjects.sort(Comparator.comparingInt(c -> c.carId)));
 
         // serialize the data in a file for easy loading
-        ObjectSerializer.save(new CarGroupAnimation(carMeshFrames), filePath.replaceAll("\\" + ANIMATIONS_EXTENSION_NAME, OBJECT_STREAMING_EXTENSION_NAME));
+        ObjectSerializer.save(new Animation(carMeshFrames), filePath.replaceAll("\\" + ANIMATIONS_EXTENSION_NAME, OBJECT_STREAMING_EXTENSION_NAME));
         amountOfFileSerialized++;
     }
 

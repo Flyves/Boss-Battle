@@ -1,11 +1,11 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
 import rlbotexample.app.physics.game.game_option.GameOptions;
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
-import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
+import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
@@ -35,7 +35,7 @@ public class BossDashAttackPhase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_dash_attack);
+        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.boss_dash_attack);
         CurrentGame.bossAi.animator.looping(false);
         CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
 

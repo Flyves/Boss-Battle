@@ -6,8 +6,8 @@ import bpy
 # to playback in real time animations of 50+ cars (that's blender 2.8 for ya blender devs plz fix this lol).
 
 def main():
-    # destination folder (yes, using a global path is an horrible idea, why are we doing this)
-    export_path = "/car_animations\\"
+    # destination folder
+    export_path = "../../resources/car animations/"
     # file extension when exported
     export_extension = ".cop"
 

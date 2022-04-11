@@ -3,7 +3,7 @@ package rlbotexample.app.physics.game.states.boss_moves.phase1.spin_attack_state
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.BossSpinAttackPhase1;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
 import util.math.linear_transform.LinearNormalizer;

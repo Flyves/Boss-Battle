@@ -19,24 +19,23 @@ public class OrientedPosition implements Serializable {
     }
 
     public ZyxOrientedPosition toZyxOrientedPosition() {
-        final Vector3 restOrientation = new Vector3(1, 0, 0);
-        final Vector3 flatFront = new Vector3(orientation.noseVector.flatten(), 0);
-        final Vector3 rotatorZ = restOrientation.findRotator(flatFront);
-        final double angleZ = rotatorZ.dotProduct(Vector3.UP_VECTOR);
-
-        final Orientation restOrientationRotatedInZ = new Orientation().rotate(rotatorZ);
-        final Vector3 rotatorY = restOrientationRotatedInZ.noseVector.findRotator(orientation.noseVector);
-        final double angleY = rotatorY.dotProduct(Vector3.Y_VECTOR.rotate(rotatorZ));
-
-        final Orientation restOrientationRotatedInZy = restOrientationRotatedInZ.rotate(rotatorY);
-        final Vector3 rotatorX = restOrientationRotatedInZy.roofVector.findRotator(orientation.roofVector);
-        double angleX = rotatorX.dotProduct(Vector3.X_VECTOR.rotate(rotatorZ).rotate(rotatorY));
-        // ugly fix but it seems to work now!
-        if(orientation.roofVector.z < 0 && Math.abs(angleX) < 0.00000001) {
-            angleX = Math.PI;
+        final Vector3 restOrientation = Vector3.X_VECTOR;
+        Vector3 flatFront = new Vector3(orientation.noseVector.flatten(), 0);
+        if(flatFront.isZero()) {
+            flatFront = restOrientation;
         }
+        final Vector3 rotatorZ = flatFront.findRotator(restOrientation);
+        final double angleZ = rotatorZ.dotProduct(Vector3.Z_VECTOR);
 
-        return new ZyxOrientedPosition(position, new Vector3(angleX, angleY, angleZ));
+        final Orientation thisOrientationRotatedInZ = orientation.rotate(rotatorZ);
+        final Vector3 rotatorY = thisOrientationRotatedInZ.noseVector.findRotator(restOrientation);
+        final double angleY = rotatorY.dotProduct(Vector3.Y_VECTOR);
+
+        final Orientation thisOrientationRotatedInZy = thisOrientationRotatedInZ.rotate(rotatorY);
+        final Vector3 rotatorX = thisOrientationRotatedInZy.roofVector.findRotator(Vector3.Z_VECTOR);
+        final double angleX = rotatorX.dotProduct(Vector3.X_VECTOR);
+
+        return new ZyxOrientedPosition(position, new Vector3(-angleX, -angleY, -angleZ));
     }
 
     // this function assumes that the origin of this object is zeroed, and outputs the same object, but with the specified origin in parameters:

@@ -14,7 +14,7 @@ public class ZyxOrientedPosition implements Serializable {
     }
 
     public OrientedPosition toCarOrientedPosition() {
-        Vector3 rotatorZ = Vector3.UP_VECTOR.scaled(eulerZYX.z);
+        Vector3 rotatorZ = Vector3.Z_VECTOR.scaled(eulerZYX.z);
         Vector3 rotatorY = Vector3.Y_VECTOR.rotate(rotatorZ).scaled(eulerZYX.y);
         Vector3 rotatorX = Vector3.X_VECTOR.rotate(rotatorZ).rotate(rotatorY).scaled(eulerZYX.x);
 
@@ -22,7 +22,7 @@ public class ZyxOrientedPosition implements Serializable {
                 .rotate(rotatorZ)
                 .rotate(rotatorY)
                 .rotate(rotatorX);
-        Vector3 roof = Vector3.UP_VECTOR
+        Vector3 roof = Vector3.Z_VECTOR
                 .rotate(rotatorZ)
                 .rotate(rotatorY)
                 .rotate(rotatorX);

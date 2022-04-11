@@ -1,12 +1,12 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
-import rlbotexample.assets.animations.CarGroupAnimator;
-import rlbotexample.assets.animations.GameAnimations;
-import rlbotexample.assets.animations.rigidity.BasicRigidityTransitionHandler;
+import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.GameAnimations;
+import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
-import rlbotexample.assets.sounds.GameSoundFiles;
+import rlbotexample.asset.sounds.GameSoundFiles;
 import util.math.vector.Vector3;
 import util.resource_handling.electric_balls.ElectricBallsResourceHandler;
 import util.state_machine.State;
@@ -35,11 +35,11 @@ public class BossElectricBallShootingAttackPhase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new CarGroupAnimator(GameAnimations.boss_electric_ball_firing);
+        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.boss_electric_ball_firing);
         CurrentGame.bossAi.animator.looping(false);
 
         Vector3 initialNoseOrientation = CurrentGame.bossAi.orientedPosition.orientation.noseVector;
-        bossInitialOrientation = new Orientation(initialNoseOrientation, Vector3.UP_VECTOR);
+        bossInitialOrientation = new Orientation(initialNoseOrientation, Vector3.Z_VECTOR);
         bossInitialPosition = CurrentGame.bossAi.orientedPosition.position;
 
         TinySound.init();
@@ -65,7 +65,7 @@ public class BossElectricBallShootingAttackPhase1 implements State {
             buildownSound.play(0.14);
         }
 
-        final Vector3 orientationRotator = Vector3.UP_VECTOR.findRotator(input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass));
+        final Vector3 orientationRotator = Vector3.Z_VECTOR.findRotator(input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass));
         final Orientation newBossOrientation = bossInitialOrientation.rotate(orientationRotator);
         if(CurrentGame.bossAi.animator.currentFrameIndex() < FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT.get(FRAME_INDEXES_AT_WHICH_BALLS_ARE_SHOT.size()-1) + 30) {
             CurrentGame.bossAi.orientedPosition.orientation = newBossOrientation;

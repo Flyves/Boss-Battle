@@ -22,7 +22,7 @@ import util.math.vector.Vector3;
 
     public Orientation() {
         this.noseVector = Vector3.X_VECTOR;
-        this.roofVector = Vector3.UP_VECTOR;
+        this.roofVector = Vector3.Z_VECTOR;
         this.rightVector = noseVector.crossProduct(roofVector);
     }
 
@@ -64,7 +64,7 @@ import util.math.vector.Vector3;
         final Vector3 noseRotationDisk = findRotationDisk(this.noseVector, that.noseVector);
         final Vector3 roofRotationDisk = findRotationDisk(this.roofVector, that.roofVector);
         final Vector3 directionOfDisplacementVector = computeDirectionOfDisplacementVector(noseRotationDisk, roofRotationDisk);
-        final Vector3 flatteningRotator = directionOfDisplacementVector.findRotator(Vector3.UP_VECTOR);
+        final Vector3 flatteningRotator = directionOfDisplacementVector.findRotator(Vector3.Z_VECTOR);
 
         final double displacementVectorMagnitude;
         if(!noseRotationDisk.isZero()) {

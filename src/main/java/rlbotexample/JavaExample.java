@@ -1,8 +1,8 @@
 package rlbotexample;
 
 import rlbot.manager.BotManager;
-import rlbotexample.assets.sounds.GameSoundFiles;
-import rlbotexample.assets.sounds.GameSoundGlobals;
+import rlbotexample.asset.sounds.GameSoundFiles;
+import rlbotexample.asset.sounds.GameSoundGlobals;
 import util.PortReader;
 import util.game_constants.RlConstants;
 import util.tinysound.Sound;

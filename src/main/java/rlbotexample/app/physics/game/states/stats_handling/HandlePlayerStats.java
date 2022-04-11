@@ -63,7 +63,7 @@ public class HandlePlayerStats implements State {
 
         CurrentGame.bossAi.health -= getHpDealtForEveryDemolition() * allNewDemos.size();
 
-        if(CurrentGame.bossAi.health <= 666) {
+        if(CurrentGame.bossAi.health <= 0) {
             CurrentGame.bossAi.health = 0;
             CurrentGame.triggerGameOver();
         }
@@ -94,5 +94,6 @@ public class HandlePlayerStats implements State {
     @Override
     public void debug(DataPacket input) {
         PlayerHealthBar.renderOnScreen();
+        BossHealthBar.renderOnScreen();
     }
 }
