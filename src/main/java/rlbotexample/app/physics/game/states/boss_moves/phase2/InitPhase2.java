@@ -2,9 +2,9 @@ package rlbotexample.app.physics.game.states.boss_moves.phase2;
 
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
-import rlbotexample.asset.animation.continuous_player.AnimationPlayer;
-import rlbotexample.asset.animation.continuous_player.AnimationProfileBuilder;
-import rlbotexample.asset.animation.continuous_player.AnimationTasks;
+import rlbotexample.asset.animation.animation.AnimationPlayer;
+import rlbotexample.asset.animation.animation.AnimationProfileBuilder;
+import rlbotexample.asset.animation.animation.AnimationTasks;
 import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.dynamic_objects.DataPacket;
@@ -47,8 +47,9 @@ public class InitPhase2 implements State {
     }
 
     private OrientedPosition findDestinationOffset() {
-        final Vector2 playerPosition = gameStateHolder.value.humanCar.position.flatten();
-        final Vector2 playerVelocity = gameStateHolder.value.humanCar.velocity.flatten();
+        final DataPacket input = gameStateHolder.value;
+        final Vector2 playerPosition = input.humanCar.position.flatten();
+        final Vector2 playerVelocity = input.humanCar.velocity.flatten();
         final Vector2 bossPosition = animationPlayer.getCenterOfMass().flatten();
         final Vector2 destination = playerPosition.scaled(-1).scaledToMagnitude(4000).plus(playerPosition).plus(playerVelocity.scaled(0.5));
         final double convergenceRate = 0.008;
@@ -59,7 +60,8 @@ public class InitPhase2 implements State {
             nextFlatPosition = destination.minus(bossPosition).scaledToMagnitude(maxSpeed).scaled(RlConstants.BOT_REFRESH_TIME_PERIOD).plus(bossPosition);
         }
         final Vector3 destinationOnCeiling = new Vector3(nextFlatPosition, 1300);
-        return new OrientedPosition(destinationOnCeiling, new Orientation());
+        final Vector3 rotator = animationPlayer.getCenterOfMass().minus(input.humanCar.position).findRotator(Vector3.Z_VECTOR.scaled(-1)).scaled(-1);
+        return new OrientedPosition(destinationOnCeiling, new Orientation().rotate(rotator));
     }
 
     @Override

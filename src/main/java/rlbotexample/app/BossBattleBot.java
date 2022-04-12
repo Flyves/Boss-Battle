@@ -18,7 +18,6 @@ public class BossBattleBot extends FlyveBot {
     @Override
     public BotOutput processInput(DataPacket input,  GameTickPacket packet) {
         PhysicsOfBossBattle.execute(input);
-
         return new BotOutput();
     }
 

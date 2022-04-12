@@ -7,12 +7,16 @@ import rlbot.manager.BotManager;
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
 import rlbotexample.asset.animation.GameAnimations;
-import rlbotexample.asset.animation.continuous_player.AnimationTasks;
+import rlbotexample.asset.animation.animation.AnimationPlayer;
+import rlbotexample.asset.animation.animation.AnimationProfileBuilder;
+import rlbotexample.asset.animation.animation.AnimationTasks;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
 import util.game_constants.RlConstants;
+import util.math.vector.Vector3;
+import util.math.vector.ZyxOrientedPosition;
 import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
 
@@ -125,9 +129,9 @@ public class SampleBot implements Bot {
         }
         catch (RuntimeException runtimeException) {
             if(amountOfBotsRunning > AMOUNT_OF_BOTS_TO_KEEP_ALIVE) {
-                killBot();
+                //killBot();
             }
-            return new ControlsOutput();
+            return new ControlsOutput().withBoost(PhysicsOfBossBattle.shouldBeBoosting(playerIndex));
         }
         ControlsOutput controlsOutput = processInput(dataPacket, packet);
 

@@ -1,10 +1,12 @@
 package external_data.animation;
 
-import rlbotexample.asset.animation.discrete_player.CarData;
-import rlbotexample.asset.animation.discrete_player.CarGroup;
-import rlbotexample.asset.animation.discrete_player.IndexedCarGroup;
-import rlbotexample.asset.animation.discrete_player.Animation;
+import rlbotexample.asset.animation.car_group.CarData;
+import rlbotexample.asset.animation.car_group.CarGroup;
+import rlbotexample.asset.animation.car_group.IndexedCarGroup;
+import rlbotexample.asset.animation.animation.Animation;
+import rlbotexample.dynamic_objects.car.orientation.Orientation;
 import util.math.matrix.Matrix3By3;
+import util.math.vector.OrientedPosition;
 import util.math.vector.ZyxOrientedPosition;
 import util.math.vector.Vector3;
 import util.files.IOFile;
@@ -68,13 +70,11 @@ public class CarAnimationImporter {
             final int frameId = round(valuesDouble.get(1));
 
             final Vector3 objectPosition = new Vector3(valuesDouble.get(2), valuesDouble.get(3), valuesDouble.get(4));
-            final Matrix3By3 objectRotationMatrix = new Matrix3By3(
-                    valuesDouble.get(5), valuesDouble.get(6), valuesDouble.get(7),
-                    valuesDouble.get(8), valuesDouble.get(9), valuesDouble.get(10),
-                    valuesDouble.get(11), valuesDouble.get(12), valuesDouble.get(13)
-            );
+            final Vector3 eulerZyx = new Vector3(valuesDouble.get(5), valuesDouble.get(6), valuesDouble.get(7));
 
-            final int teamId = round(valuesDouble.get(14));
+            final boolean isBoosting = valuesDouble.get(8) > 0.5;
+
+            final int teamId = round(valuesDouble.get(9));
 
 
             // update current frame id reference
@@ -91,8 +91,8 @@ public class CarAnimationImporter {
             final CarGroup mesh = carMeshFrames.get(carMeshFrames.size()-1).carGroup;
 
             // add the parsed car in the frame
-            final ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, objectRotationMatrix.toEulerZyx());
-            final CarData carObject = new CarData(objectId, teamId, zyxOrientedPosition);
+            final ZyxOrientedPosition zyxOrientedPosition = new ZyxOrientedPosition(objectPosition, eulerZyx);
+            final CarData carObject = new CarData(objectId, teamId, zyxOrientedPosition, isBoosting);
             mesh.carObjects.add(carObject);
         });
 

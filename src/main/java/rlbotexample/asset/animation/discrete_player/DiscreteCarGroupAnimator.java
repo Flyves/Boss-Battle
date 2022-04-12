@@ -1,6 +1,7 @@
 package rlbotexample.asset.animation.discrete_player;
 
 import rlbotexample.app.physics.PhysicsOfBossBattle;
+import rlbotexample.asset.animation.animation.Animation;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import rlbotexample.dynamic_objects.car.orientation.Orientation;
@@ -91,11 +92,6 @@ public class DiscreteCarGroupAnimator implements AutoCloseable {
                         .get(safeBotIndex.get());
         final OrientedPosition localOrientedPosition = localZyxOrientedPosition.toCarOrientedPosition();
         OrientedPosition orientedPosition = localOrientedPosition.toGlobalPosition(this.orientedPosition);
-
-        if(carData.position.minus(orientedPosition.position).magnitude() < 10000) {
-            final Vector3 positionWithRigidity = carData.position.plus(orientedPosition.position.minus(carData.position).scaled(carsRigidity));
-            orientedPosition = new OrientedPosition(positionWithRigidity, orientedPosition.orientation);
-        }
 
         stateSetWithSnapPhysics(orientedPosition, carData);
     }

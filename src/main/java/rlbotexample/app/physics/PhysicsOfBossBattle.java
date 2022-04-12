@@ -1,12 +1,12 @@
 package rlbotexample.app.physics;
 
-import rlbot.gamestate.DesiredRotation;
 import rlbot.gamestate.DesiredVector3;
 import rlbot.gamestate.PhysicsState;
+import rlbotexample.app.physics.assigned_quantities.AssignedBoolean;
+import rlbotexample.app.physics.assigned_quantities.AssignedFloat;
 import rlbotexample.app.physics.assigned_quantities.AssignedOrientedPosition;
 import rlbotexample.app.physics.assigned_quantities.AssignedVector3;
 import rlbotexample.app.physics.game.CurrentGame;
-import rlbotexample.app.physics.state_setter.BallStateSetter;
 import rlbotexample.app.physics.state_setter.CarStateSetter;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
@@ -18,6 +18,7 @@ import util.resource_handling.cars.CarResourceHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PhysicsOfBossBattle {
 
@@ -26,6 +27,8 @@ public class PhysicsOfBossBattle {
     private static final List<AssignedVector3> assignedSpins = new ArrayList<>();
     private static final List<AssignedVector3> assignedAccelerations = new ArrayList<>();
     private static final List<AssignedVector3> assignedPenetrations = new ArrayList<>();
+    private static final List<AssignedFloat> assignedBoostAmounts = new ArrayList<>();
+    private static final List<AssignedBoolean> assignedIsBoosting = new ArrayList<>();
 
     public static void execute(DataPacket input) {
         CurrentGame.step(input);
@@ -39,6 +42,15 @@ public class PhysicsOfBossBattle {
 
     public static void setVelocity(Vector3 newVelocity, ExtendedCarData carData) {
         assignedVelocities.add(new AssignedVector3(carData, newVelocity));
+    }
+
+    public static void setIsBoosting(boolean isBoosting, ExtendedCarData carToStateSet) {
+        removeAssignedIsBoostingIfPresent(carToStateSet);
+        assignedIsBoosting.add(new AssignedBoolean(carToStateSet, isBoosting));
+    }
+
+    public static void setBoostAmount(float boostAmount, ExtendedCarData carToStateSet) {
+        assignedBoostAmounts.add(new AssignedFloat(carToStateSet, boostAmount));
     }
 
     public static void setSpin(Vector3 newSpin, ExtendedCarData carData) {
@@ -89,6 +101,11 @@ public class PhysicsOfBossBattle {
                     .filter(assignedVector3 -> assignedVector3.carData == car)
                     .map(assignedVector3 -> assignedVector3.vector)
                     .findFirst();
+            float boostAmount = assignedBoostAmounts.stream()
+                    .filter(assignedBoolean -> assignedBoolean.carData == car)
+                    .map(assignedBoolean -> assignedBoolean.value)
+                    .findFirst()
+                    .orElse((float)car.boost);
 
             final double dt = 1/RlConstants.BOT_REFRESH_RATE;
             penetrationOpt.ifPresent(penetration -> {
@@ -110,10 +127,7 @@ public class PhysicsOfBossBattle {
                 else {
                     alternativePhysics.withLocation(orientedPosition.position.minus(penetrationOpt.get()).toFlippedDesiredVector3());
                 }
-                alternativePhysics.withRotation(new DesiredRotation(
-                        (float)orientedPosition.eulerZYX.y,
-                        (float)-orientedPosition.eulerZYX.z,
-                        (float)orientedPosition.eulerZYX.x));
+                alternativePhysics.withRotation(orientedPosition.eulerZYX.toDesiredRotation());
                 if(!velocityOpt.isPresent() && !accelerationOpt.isPresent()) {
                     alternativePhysics.withVelocity(new Vector3(0, 0, 0).toFlippedDesiredVector3());
                 }
@@ -125,7 +139,7 @@ public class PhysicsOfBossBattle {
                 alternativePhysics.withVelocity(newVelocityAsDesiredVector3);
             });
 
-            CarStateSetter.applyPhysics(alternativePhysics, car);
+            CarStateSetter.applyPhysics(alternativePhysics, boostAmount, car);
         }
 
         assignedOrientedPositions.clear();
@@ -133,5 +147,31 @@ public class PhysicsOfBossBattle {
         assignedSpins.clear();
         assignedAccelerations.clear();
         assignedPenetrations.clear();
+        assignedBoostAmounts.clear();
+    }
+
+    public static boolean shouldBeBoosting(int playerIndex) {
+        synchronized (assignedIsBoosting) {
+            try {
+                return assignedIsBoosting.stream()
+                        .anyMatch(assignedBoolean -> assignedBoolean.carData.playerIndex == playerIndex && assignedBoolean.status);
+            }
+            catch (final RuntimeException e){
+                return false;
+            }
+        }
+    }
+
+    private static void removeAssignedIsBoostingIfPresent(ExtendedCarData carToStateSet) {
+        if(assignedIsBoosting.stream().anyMatch(assignedBoolean -> assignedBoolean.carData.playerIndex == carToStateSet.playerIndex)) {
+            synchronized (assignedIsBoosting) {
+                final List<AssignedBoolean> assignedBooleansToRemove = new ArrayList<>();
+                assignedIsBoosting.stream()
+                        .filter(assignedBoolean -> assignedBoolean.carData.playerIndex == carToStateSet.playerIndex)
+                        .findFirst()
+                        .ifPresent(assignedBooleansToRemove::add);
+                assignedIsBoosting.removeAll(assignedBooleansToRemove);
+            }
+        }
     }
 }

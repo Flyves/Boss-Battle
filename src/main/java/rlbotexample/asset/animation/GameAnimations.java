@@ -1,8 +1,7 @@
 package rlbotexample.asset.animation;
 
 import external_data.animation.CarAnimationImporter;
-import rlbotexample.asset.animation.discrete_player.Animation;
-import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
+import rlbotexample.asset.animation.animation.Animation;
 import util.files.ObjectSerializer;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ public class GameAnimations {
     public static Animation quadrupedal_beyblade;
     public static Animation lamp_glados_base;
     public static Animation lamp_glados_head;
+    public static Animation boss_idle_idle;
 
     public static void loadAnimations() {
         boss_transformation_0_To_1 = ObjectSerializer.load(BASE_FILE_PATH + "boss_transformation_0_To_1.sob");
@@ -42,6 +42,8 @@ public class GameAnimations {
         lamp_glados_base = ObjectSerializer.load(BASE_FILE_PATH + "boss_lamp_glados_base_form_rigged.sob");
         loadingProgress++;
         lamp_glados_head = ObjectSerializer.load(BASE_FILE_PATH + "boss_lamp_glados_head_form_rigged.sob");
+        loadingProgress++;
+        boss_idle_idle = ObjectSerializer.load(BASE_FILE_PATH + "boss_idle.sob");
         areReady = true;
         areLoading = false;
     }
