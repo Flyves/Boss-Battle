@@ -39,7 +39,7 @@ public class RlConstants {
     }
 
     public static final double NORMAL_GRAVITY_STRENGTH = 650;
-    public static final Vector3 GRAVITY_VECTOR = Vector3.DOWN_VECTOR.scaled(NORMAL_GRAVITY_STRENGTH);
+    public static final Vector3 GRAVITY_VECTOR = Vector3.MINUS_Z_VECTOR.scaled(NORMAL_GRAVITY_STRENGTH);
 
     public static final double CEILING_HEIGHT = 2044;
     public static final double WALL_DISTANCE_X = 4096;

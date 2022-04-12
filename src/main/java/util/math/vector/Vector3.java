@@ -20,7 +20,7 @@ import java.util.Objects;
 public class Vector3 implements Serializable {
 
     public static final Vector3 Z_VECTOR = new Vector3(0, 0, 1);
-    public static final Vector3 DOWN_VECTOR = new Vector3(0, 0, -1);
+    public static final Vector3 MINUS_Z_VECTOR = new Vector3(0, 0, -1);
     public static final Vector3 X_VECTOR = new Vector3(1, 0, 0);
     public static final Vector3 Y_VECTOR = new Vector3(0, 1, 0);
 

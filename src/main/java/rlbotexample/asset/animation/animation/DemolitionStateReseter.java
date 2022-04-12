@@ -13,7 +13,7 @@ public abstract class DemolitionStateReseter {
                     new Vector3(0, 0, 2050),    // on the ceiling
                     new Orientation(
                             new Vector3(1, 0, 0),   // nose in some random orientation (any on xy plane works)
-                            new Vector3(0, 0, -1))  // upside down
+                            new Vector3(0, 0.05, -1))  // upside down
             ).toZyxOrientedPosition();
 
     public static void stateSet(final ExtendedCarData carData) {

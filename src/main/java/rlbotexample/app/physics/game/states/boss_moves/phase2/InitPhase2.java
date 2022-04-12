@@ -21,10 +21,16 @@ public class InitPhase2 implements State {
     private int amountOfFramesSpend;
     private final AnimationPlayer animationPlayer;
     private final Holder<DataPacket> gameStateHolder;
+    private final Holder<Vector2> virtualPosition;
+    private final Holder<Vector3> virtualOrientation;
+    private final Holder<Vector3> bossOrientation;
 
     public InitPhase2() {
         amountOfFramesSpend = 0;
         gameStateHolder = new Holder<>();
+        virtualPosition = new Holder<>(new Vector2());
+        virtualOrientation = new Holder<>(Vector3.Z_VECTOR);
+        bossOrientation = new Holder<>(Vector3.Z_VECTOR);
         this.animationPlayer = new AnimationPlayer(new AnimationProfileBuilder()
                 .withAnimation(GameAnimations.lamp_glados_head)
                 .withLooping(true)
@@ -52,16 +58,17 @@ public class InitPhase2 implements State {
         final Vector2 playerVelocity = input.humanCar.velocity.flatten();
         final Vector2 bossPosition = animationPlayer.getCenterOfMass().flatten();
         final Vector2 destination = playerPosition.scaled(-1).scaledToMagnitude(4000).plus(playerPosition).plus(playerVelocity.scaled(0.5));
-        final double convergenceRate = 0.008;
+        final double convergenceRate = 0.01;
         final double maxSpeed = 1600;
-        Vector2 nextFlatPosition = destination.minus(bossPosition).scaled(convergenceRate).plus(bossPosition);
-        final double calculatedSpeed = nextFlatPosition.minus(bossPosition).scaled(RlConstants.BOT_REFRESH_RATE).magnitude();
-        if(calculatedSpeed > maxSpeed) {
-            nextFlatPosition = destination.minus(bossPosition).scaledToMagnitude(maxSpeed).scaled(RlConstants.BOT_REFRESH_TIME_PERIOD).plus(bossPosition);
-        }
+        virtualPosition.value = virtualPosition.value.plus(destination.minus(virtualPosition.value).scaledToMagnitude(maxSpeed*RlConstants.BOT_REFRESH_TIME_PERIOD));
+        Vector2 nextFlatPosition = virtualPosition.value.minus(bossPosition).scaled(convergenceRate).plus(bossPosition);
         final Vector3 destinationOnCeiling = new Vector3(nextFlatPosition, 1300);
-        final Vector3 rotator = animationPlayer.getCenterOfMass().minus(input.humanCar.position).findRotator(Vector3.Z_VECTOR.scaled(-1)).scaled(-1);
-        return new OrientedPosition(destinationOnCeiling, new Orientation().rotate(rotator));
+        final Vector3 desiredRotator = animationPlayer.getCenterOfMass().minus(input.humanCar.position).findRotator(Vector3.Z_VECTOR).scaled(-1);
+        final double orientationConvergenceRate = 0.05;
+        final double maxOrientationSpeed = 1.5;
+        virtualOrientation.value = virtualOrientation.value.plus(desiredRotator.minus(virtualOrientation.value).scaledToMagnitude(maxOrientationSpeed*RlConstants.BOT_REFRESH_TIME_PERIOD));
+        bossOrientation.value = virtualOrientation.value.minus(bossOrientation.value).scaled(orientationConvergenceRate).plus(bossOrientation.value);
+        return new OrientedPosition(destinationOnCeiling, new Orientation().rotate(bossOrientation.value));
     }
 
     @Override
