@@ -7,16 +7,12 @@ import rlbot.manager.BotManager;
 import rlbotexample.app.physics.PhysicsOfBossBattle;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
 import rlbotexample.asset.animation.GameAnimations;
-import rlbotexample.asset.animation.animation.AnimationPlayer;
-import rlbotexample.asset.animation.animation.AnimationProfileBuilder;
 import rlbotexample.asset.animation.animation.AnimationTasks;
 import rlbotexample.generic_bot.BotBehaviour;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.generic_bot.output.BotOutput;
 import rlbotexample.generic_bot.output.ControlsOutput;
 import util.game_constants.RlConstants;
-import util.math.vector.Vector3;
-import util.math.vector.ZyxOrientedPosition;
 import util.renderers.IndexedRenderer;
 import util.renderers.RenderTasks;
 
@@ -75,27 +71,50 @@ public class SampleBot implements Bot {
      * Modify it to make your bot smarter!
      */
     private ControlsOutput processInput(DataPacket input, GameTickPacket packet) {
+        // used at the beginning to load animations (crucial feature to prevent startup stalling)
+        handleInitialAnimationLoading();
+
+        // compute boss + player interactions
+        executeBot(input, packet);
+
+        // render everything that's been computed
+        renderGui();
+        executeAnimationRequests(input);
+        applyPhysics(input);
+
+        // crude in-game debug data
+        fpsDataCalc();
+        System.out.println(averageFps);
+        return botOutput.getForwardedOutput();
+    }
+
+    private void applyPhysics(DataPacket input) {
+        PhysicsOfBossBattle.applyImpulses(input);
+        BallStateSetter.handleBallState(input);
+    }
+
+    private void executeAnimationRequests(DataPacket input) {
+        AnimationTasks.stateSetAnimations(input);
+        AnimationTasks.clearFinishedTasks();
+    }
+
+    private void renderGui() {
+        RenderTasks.init();
+        RenderTasks.render();
+        RenderTasks.clearTaskBuffer();
+    }
+
+    private void executeBot(DataPacket input, GameTickPacket packet) {
+        botOutput = botBehaviour.processInput(input, packet);
+        botBehaviour.updateGui(input, currentFps, averageFps, deltaTime);
+    }
+
+    private void handleInitialAnimationLoading() {
         if(!isAnimationsLoaderStarted) {
             new Thread(GameAnimations::loadAnimations).start();
             GameAnimations.areLoading = true;
             isAnimationsLoaderStarted = true;
         }
-        botOutput = botBehaviour.processInput(input, packet);
-        botBehaviour.updateGui(input, currentFps, averageFps, deltaTime);
-
-        // renderer
-        RenderTasks.init();
-        RenderTasks.render();
-        RenderTasks.clearTaskBuffer();
-
-        // bot animation + ball
-        AnimationTasks.stateSetAnimations(input);
-        AnimationTasks.clearFinishedTasks();
-        PhysicsOfBossBattle.applyImpulses(input);
-        BallStateSetter.handleBallState(input);
-
-        fpsDataCalc();
-        return botOutput.getForwardedOutput();
     }
 
     private void fpsDataCalc() {

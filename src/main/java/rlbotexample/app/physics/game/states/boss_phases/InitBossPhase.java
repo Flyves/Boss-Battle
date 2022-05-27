@@ -19,7 +19,7 @@ public class InitBossPhase implements State {
 
     @Override
     public State next(DataPacket input) {
-        return new TransitionFromPhase1ToPhase2();
+        return new TransitionFromPhase0ToPhase1();
     }
 
     @Override
