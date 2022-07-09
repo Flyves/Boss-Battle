@@ -19,11 +19,16 @@ public class BossIdle1Phase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        idle2Phase1.start(input);
+        if(amountOfTimesBossJumped < findHowManyTimesToJump()) {
+            idle2Phase1.start(input);
+        }
     }
 
     @Override
     public void exec(DataPacket input) {
+        if(findHowManyTimesToJump() == 0) {
+            return;
+        }
         idle2Phase1.exec(input);
         if(idle2Phase1.animationPlayer.isFinished()) {
             amountOfTimesBossJumped++;

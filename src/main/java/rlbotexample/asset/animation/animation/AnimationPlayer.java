@@ -149,7 +149,7 @@ public class AnimationPlayer {
         final double currentTime = System.currentTimeMillis() / 1000.0;
         // The player likely paused the game.
         if(currentTime - previousTime > 0.5) {
-            timeOffsetDueToPausing += currentTime - previousTime;
+            previousTime = currentTime;
         }
         return currentTime - timeOffsetDueToPausing;
     }

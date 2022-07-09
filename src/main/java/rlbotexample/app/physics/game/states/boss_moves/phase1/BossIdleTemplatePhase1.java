@@ -49,7 +49,7 @@ public class BossIdleTemplatePhase1 implements State {
                 .withFrameEvent(119, () -> TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.04))
                 .withFrameEvent(129, () -> TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.04))
                 .build());
-
+        
         // Basic interpolation stuff for the movement.
         animationAutomationClip = new LinearNormalizer(FRAME_AT_WHICH_BOSS_STARTS_TO_MOVE_TO_THE_SIDE, FRAME_AT_WHICH_BOSS_ENDS_TO_MOVE_TO_THE_SIDE);
         animationAutomationClip.isBounded = true;
