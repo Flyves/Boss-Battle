@@ -18,6 +18,8 @@ def dllDirectory = 'build/dll'
 applicationDefaultJvmArgs = ["-Djna.library.path=" + dllDirectory]
 
 dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
     // Fetch the framework jar file
     compile 'org.rlbot.commons:framework:2.1.0'
 

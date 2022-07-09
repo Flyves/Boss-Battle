@@ -37,7 +37,6 @@ public class InitPhase2 implements State {
         this.animationPlayer = new AnimationPlayer(new AnimationProfileBuilder()
                 .withAnimation(GameAnimations.lamp_glados_head)
                 .withLooping(true)
-                .withRigidity((carId) -> 1d)
                 .withAnimationOffset(this::findDestinationOffset)
                 .build());
     }

@@ -34,7 +34,7 @@ public class CarGroupStateSetter {
 
         // linking references
         allocatedCarsOpt.ifPresent(indexes -> {
-            for(int i = 0; i < animation.frames.get(0).carGroup.carObjects.size(); i++) {
+            for(int i = 0; i < indexes.size(); i++) {
                 final Integer inGameCarIndex = indexes.get(i);
                 final Integer animationCarIndex = i;
                 animationIndexToInGameCarIndexMap.put(animationCarIndex, inGameCarIndex);
@@ -43,8 +43,8 @@ public class CarGroupStateSetter {
         // making sure we have enough cars of each colors
         if(teamIds.size() != animationIndexToInGameCarIndexMap.size()) {
             throw new RuntimeException("not enough cars to load the animation.\n" +
-                    "Expected " + animation.frames.get(0).carGroup.amountOfBlueCars() + "b and "
-                    + animation.frames.get(0).carGroup.amountOfOrangeCars() + "r");
+                    "Make sure you have " + animation.frames.get(0).carGroup.amountOfBlueCars() + " blue cars and "
+                    + animation.frames.get(0).carGroup.amountOfOrangeCars() + " orange car!");
         }
     }
 
@@ -68,5 +68,24 @@ public class CarGroupStateSetter {
             CarResourceHandler.free(animationIndexToInGameCarIndexMap.values());
             isClosed = true;
         }
+    }
+
+    public Integer mapAnimationIndexToRLBotIndex(final Integer carId) {
+        try {
+            final Integer index = animationIndexToInGameCarIndexMap.get(carId);
+            if(index == null) {
+                return -1;
+            }
+            return index;
+        }
+        catch(final NullPointerException e) {
+            return -1;
+        }
+    }
+
+    public List<Integer> getCarIndexesUsedForTheAnimation() {
+        final List<Integer> indexes = new ArrayList<>();
+        animationIndexToInGameCarIndexMap.forEach((key, value) -> indexes.add(value));
+        return indexes;
     }
 }

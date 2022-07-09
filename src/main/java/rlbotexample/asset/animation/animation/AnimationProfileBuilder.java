@@ -3,6 +3,9 @@ package rlbotexample.asset.animation.animation;
 import util.data_structure.builder.Builder;
 import util.math.vector.OrientedPosition;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -18,6 +21,8 @@ public class AnimationProfileBuilder implements Builder<AnimationProfile> {
     private Boolean isLooping;
     private Function<Integer, Double> rigidityFunction;
 
+    private Map<Integer, Runnable> frameEvents;
+
     public AnimationProfileBuilder() {
         this.playbackSpeed = () -> DEFAULT_PLAYBACK_SPEED;
         this.inBetweenFramesInterpolationFunction = DEFAULT_INTERPOLATION_FUNCTION;
@@ -25,6 +30,7 @@ public class AnimationProfileBuilder implements Builder<AnimationProfile> {
         this.finishingSupplier = () -> false;
         this.isLooping = false;
         this.rigidityFunction = (i) -> 1d;
+        this.frameEvents = new HashMap<>();
     }
 
     public AnimationProfileBuilder withAnimation(final Animation animation) {
@@ -71,6 +77,24 @@ public class AnimationProfileBuilder implements Builder<AnimationProfile> {
         return this;
     }
 
+    public AnimationProfileBuilder withFrameEvent(final int frameIndex, final Runnable event) {
+        if(frameEvents.containsKey(frameIndex)) {
+            // If the event already exists, we replace it with a nested one.
+            // This way, we can run as many events as we want, despite the system being handled by an hashmap underneath.
+            // It's not perfect, because it's going to add a lot of overhead function calls, but it's good enough I think.
+            final Runnable existing = frameEvents.get(frameIndex);
+            frameEvents.remove(frameIndex);
+            frameEvents.put(frameIndex, () -> {
+                existing.run();
+                event.run();
+            });
+        }
+        else {
+            frameEvents.put(frameIndex, event);
+        }
+        return this;
+    }
+
     @Override
     public AnimationProfile build() {
         return new AnimationProfile(
@@ -80,6 +104,7 @@ public class AnimationProfileBuilder implements Builder<AnimationProfile> {
                 animationOffset,
                 finishingSupplier,
                 isLooping,
-                rigidityFunction);
+                rigidityFunction,
+                frameEvents);
     }
 }

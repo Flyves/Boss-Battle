@@ -1,5 +1,6 @@
 package rlbotexample.app.physics.state_setter;
 
+import rlbot.flat.FieldInfo;
 import rlbot.gamestate.*;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;

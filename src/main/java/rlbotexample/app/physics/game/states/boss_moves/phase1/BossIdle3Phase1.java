@@ -4,15 +4,16 @@ import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.dynamic_objects.DataPacket;
+import util.math.vector.OrientedPosition;
 import util.state_machine.State;
 
 public class BossIdle3Phase1 implements State {
 
-    private State idle2Phase1;
+    private BossIdleTemplatePhase1 idle2Phase1;
     private int amountOfTimesBossJumped;
 
-    public BossIdle3Phase1() {
-        this.idle2Phase1 = new BossIdleTemplatePhase1();
+    public BossIdle3Phase1(final OrientedPosition initialOrientedPosition) {
+        this.idle2Phase1 = new BossIdleTemplatePhase1(initialOrientedPosition);
         this.amountOfTimesBossJumped = 0;
     }
 
@@ -23,12 +24,13 @@ public class BossIdle3Phase1 implements State {
 
     @Override
     public void exec(DataPacket input) {
-        BasicRigidityTransitionHandler.handle(CurrentGame.bossAi.animator);
         idle2Phase1.exec(input);
-        if(CurrentGame.bossAi.animator.isFinished()) {
+        if(idle2Phase1.animationPlayer.isFinished()) {
             amountOfTimesBossJumped++;
-            idle2Phase1 = new BossIdleTemplatePhase1();
-            idle2Phase1.start(input);
+            if(amountOfTimesBossJumped < findHowManyTimesToJump()) {
+                idle2Phase1 = new BossIdleTemplatePhase1(idle2Phase1.orientedPosition);
+                idle2Phase1.start(input);
+            }
         }
     }
 
@@ -39,8 +41,8 @@ public class BossIdle3Phase1 implements State {
 
     @Override
     public State next(DataPacket input) {
-        if(amountOfTimesBossJumped == findHowManyTimesToJump()) {
-            return new BossElectricBallShootingAttackPhase1();
+        if(amountOfTimesBossJumped >= findHowManyTimesToJump()) {
+            return new BossElectricBallShootingAttackPhase1(idle2Phase1.orientedPosition);
         }
         return this;
     }

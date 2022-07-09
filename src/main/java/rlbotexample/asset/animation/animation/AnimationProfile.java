@@ -2,6 +2,7 @@ package rlbotexample.asset.animation.animation;
 
 import util.math.vector.OrientedPosition;
 
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -13,15 +14,17 @@ class AnimationProfile {
     public final Supplier<Boolean> finishingSupplier;
     public final Boolean isLooping;
     public final Function<Integer, Double> rigidityFunction;
+    public final Map<Integer, Runnable> frameEvents;
 
-    public AnimationProfile(
+    AnimationProfile(
             final Animation animation,
             final Supplier<Double> playbackSpeed,
             final Function<Double, Double> inBetweenFramesInterpolationFunction,
             final Supplier<OrientedPosition> animationOffset,
             final Supplier<Boolean> finishingSupplier,
             final Boolean isLooping,
-            final Function<Integer, Double> rigidityFunction) {
+            final Function<Integer, Double> rigidityFunction,
+            final Map<Integer, Runnable> frameEvents) {
         this.animation = animation;
         this.playbackSpeed = playbackSpeed;
         this.inBetweenFramesInterpolationFunction = inBetweenFramesInterpolationFunction;
@@ -29,5 +32,6 @@ class AnimationProfile {
         this.finishingSupplier = finishingSupplier;
         this.isLooping = isLooping;
         this.rigidityFunction = rigidityFunction;
+        this.frameEvents = frameEvents;
     }
 }

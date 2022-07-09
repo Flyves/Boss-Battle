@@ -11,33 +11,30 @@ public class BeginSpinAttack implements State {
 
     private final BossSpinAttackPhase1 bossSpinAttackPhase1;
 
-    public BeginSpinAttack(BossSpinAttackPhase1 bossSpinAttackPhase1) {
+    public BeginSpinAttack(final BossSpinAttackPhase1 bossSpinAttackPhase1) {
         this.bossSpinAttackPhase1 = bossSpinAttackPhase1;
     }
 
     @Override
-    public void start(DataPacket input) {
-        CurrentGame.bossAi.animator.setCurrentFrameIndex(FRAME_INDEX_AT_WHICH_ANIMATION_STARTS);
+    public void start(final DataPacket input) {
+        bossSpinAttackPhase1.animationPlayer.setCurrentAnimationFrame(FRAME_INDEX_AT_WHICH_ANIMATION_STARTS);
     }
 
     @Override
-    public void exec(DataPacket input) {
-        CurrentGame.bossAi.step(input);
-    }
+    public void exec(final DataPacket input) {}
 
     @Override
-    public void stop(DataPacket input) {}
+    public void stop(final DataPacket input) {}
 
     @Override
-    public State next(DataPacket input) {
-        if(CurrentGame.bossAi.animator.currentFrameIndex() >= SpinToPredictedPlayerPosition.FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER) {
+    public State next(final DataPacket input) {
+        if(bossSpinAttackPhase1.animationPlayer.getCurrentAnimationFrame() >=
+                SpinToPredictedPlayerPosition.FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER) {
             return new SpinToPredictedPlayerPosition(bossSpinAttackPhase1);
         }
         return this;
     }
 
     @Override
-    public void debug(DataPacket input) {
-
-    }
+    public void debug(final DataPacket input) {}
 }

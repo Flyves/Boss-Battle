@@ -1,23 +1,34 @@
 package rlbotexample.asset.animation.animation;
 
+import rlbotexample.asset.animation.car_group.CarData;
 import rlbotexample.asset.animation.car_group.CarGroup;
 import rlbotexample.asset.animation.car_group.CarGroupStateSetter;
 import rlbotexample.asset.animation.car_group.CarGroupUtils;
 import rlbotexample.dynamic_objects.DataPacket;
+import rlbotexample.dynamic_objects.car.ExtendedCarData;
+import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
+import util.math.vector.ZyxOrientedPosition;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AnimationPlayer {
+    private double timeOffsetDueToPausing;
     private final AnimationProfile animationProfile;
     private final CarGroupStateSetter carGroupStateSetter;
     private double previousTime;
     private double elapsedFrames;
+    private double previousElapsedFrames;
     private Vector3 centerOfMass;
 
     public AnimationPlayer(final AnimationProfile animationProfile) {
         this.animationProfile = animationProfile;
         this.carGroupStateSetter = new CarGroupStateSetter(animationProfile.animation);
         this.previousTime = getTimeInSeconds();
+        this.previousElapsedFrames = 0;
         this.elapsedFrames = 0;
+        this.timeOffsetDueToPausing = 0;
         this.centerOfMass = new Vector3();
     }
 
@@ -25,8 +36,17 @@ public class AnimationPlayer {
         // updating the frame at the user's desired playback rate
         final double playbackSpeed = animationProfile.playbackSpeed.get();
         final double currentTime = getTimeInSeconds();
+        previousElapsedFrames = elapsedFrames;
         elapsedFrames += (currentTime - previousTime) * playbackSpeed;
         previousTime = currentTime;
+
+        // Running triggers.
+        for(int i = (int)previousElapsedFrames; i < (int)elapsedFrames; i++) {
+                final Runnable triggeredFunction = animationProfile.frameEvents.get(i);
+                if(triggeredFunction != null) {
+                    triggeredFunction.run();
+                }
+        }
 
         // bounding the resulting value
         if(elapsedFrames < 0) {
@@ -51,7 +71,11 @@ public class AnimationPlayer {
 
         // state setting
         final CarGroup carGroupWithoutOffset = CarGroupUtils.interpolate(frame1, frame2, t);
-        final CarGroup carGroupToStateSet = CarGroupUtils.addOffset(carGroupWithoutOffset, animationProfile.animationOffset.get());
+        final CarGroup offsetedCarGroup = CarGroupUtils.addOffset(carGroupWithoutOffset, animationProfile.animationOffset.get());
+        final CarGroup inGameCarGroupRepresentation = generateInGameCarGroupRepresentation(offsetedCarGroup, input);
+        final double rigidity = animationProfile.rigidityFunction.apply(index1);
+        // TODO: Fix cars flipping back and forth when the rigidity is below 1.0.
+        final CarGroup carGroupToStateSet = CarGroupUtils.interpolate(inGameCarGroupRepresentation, offsetedCarGroup, rigidity);
         if(carGroupToStateSet.carObjects.size() > 0) {
             this.centerOfMass = carGroupToStateSet.carObjects.stream()
                     .map(carData -> carData.zyxOrientedPosition.position)
@@ -60,6 +84,39 @@ public class AnimationPlayer {
                     .orElse(new Vector3());
         }
         carGroupStateSetter.stateSet(carGroupToStateSet, input);
+    }
+
+    private CarGroup generateInGameCarGroupRepresentation(final CarGroup carGroupWithoutOffset, final DataPacket input) {
+        final CarGroup carGroup = new CarGroup();
+
+        carGroup.carObjects.addAll(carGroupWithoutOffset.carObjects.stream().map(carData -> {
+            final int inGameCarIndex = carGroupStateSetter.mapAnimationIndexToRLBotIndex(carGroupWithoutOffset.carObjects.indexOf(carData));
+            final ExtendedCarData inGameCar = input.allCars.get(inGameCarIndex);
+            // TODO: Cars are flipping, I'm not sure why.
+            //       The tests for transforming euler orientation into our own orientation representation and vice versa are passing, I'm very confused.
+            //       This code is working and all, but man, this is scuffed af.
+            final OrientedPosition inGameOrientedPosition = new OrientedPosition(inGameCar.position, inGameCar.orientation.rotate(inGameCar.orientation.roofVector.scaled(Math.PI)));
+            final ZyxOrientedPosition inGameZyxOrientedPosition = inGameOrientedPosition.toZyxOrientedPosition();
+            return new CarData(
+                    carData.carId,
+                    carData.teamId,
+                    inGameZyxOrientedPosition,
+                    carData.isBoosting);
+        }).collect(Collectors.toList()));
+
+        return carGroup;
+    }
+
+    public double getCurrentAnimationFrame() {
+        return elapsedFrames;
+    }
+
+    public void setCurrentAnimationFrame(final double frameCount) {
+        elapsedFrames = frameCount;
+    }
+
+    public int getAnimationLength() {
+        return animationProfile.animation.frames.size();
     }
 
     public boolean isFinished() {
@@ -89,6 +146,15 @@ public class AnimationPlayer {
     }
 
     private double getTimeInSeconds() {
-        return System.currentTimeMillis() / 1000.0;
+        final double currentTime = System.currentTimeMillis() / 1000.0;
+        // The player likely paused the game.
+        if(currentTime - previousTime > 0.5) {
+            timeOffsetDueToPausing += currentTime - previousTime;
+        }
+        return currentTime - timeOffsetDueToPausing;
+    }
+
+    public List<Integer> getCarIndexesUsedForTheAnimation() {
+        return carGroupStateSetter.getCarIndexesUsedForTheAnimation();
     }
 }

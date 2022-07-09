@@ -26,14 +26,14 @@ public class SpinToPredictedPlayerPosition implements State {
 
     private final BossSpinAttackPhase1 bossSpinAttackPhase1;
 
-    public SpinToPredictedPlayerPosition(BossSpinAttackPhase1 bossSpinAttackPhase1) {
+    public SpinToPredictedPlayerPosition(final BossSpinAttackPhase1 bossSpinAttackPhase1) {
         this.bossSpinAttackPhase1 = bossSpinAttackPhase1;
     }
 
     @Override
-    public void start(DataPacket input) {
+    public void start(final DataPacket input) {
         amountOfFramesToReachSpinDestination = findAmountOfFramesToReach();
-        CurrentGame.bossAi.animator.setCurrentFrameIndex(FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER);
+        bossSpinAttackPhase1.animationPlayer.setCurrentAnimationFrame(FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER);
         Vector3 distanceFromSpeedPrediction = input.humanCar.velocity.scaled(TIME_TO_EXECUTE_MOVEMENT);
         spinDestination = input.humanCar.position.plus(distanceFromSpeedPrediction)
             .minus(new Vector3(0, 0, 50));
@@ -63,34 +63,33 @@ public class SpinToPredictedPlayerPosition implements State {
                 FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER + amountOfFramesToReachSpinDestination);
         animationAutomationClip.isBounded = true;
 
-        Vector3 bossAnimationPosition = CurrentGame.bossAi.animator.orientedPosition.position;
+        Vector3 bossAnimationPosition = bossSpinAttackPhase1.orientedPosition.position;
         parameterizedTrajectory = new ParameterizedSegment(bossAnimationPosition, spinDestination);
         TinySound.loadSound(GameSoundFiles.helicopter_attack).play(0.2);
     }
 
     @Override
-    public void exec(DataPacket input) {
-        double valueOfParameterizedAutomation = animationAutomationClip.compute(CurrentGame.bossAi.animator.currentFrameIndex());
+    public void exec(final DataPacket input) {
+        double valueOfParameterizedAutomation = animationAutomationClip.compute(bossSpinAttackPhase1.animationPlayer.getCurrentAnimationFrame());
         valueOfParameterizedAutomation = parameterizedSmoothedDisplacementFunction(valueOfParameterizedAutomation);
 
-        CurrentGame.bossAi.orientedPosition.position = parameterizedTrajectory.compute(valueOfParameterizedAutomation);
-        CurrentGame.bossAi.step(input);
+        bossSpinAttackPhase1.orientedPosition.position = parameterizedTrajectory.compute(valueOfParameterizedAutomation);
     }
 
-    static double parameterizedSmoothedDisplacementFunction(double x) {
+    static double parameterizedSmoothedDisplacementFunction(final double x) {
         final double a = 0.6;
         final double b = -2 * Math.tan(-0.5/a);
         return (a * Math.atan(b * (x - 0.5))) + 0.5;
     }
 
     @Override
-    public void stop(DataPacket input) {
+    public void stop(final DataPacket input) {
         bossSpinAttackPhase1.amountOfTimesAttackOccurred++;
     }
 
     @Override
-    public State next(DataPacket input) {
-        if(CurrentGame.bossAi.animator.currentFrameIndex()
+    public State next(final DataPacket input) {
+        if(bossSpinAttackPhase1.animationPlayer.getCurrentAnimationFrame()
                 >= FRAME_INDEX_AT_WHICH_BOSS_STARTS_TO_MOVE_TOWARDS_PLAYER + amountOfFramesToReachSpinDestination) {
             return new StayOnPlaceWhileSpinning(bossSpinAttackPhase1);
         }

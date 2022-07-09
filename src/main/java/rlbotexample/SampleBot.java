@@ -84,7 +84,6 @@ public class SampleBot implements Bot {
 
         // crude in-game debug data
         fpsDataCalc();
-        System.out.println(averageFps);
         return botOutput.getForwardedOutput();
     }
 

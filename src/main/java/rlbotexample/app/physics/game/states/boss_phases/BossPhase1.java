@@ -6,8 +6,10 @@ import rlbotexample.app.physics.game.game_option.DifficultyType;
 import rlbotexample.app.physics.game.game_option.GameOptions;
 import rlbotexample.app.physics.game.states.boss_moves.phase1.BossIdle3Phase1;
 import rlbotexample.app.physics.state_setter.BallStateSetter;
+import rlbotexample.asset.animation.animation.AnimationTasks;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.game_constants.RlConstants;
+import util.math.vector.OrientedPosition;
 import util.renderers.RenderTasks;
 import util.state_machine.State;
 import util.state_machine.StateMachine;
@@ -23,13 +25,12 @@ public class BossPhase1 implements State {
 
     @Override
     public void start(DataPacket input) {
-        bossAttackPattern = new StateMachine(new BossIdle3Phase1());
+        bossAttackPattern = new StateMachine(new BossIdle3Phase1(new OrientedPosition()));
         amountOfFramesWithoutDealingHealth = 0;
     }
 
     @Override
     public void exec(DataPacket input) {
-        BallStateSetter.setTarget(CurrentGame.bossAi.centerOfMass);
         bossAttackPattern.exec(input);
         if(GameOptions.gameDifficulty == DifficultyType.WTF
                 || GameOptions.gameDifficulty == DifficultyType.IMPOSSIBLE
@@ -56,6 +57,7 @@ public class BossPhase1 implements State {
     @Override
     public State next(DataPacket input) {
         if(CurrentGame.bossAi.health < CurrentGame.BOSS_INITIAL_HP * BOSS_HEALTH_THRESHOLD_FACTOR) {
+            AnimationTasks.clearAll();
             return new TransitionFromPhase1ToPhase2();
         }
         return this;

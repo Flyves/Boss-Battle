@@ -3,6 +3,7 @@ package rlbotexample.app.physics.game.states.menu_and_game_over;
 import rlbot.render.Renderer;
 import rlbotexample.app.physics.game.CurrentGame;
 import rlbotexample.app.physics.game.entity.BossAi;
+import rlbotexample.asset.animation.animation.AnimationTasks;
 import rlbotexample.dynamic_objects.DataPacket;
 import util.state_machine.State;
 
@@ -12,7 +13,7 @@ public class GameOver implements State {
 
     @Override
     public void start(DataPacket input) {
-
+        AnimationTasks.clearAll();
     }
 
     @Override

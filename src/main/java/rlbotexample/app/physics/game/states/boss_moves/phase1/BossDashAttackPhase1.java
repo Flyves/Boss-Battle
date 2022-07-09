@@ -1,6 +1,10 @@
 package rlbotexample.app.physics.game.states.boss_moves.phase1;
 
 import rlbotexample.app.physics.game.game_option.GameOptions;
+import rlbotexample.app.physics.state_setter.BallStateSetter;
+import rlbotexample.asset.animation.animation.AnimationPlayer;
+import rlbotexample.asset.animation.animation.AnimationProfileBuilder;
+import rlbotexample.asset.animation.animation.AnimationTasks;
 import rlbotexample.asset.animation.discrete_player.DiscreteCarGroupAnimator;
 import rlbotexample.asset.animation.GameAnimations;
 import rlbotexample.asset.animation.rigidity.BasicRigidityTransitionHandler;
@@ -9,12 +13,14 @@ import rlbotexample.asset.sounds.GameSoundFiles;
 import rlbotexample.dynamic_objects.DataPacket;
 import rlbotexample.dynamic_objects.car.ExtendedCarData;
 import util.game_constants.RlConstants;
+import util.math.vector.OrientedPosition;
 import util.math.vector.Vector3;
 import util.resource_handling.cars.CarResourceHandler;
 import util.state_machine.State;
 import util.tinysound.Sound;
 import util.tinysound.TinySound;
 
+import javax.xml.ws.Holder;
 import java.util.List;
 
 public class BossDashAttackPhase1 implements State {
@@ -29,138 +35,112 @@ public class BossDashAttackPhase1 implements State {
     private static final int ATTACK_DAMAGE = 3;
 
     private Vector3 dashDirection = new Vector3();
-
     private Sound shootingSound;
+    private AnimationPlayer animationPlayer;
+    private OrientedPosition orientedPosition;
+    private Holder<DataPacket> inputHolder;
 
+    public BossDashAttackPhase1(final OrientedPosition initialPosition) {
+        this.orientedPosition = initialPosition;
+    }
 
     @Override
     public void start(DataPacket input) {
-        CurrentGame.bossAi.animator = new DiscreteCarGroupAnimator(GameAnimations.boss_dash_attack);
-        CurrentGame.bossAi.animator.looping(false);
-        CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
+        this.inputHolder = new Holder<>(input);
+        this.animationPlayer = new AnimationPlayer(new AnimationProfileBuilder()
+                .withAnimation(GameAnimations.boss_dash_attack)
+                .withRigidity(this::rigidityFunction)
+                .withAnimationOffset(this::orientedPositionFunction)
+                .withFrameEvent(19, () -> TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06))
+                .withFrameEvent(27, () -> TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06))
+                .withFrameEvent(32, () -> TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06))
+                .withFrameEvent(37, () -> TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06))
+                .withFrameEvent(54, () -> TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06))
+                .withFrameEvent(62, () -> TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06))
+                .withFrameEvent(67, () -> TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06))
+                .withFrameEvent(72, () -> TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06))
+                .withFrameEvent(88, () -> TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06))
+                .withFrameEvent(96, () -> TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06))
+                .withFrameEvent(100, () -> TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06))
+                .withFrameEvent(106, () -> TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06))
+                .withFrameEvent(123, () -> TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06))
+                .withFrameEvent(131, () -> TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06))
+                .withFrameEvent(136, () -> TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06))
+                .withFrameEvent(141, () -> TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06))
+                .withFrameEvent(177, () -> {
+                    TinySound.shutdown();
+                    TinySound.init();
+                    shootingSound = TinySound.loadSound(GameSoundFiles.dash_shooting);
+                    shootingSound.play(0.1);
+                })
+                .withFinishingFunction(() -> isBossDashOutOfBound(animationPlayer.getCenterOfMass()))
+                .build());
+        AnimationTasks.append(animationPlayer);
 
         TinySound.init();
-
         Sound buildupSound = TinySound.loadSound(GameSoundFiles.dash_buildup);
         buildupSound.play(0.1);
     }
 
     @Override
     public void exec(DataPacket input) {
-        BasicRigidityTransitionHandler.handle(CurrentGame.bossAi.animator);
+        inputHolder.value = input;
+        BallStateSetter.setTarget(animationPlayer.getCenterOfMass());
+    }
 
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 177) {
-            TinySound.shutdown();
-            TinySound.init();
-            shootingSound = TinySound.loadSound(GameSoundFiles.dash_shooting);
-            shootingSound.play(0.1);
-        }
+    private double rigidityFunction(final int frameIndex) {
+        return 0.2 + frameIndex/180.0;
+    }
 
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 19) {
-            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 27) {
-            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 32) {
-            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 32) {
-            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 37) {
-            TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 54) {
-            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 62) {
-            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 67) {
-            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 72) {
-            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 88) {
-            TinySound.loadSound(GameSoundFiles.leg_step_2).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 96) {
-            TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 100) {
-            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 106) {
-            TinySound.loadSound(GameSoundFiles.leg_step_3).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 123) {
-            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 131) {
-            TinySound.loadSound(GameSoundFiles.leg_step_4).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 136) {
-            TinySound.loadSound(GameSoundFiles.leg_step_0).play(0.06);
-        }
-        if(CurrentGame.bossAi.animator.currentFrameIndex() == 141) {
-            TinySound.loadSound(GameSoundFiles.leg_step_1).play(0.06);
-        }
-
-        if(CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH < DASH_DURATION
-                && CurrentGame.bossAi.animator.currentFrameIndex() > AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
-            CurrentGame.bossAi.orientedPosition.position = CurrentGame.bossAi.orientedPosition.position
+    private OrientedPosition orientedPositionFunction() {
+        if(animationPlayer.getCurrentAnimationFrame() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH < DASH_DURATION
+                && animationPlayer.getCurrentAnimationFrame() > AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) {
+            orientedPosition.position = orientedPosition.position
                     .plus(dashDirection.scaledToMagnitude(
                             findDashSpeed()
-                            - ((CurrentGame.bossAi.animator.currentFrameIndex() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (findDashSpeed()/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
+                                    - ((animationPlayer.getCurrentAnimationFrame() - AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH) * (findDashSpeed()/RlConstants.BOT_REFRESH_RATE)/(DASH_DURATION))));
 
-            List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(input, CurrentGame.bossAi.animator.carIndexesUsedForTheAnimation);
+            final List<ExtendedCarData> carsUsedForTheAnimation = CarResourceHandler.dereferenceIndexes(inputHolder.value, animationPlayer.getCarIndexesUsedForTheAnimation());
             boolean isBossCollidingWithPLayer = carsUsedForTheAnimation.stream()
-                    .anyMatch(carData -> carData.hitBox.isCollidingWith(input.humanCar.hitBox));
+                    .anyMatch(carData -> carData.hitBox.isCollidingWith(inputHolder.value.humanCar.hitBox));
 
             if(isBossCollidingWithPLayer) {
-                CurrentGame.humanPlayer.takeDamage(input, ATTACK_DAMAGE, dashDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(2200));
+                CurrentGame.humanPlayer.takeDamage(inputHolder.value, ATTACK_DAMAGE, dashDirection.plus(new Vector3(0, 0, 0.5)).scaledToMagnitude(2200));
             }
         }
-        else if(CurrentGame.bossAi.animator.currentFrameIndex() >= FRAME_FOR_BEGINNING_OF_REORIENTATION
-                && CurrentGame.bossAi.animator.currentFrameIndex() < FRAME_FOR_ENDING_OF_REORIENTATION) {
-            Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
-            dashDirection = vectorFromBossToPlayer.plus(input.humanCar.velocity.scaled(
-                    ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
-                            + vectorFromBossToPlayer.magnitude()/(findDashSpeed()*RlConstants.BOT_REFRESH_RATE))
-                    .scaled(1.4))
+        else if(animationPlayer.getCurrentAnimationFrame() >= FRAME_FOR_BEGINNING_OF_REORIENTATION
+                && animationPlayer.getCurrentAnimationFrame() < FRAME_FOR_ENDING_OF_REORIENTATION) {
+            Vector3 vectorFromBossToPlayer = inputHolder.value.humanCar.position.minus(animationPlayer.getCenterOfMass());
+            dashDirection = vectorFromBossToPlayer.plus(inputHolder.value.humanCar.velocity.scaled(
+                                    ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
+                                            + vectorFromBossToPlayer.magnitude()/(findDashSpeed()*RlConstants.BOT_REFRESH_RATE))
+                            .scaled(1.4))
                     .scaled(1, 1, 0).normalized();
-            Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
-            CurrentGame.bossAi.orientedPosition.orientation.noseVector = noseDestination;
-            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
+            final Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
+            orientedPosition.orientation.noseVector = noseDestination;
+            orientedPosition.orientation = orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
         }
-        else if(CurrentGame.bossAi.animator.currentFrameIndex() == FRAME_FOR_ENDING_OF_REORIENTATION) {
-            Vector3 vectorFromBossToPlayer = input.humanCar.position.minus(CurrentGame.bossAi.centerOfMass);
-            dashDirection = vectorFromBossToPlayer.plus(input.humanCar.velocity.scaled(
-                    ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
-                            + vectorFromBossToPlayer.magnitude()/(findDashSpeed()*RlConstants.BOT_REFRESH_RATE))
-                    .scaled(1.4))
+        else if(animationPlayer.getCurrentAnimationFrame() == FRAME_FOR_ENDING_OF_REORIENTATION) {
+            Vector3 vectorFromBossToPlayer = inputHolder.value.humanCar.position.minus(animationPlayer.getCenterOfMass());
+            dashDirection = vectorFromBossToPlayer.plus(inputHolder.value.humanCar.velocity.scaled(
+                                    ((AMOUNT_OF_FRAMES_TO_PREPARE_BEFORE_THE_DASH - FRAME_FOR_ENDING_OF_REORIENTATION)/RlConstants.BOT_REFRESH_RATE)
+                                            + vectorFromBossToPlayer.magnitude()/(findDashSpeed()*RlConstants.BOT_REFRESH_RATE))
+                            .scaled(1.4))
                     .scaled(1, 1, 0).normalized();
-            Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
-            CurrentGame.bossAi.orientedPosition.orientation.noseVector = noseDestination;
-            CurrentGame.bossAi.orientedPosition.orientation = CurrentGame.bossAi.orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
+            final Vector3 noseDestination = dashDirection.scaled(1, 1, 0).normalized().scaled(-1);
+            orientedPosition.orientation.noseVector = noseDestination;
+            orientedPosition.orientation = orientedPosition.orientation.rotate(new Vector3(0, 0, -Math.PI/2));
         }
-        CurrentGame.bossAi.step(input);
+        return orientedPosition;
     }
 
     @Override
-    public void stop(DataPacket input) {
-        CurrentGame.bossAi.close();
-    }
+    public void stop(DataPacket input) {}
 
     @Override
     public State next(DataPacket input) {
-        if(CurrentGame.bossAi.animator.isFinished()) {
-            return new BossIdle2Phase1();
-        }
-        if(isBossDashOutOfBound(CurrentGame.bossAi.centerOfMass)) {
-            return new BossIdle2Phase1();
+        if(animationPlayer.isFinished()) {
+            return new BossIdle2Phase1(orientedPosition);
         }
         return this;
     }
@@ -168,13 +148,13 @@ public class BossDashAttackPhase1 implements State {
     private double findDashSpeed() {
         switch (GameOptions.gameDifficulty) {
             case ROCKET_SLEDGE: return 4;
-            case TRIVIAL: return 3000/RlConstants.BOT_REFRESH_RATE;
-            case EASY: return 5000/RlConstants.BOT_REFRESH_RATE;
-            case MEDIUM: return 9000/RlConstants.BOT_REFRESH_RATE;
-            case HARD: return 13000/RlConstants.BOT_REFRESH_RATE;
-            case EXPERT: return 17000/RlConstants.BOT_REFRESH_RATE;
-            case IMPOSSIBLE: return 22000/RlConstants.BOT_REFRESH_RATE;
-            case WTF: return 25000/RlConstants.BOT_REFRESH_RATE;
+            case TRIVIAL: return 3000 / RlConstants.BOT_REFRESH_RATE;
+            case EASY: return 5000 / RlConstants.BOT_REFRESH_RATE;
+            case MEDIUM: return 9000 / RlConstants.BOT_REFRESH_RATE;
+            case HARD: return 13000 / RlConstants.BOT_REFRESH_RATE;
+            case EXPERT: return 17000 / RlConstants.BOT_REFRESH_RATE;
+            case IMPOSSIBLE: return 22000 / RlConstants.BOT_REFRESH_RATE;
+            case WTF: return 25000 / RlConstants.BOT_REFRESH_RATE;
         }
         throw new RuntimeException("No game difficulty selected!");
     }

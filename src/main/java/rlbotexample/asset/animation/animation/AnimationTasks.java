@@ -26,7 +26,12 @@ public abstract class AnimationTasks {
         animationHandlers.removeAll(finishedAnimations);
     }
 
-    public static List<AnimationPlayer> getCurrentAnimations() {
-        return animationHandlers;
+    public static void clearAll() {
+        animationHandlers.forEach(AnimationPlayer::close);
+        animationHandlers.clear();
+    }
+
+    public static boolean contains(final AnimationPlayer animationPlayer) {
+        return animationHandlers.contains(animationPlayer);
     }
 }
